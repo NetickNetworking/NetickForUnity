@@ -1,0 +1,74 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - NavRoot
+  - graticule
+  - CFO3PCam
+  - CFOMainCam
+  - JauntyJaloppy
+  - frontLeftW
+  - frontRightW
+  - backRightW
+  - backLeftW
+  - playerCapsule
+  - PlayerVehichleGroup
+  - AboveBlackSphere
+  - PhysicsBuilding
+  - LocalPlayer
+  - RemotePlayer
+  - Zero
+  - NestedRelocatablenode2
+  - NestedRelocatableNode
+  - FirstRelocNode
+  - Notifications
+  - Notification
+  - randomNotes
+  - Tutorial
+  - CFOPlayerCapsule
+  - SecondCamera
+  - FullGlobe
+  - shootPoint
+  - PlayerHead
+  - box
+  - FPSTxt1
+  - Vehicle
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - x
+  - Water
+  - UI
+  - Player
+  - LocalSpace
+  - FarSpace
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0

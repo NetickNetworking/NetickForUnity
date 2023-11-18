@@ -1,0 +1,33 @@
+{
+  "name": "com.karrar.netick",
+  "version": "0.8.5",
+  "displayName": "Netick",
+  "description": "A networking library for unity",
+  "unity": "2021.3",
+  "dependencies": {
+    "com.unity.nuget.mono-cecil": "1.11.4"
+  },
+  "documentationUrl": "https://www.netick.net/docs.html",
+  "samples": [
+    {
+      "displayName": "Bomberman",
+      "description": "A simple bomberman clone.",
+      "path": "Samples~/Bomberman"
+    },
+    {
+      "displayName": "FPS",
+      "description": "A basic FPS sample.",
+      "path": "Samples~/First Person Shooter"
+    }
+  ],
+  "keywords": [
+    "networking",
+    "multiplayer",
+    "online"
+  ],
+  "author": {
+    "name": "Karrar Rahim",
+    "email": "karsoftgames@gmail.com",
+    "url": "https://www.netick.net"
+  }
+}

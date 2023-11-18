@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 2061283162, guid: da78c2c9df60edc4fb5f65b59fa57c41, type: 3}
+  m_Name: netickConfigDefault
+  m_EditorClassIdentifier: 
+  Assemblies:
+  - Assembly-CSharp.dll
+  _Prefabs:
+  - Obj: {fileID: 6276855212308729943, guid: 84bdaf9c034444f408cc66234ee3344d, type: 3}
+    InstanceId: 25174
+    Name: Bomb
+    FileName: Assets/Netick/Samples/Bomberman/Network Prefabs/Bomb.prefab
+    GO: {fileID: 8886278785656527844, guid: 84bdaf9c034444f408cc66234ee3344d, type: 3}
+    Id: 0
+  - Obj: {fileID: 8143126971102408644, guid: 98e433893a4b70f41a8ab2145afe3e07, type: 3}
+    InstanceId: 25178
+    Name: Bomberman Player
+    FileName: Assets/Netick/Samples/Bomberman/Network Prefabs/Bomberman Player.prefab
+    GO: {fileID: 2511112182317059464, guid: 98e433893a4b70f41a8ab2145afe3e07, type: 3}
+    Id: 1
+  - Obj: {fileID: 4469672062832013922, guid: 8e254087cbaecc049ac87981c263d46c, type: 3}
+    InstanceId: 25182
+    Name: DestroyableBlock
+    FileName: Assets/Netick/Samples/Bomberman/Network Prefabs/DestroyableBlock.prefab
+    GO: {fileID: 9137365252298567970, guid: 8e254087cbaecc049ac87981c263d46c, type: 3}
+    Id: 2
+  - Obj: {fileID: 9177126579482737267, guid: 09a0cccbd8f361641bd963785a4b016c, type: 3}
+    InstanceId: 25186
+    Name: Power Up
+    FileName: Assets/Netick/Samples/Bomberman/Network Prefabs/Power Up.prefab
+    GO: {fileID: 3064325587269614628, guid: 09a0cccbd8f361641bd963785a4b016c, type: 3}
+    Id: 3
+  - Obj: {fileID: 5100633453439203130, guid: d66d5a97430d3364890108321123b309, type: 3}
+    InstanceId: 25190
+    Name: FPS Player
+    FileName: Assets/Netick/Samples/First Person Shooter/Network Prefabs/FPS Player.prefab
+    GO: {fileID: 7011933354638177272, guid: d66d5a97430d3364890108321123b309, type: 3}
+    Id: 4
+  Replication: 1
+  TickRate: 33.333336
+  MaxPlayers: 16
+  MaxObjects: 512
+  MaxSendableDataSize: 50000
+  AllocatorBlockSize: 65536
+  ReceiveBufferSize: 32768
+  SendBufferSize: 16384
+  Timeout: 10
+  MaxPredicatedTicks: 64
+  ServerDivisor: 1
+  ClientDivisor: 1
+  PredictedClientPhysics: 0
+  PhysicsType: 1
+  InvokeRenderInHeadless: 1
+  RenderInvokeOrder: 1
+  EnableLogging: 1
+  SimServerLoss: 0
+  SimClientLoss: 0
+  EnableLagCompensation: 0
+  AoI: 0
+  CellSize: 450
+  WorldSize: 8000
+  UseSceneSwitchThread: 1
+  LagCompensationDebug: 1

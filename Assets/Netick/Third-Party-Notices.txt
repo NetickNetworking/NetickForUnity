@@ -1,0 +1,46 @@
+- Mono.Cecil
+    https://github.com/jbevain/cecil
+    Copyright (c) 2008-2015 Jb Evain.  Copyright (c) 2008-2011 Novell, Inc.
+    MIT license
+
+- LiteNetLib
+    https://github.com/RevenantX/LiteNetLib
+    Copyright (c) 2020 Ruslan Pyrch
+    MIT License
+
+- GameObjects Netcode
+    https://github.com/Unity-Technologies/com.unity.netcode.gameobjects
+    Copyright (c) 2021 Unity Technologies
+    MIT License 
+
+- Unity FPS Sample
+    https://github.com/Unity-Technologies/FPSSample
+    Copyright (c) 2018 Unity Technologies ApS
+    Licensed under the Unity Companion License for Unity-dependent projects--see Unity Companion License.
+
+- Unity Execution Order
+    https://github.com/azixMcAze/Unity-ExecutionOrder
+    Copyright (c) 2017 Mathieu Le Ber
+    MIT License
+
+- RailgunNet
+    https://github.com/ashoulson/RailgunNet
+    Copyright (c) 2016 - Alexander Shoulson - http://ashoulson.com
+
+    This software is provided 'as-is', without any express or implied
+    warranty. In no event will the authors be held liable for any damages
+    arising from the use of this software.
+
+    Permission is granted to anyone to use this software for any purpose,
+    including commercial applications, and to alter it and redistribute it
+    freely, subject to the following restrictions:
+
+    1. The origin of this software must not be misrepresented; you must not
+       claim that you wrote the original software. If you use this software
+       in a product, an acknowledgement in the product documentation would be
+       appreciated but is not required.
+    2. Altered source versions must be plainly marked as such, and must not be
+       misrepresented as being the original software.
+    3. This notice may not be removed or altered from any source distribution.
+
+
