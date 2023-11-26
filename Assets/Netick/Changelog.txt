@@ -1,3 +1,8 @@
+### [0.8.6] Changelog - 2023/11/19
+
+- Fixed an issue causing [OnChanged] methods on NetworkArray to not work correctly. 
+- Fixed an issue causing network state changes to not be detected if they weren't done in NetworkFixedUpdate.
+
 ### [0.8.4] Changelog - 2023/11/17
 
 - Fixed a CodeGen issue with parameterless Rpc methods.
