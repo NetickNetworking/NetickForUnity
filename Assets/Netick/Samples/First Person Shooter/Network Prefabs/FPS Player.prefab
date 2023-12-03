@@ -219,8 +219,7 @@ MonoBehaviour:
   RenderTransform: {fileID: 4519677825914407182}
   TeleportDistance: 50
   PositionPrecision: 3
-  Settings: 1
-  AllowNonAuthoritativeParenting: 0
+  Settings: 5
   TransformSpace: 0
   _interpolationSource: 0
 --- !u!114 &6851739389618402669

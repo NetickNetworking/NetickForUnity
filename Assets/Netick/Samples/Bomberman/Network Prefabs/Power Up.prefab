@@ -74,7 +74,6 @@ MonoBehaviour:
   TeleportDistance: 50
   PositionPrecision: 3
   Settings: 3
-  AllowNonAuthoritativeParenting: 0
   TransformSpace: 0
   _interpolationSource: 0
 --- !u!114 &7879554298239723058
