@@ -1,3 +1,47 @@
+### [0.9.7] Changelog - 2024/1/12
+
+- Improved bandwidth usage. 
+- Improved serialization performance.
+- Added support for adding network behaviors to Sandbox prefab. Now it's possible to have 'global' network behaviors that are accessible with Sandbox.GetComponent<T>().
+- Added Sandbox.AuthoritativeTick and Sandbox.PredictedTick. Sandbox.AuthoritativeTick always returns the latest received server tick. Sandbox.PredictedTick returns the last predicted tick on the client, regardless of whether this is a resimulation.
+- Changed the location where OnConnectedToServer is invoked from. Now it's not invoked by the transport and instead as part of the internal Netick loop.
+- Fixed an issue with Rigidbody.isKinematicn not replicating when using NetworkRigidbody.
+- Fixed an issue with string network property not replicating correctly.
+- Fixed an issue with Unity 2023.
+- Fixed various other issues.
+
+### [0.9.5] Changelog - 2023/12/29
+
+- Fixed an issue causing NetworkStart to be invoked on an object in the client before applying its full initial network state. Whatever state you assign in the server for a networked object after spawning it will be available, in full, when NetworkStart is called in the client on that object.
+- Fixed an issue causing building the game to fail.
+
+### [0.9.3] Changelog - 2023/12/27
+
+- Improved heavy packet loss handling. Theoretically, It's possible to receive no packets from the server for an entire day (or more) and be back on track after that stops happening. Without needing to send the full networked world state.
+- Improved CSP handling of heavy packet loss. Now the client behaves more expectedly when heavy packet loss (no packets for seconds) occurs.
+- Improved CSP performance.
+- Improved memory usage on the client.
+- Added TransportConnection field to NetworkConnection, which can be used to get the transport connection.
+- Fixed an issue with NetworkTransform rotation interpolation.
+- Fixed various other issues.
+
+### [0.8.11] Changelog - 2023/12/14
+
+- Changed NetworkSandbox.IsVisiable to NetworkSandbox.IsVisible.
+- Changed StartNode.ServerAndClient to StartNode.MultiplePeers.
+- Added StartAsMultiplePeers to Netick.Unity.Network. This can be used to start multiple clients (and choose to start a server with them or not) in the same Unity instance. Netick.Unity.Network.StartAsServerAndClient is now marked as obsolete.
+- Fixed an issue causing NetworkStart to be called after other callbacks of NetworkBehaviour.
+- Fixed an issue causing a removed object to still be in the simulation.
+- Fixed an issue causing LiteNetLibTransport to throw an exception when a client wants to connect despite the number of connected clients being MaxPlayers.
+- Fixed various other issues.
+
+### [0.8.8] Changelog - 2023/11/30
+
+- Changed the behavior of [OnChanged] methods to act similarly to Netick 1. Now [OnChanged] methods are not called for non-default/inspector values, and only called when the property value changes during runtime.
+- Changed the default precision value of network properties to 0.001. This should greatly decrease bandwidth usage. If you don't want any compression, pass -1 to precision parameter of [Networked].
+- Fixed an issue with Auto Interpolation when passing a valid precision value to [Networked].
+- Fixed various other issues.
+
 ### [0.8.6] Changelog - 2023/11/19
 
 - Fixed an issue causing [OnChanged] methods on NetworkArray to not work correctly. 

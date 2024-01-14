@@ -153,17 +153,20 @@ namespace Netick.Transport
 
     void INetEventListener.OnConnectionRequest(ConnectionRequest request)
     {
-      //int len = request.Data.AvailableBytes;
-      //request.Data.GetBytes(_connectionBytes, 0, len);
-      //bool accepted = NetworkPeer.OnConnectRequest(_connectionBytes, len, request.RemoteEndPoint);
+      if (_clients.Count >= Engine.Config.MaxPlayers)
+      {
+        request.Reject();
+        return;
+      }
 
-      //if (accepted)
-      //  request.Accept();
-      //else
-      //  request.Reject();
+      int len = request.Data.AvailableBytes;
+      request.Data.GetBytes(_connectionBytes, 0, len);
+      bool accepted = NetworkPeer.OnConnectRequest(_connectionBytes, len, request.RemoteEndPoint.ToNetickEndPoint());
 
-
-      request.Accept();
+      if (accepted)
+        request.Accept();
+      else
+        request.Reject();
     }
 
     void INetEventListener.OnPeerConnected(NetPeer peer)

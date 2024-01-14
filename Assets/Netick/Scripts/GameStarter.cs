@@ -10,16 +10,18 @@ namespace Netick.Samples
     {
         public GameObject               SandboxPrefab;
         public NetworkTransportProvider Transport;
-        public StartMode                Mode            = StartMode.ServerAndClient;
+        public StartMode                Mode                           = StartMode.MultiplePeers;
         [Range(1, 5)]
-        public int                      Clients         = 1;
+        public int                      Clients                        = 1;
+        public bool                     StartServerInMultiplePeersMode = true;
+
         public bool                     AutoStart;
         public bool                     AutoConnect;
 
         [Header("Network")]
         [Range(0, 65535)]
         public int                      Port;
-        public string                   ServerIPAddress = "127.0.0.1";
+        public string                   ServerIPAddress                = "127.0.0.1";
 
         private void Reset()
         {
@@ -46,8 +48,8 @@ namespace Netick.Samples
                         case StartMode.Client:
                             Network.StartAsClient(Transport, Port, SandboxPrefab).Connect(Port, ServerIPAddress);
                             break;
-                        case StartMode.ServerAndClient:
-                            var sandboxes = Network.StartAsServerAndClient(Transport, Port, SandboxPrefab, Clients);
+                        case StartMode.MultiplePeers:
+                            var sandboxes = Network.StartAsMultiplePeers(Transport, Port, SandboxPrefab, StartServerInMultiplePeersMode, Clients);
 
                             if (AutoConnect)
                             {
@@ -102,7 +104,7 @@ namespace Netick.Samples
 
             if (GUI.Button(new Rect(10, 130, 200, 50), "Run Server + Client"))
             {
-                var sandboxes = Network.StartAsServerAndClient(Transport, Port, SandboxPrefab, Clients);
+                var sandboxes = Network.StartAsMultiplePeers(Transport, Port, SandboxPrefab, StartServerInMultiplePeersMode, Clients);
 
                 if (AutoConnect)
                 {
