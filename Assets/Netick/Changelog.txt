@@ -1,3 +1,13 @@
+### [0.9.11] Changelog - 2024/1/27
+
+- Added the ability to associate an input with an index. This makes it possible to use more than one input (up to 10) of the same type per NetworkPlayer, differentiated using the index. This feature enables support for multiple local players all associated with the same NetworkPlayer, but differentiated with the input index. The index has been added as an optional parameter for all input-related methods.
+- Fixed an issue when an object tries to destroy itself in NetworkStart.
+- Fixed an issue with float Auto Interpolation, causing inaccurate interpolation data to be returned.
+- Fixed an issue causing NetworkStart to be invoked before the object has applied its initial network state.
+- Fixed an issue causing Interpolation Delay to be high when first connecting.
+- Fixed an issue causing a weird behavior when data that needs to be sent exceeds Max Sendable Data Size.
+- Fixed various other issues.
+
 ### [0.9.7] Changelog - 2024/1/12
 
 - Improved bandwidth usage. 
@@ -5,7 +15,7 @@
 - Added support for adding network behaviors to Sandbox prefab. Now it's possible to have 'global' network behaviors that are accessible with Sandbox.GetComponent<T>().
 - Added Sandbox.AuthoritativeTick and Sandbox.PredictedTick. Sandbox.AuthoritativeTick always returns the latest received server tick. Sandbox.PredictedTick returns the last predicted tick on the client, regardless of whether this is a resimulation.
 - Changed the location where OnConnectedToServer is invoked from. Now it's not invoked by the transport and instead as part of the internal Netick loop.
-- Fixed an issue with Rigidbody.isKinematicn not replicating when using NetworkRigidbody.
+- Fixed an issue with Rigidbody.isKinematic not replicating when using NetworkRigidbody.
 - Fixed an issue with string network property not replicating correctly.
 - Fixed an issue with Unity 2023.
 - Fixed various other issues.
