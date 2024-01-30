@@ -1,3 +1,9 @@
+### [0.9.14] Changelog - 2024/1/31
+
+- Fixed a stutter with Remote Interpolation in the first few seconds after connecting to the server.
+- Fixed a stutter with CSP in the first few seconds after connecting to the server.
+- Fixed OnConnectedToServer not being invoked in the client.
+
 ### [0.9.11] Changelog - 2024/1/27
 
 - Added the ability to associate an input with an index. This makes it possible to use more than one input (up to 10) of the same type per NetworkPlayer, differentiated using the index. This feature enables support for multiple local players all associated with the same NetworkPlayer, but differentiated with the input index. The index has been added as an optional parameter for all input-related methods.
