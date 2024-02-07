@@ -4,123 +4,46 @@
         <name>Netick.Unity</name>
     </assembly>
     <members>
-        <member name="T:Netick.Unity.NetworkObject">
+        <member name="T:Netick.Unity.SingleInstanceEnforcer">
             <summary>
-            Any GameObject which needs to be synced/replicated must have a Network Object component. It’s the component that tells Netick a GameObject is networked. Although not every child GameObject needs it, only the root has to have a Network Object.
+            Add this component to a GameObject to ensure only a single instance of it will exist at the same time, across all sandboxes.
             </summary>
         </member>
-        <member name="P:Netick.Unity.NetworkObject.SpawnTick">
+        <member name="T:Netick.Unity.NetworkRigidbody">
             <summary>
-            The tick which this object was spawned at.
+            This component is used to replicate the position and rotation of an object. Therefore, it’s the same as the Network Transform, the difference is that Network Rigidbody must be used if you want to have client-side prediction over PhysX objects since it replicates several other properties necessary for correct prediction. 
             </summary>
         </member>
-        <member name="P:Netick.Unity.NetworkObject.Parent">
+        <member name="M:Netick.Unity.NetworkSandbox.InitializePool(UnityEngine.GameObject,System.Int32,System.Boolean)">
             <summary>
-            The <see cref="T:Netick.Unity.NetworkObject"/> parent of this object.
+            Initializes the pool for the specified prefab. After this method has been called for a certain prefab, all instances of that prefab will be recycled and reset when created/destroyed.
+            <para>Note: this method should only be called on <see cref="M:Netick.Unity.NetworkEventsListener.OnStartup(Netick.Unity.NetworkSandbox)"/>, in other words, just after Netick has been started. </para>
             </summary>
+            <param name="networkedPrefab">Prefab to enable pooling for.</param>
+            <param name="preloadedAmount">How many instances to be preloaded.</param>
+            <param name="hideInactiveMembers">Pass true to hide inactive pool members.</param>
         </member>
-        <member name="P:Netick.Unity.NetworkObject.IsClient">
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer,Netick.SpawnPredictionKey)">
             <summary>
-            Returns true if this <see cref="P:Netick.Unity.NetworkObject.Engine"/> is a client.
+            Instantiates a network prefab. 
+            <para>Commonly, this should only be called on the server, since only the server can instantiate network prefabs. However, the client can also call this to spawn-predict a prefab by providing a spawn key which must be the same on the server and client when this method is called. Read the docs to learn more about how to use spawn-prediction.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
             </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsServer">
-            <summary>
-            Returns true if this <see cref="P:Netick.Unity.NetworkObject.Engine"/> is the server.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsOwner">
-            <summary>
-            Returns true if this <see cref="P:Netick.Unity.NetworkObject.Engine"/> is the owner of this Object. In this version of Netick: Server=Owner.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsInputSource">
-            <summary>
-            Returns true if this <see cref="P:Netick.Unity.NetworkSandbox.LocalPlayer"/> is providing inputs for this <see cref="T:Netick.Unity.NetworkObject"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsProxy">
-            <summary>
-            Returns true if we neither provide inputs nor own this <see cref="T:System.Object"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.InputSource">
-            <summary>
-            Returns the source <see cref="T:Netick.NetworkPlayer"/> (<see cref="T:Netick.NetworkPeer"/>/<see cref="T:Netick.ServerConnection"/>) of inputs for this <see cref="T:Netick.Unity.NetworkObject"/>. If the source of inputs is remote (from a client) it returns that <see cref="T:Netick.ServerConnection"/>, while on the
-            input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsResimulating">
-            <summary>
-            Returns true if we are currently resimulating a previous input of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.HasValidId">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkObject"/> has been added to the simulation by Netick, and thus has a valid id.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkObject.SetParent(Netick.Unity.NetworkObject)">
-            <summary>
-            <i><b>[Owner/InputSource Only]</b></i> Changes the parent of this object.
-            </summary>
-            <param name="obj">The object which will become the parent of this object.</param>
-        </member>
-        <member name="T:Netick.Unity.StartMode">
-            <summary>
-            Manages Netick and its sandboxes, and is used to start and shut down Netick.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.Network.Init(Netick.NetworkTransport,Netick.Unity.NetickConfig,System.Int32)">
-            <summary>
-            Initializes Netick. This is automatically called when you start Netick. 
-            <para>If you don't provide a <see cref="T:Netick.Unity.NetickConfig"/>, Netick will use the default config, which can be modified/found in (Netick -> Settings).</para>
-            <para>If you don't provide a <see cref="T:Netick.NetworkTransport"/>, Netick will use the transport assigned in (Netick -> Settings -> Transport).</para>
-            </summary>
-            <param name="transport"></param>
-        </member>
-        <member name="M:Netick.Unity.Network.Shutdown(System.Boolean)">
-            <summary>
-            Shuts down Netick and destroys all sandboxes. The shutdown will occur in the next frame. For immediate shutdown, use: <see cref="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)"/>
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)">
-            <summary>
-            Shuts down Netick and destroys all sandboxes immediately.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.Network.ShutdownSandbox(Netick.Unity.NetworkSandbox,System.Boolean)">
-            <summary>
-            Shuts down a specific sandbox.
-            </summary>
-            <param name="sandbox">The sandbox to shut down.</param>
-        </member>
-        <member name="M:Netick.Unity.Network.Focus(Netick.Unity.NetworkSandbox)">
-            <summary>
-            Focus on a specific sandbox.
-            </summary>
-            <param name="sandbox">The sandbox to focus on.</param>
-        </member>
-        <member name="M:Netick.Unity.Network.StartAsServerAndClient(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject,System.Int32)">
-            <summary>
-            Starts both a client (or clients) and a server.
-            </summary>
-            <param name="serverPort">Network port.</param>
-            <param name="numOfClients">Number of client sandboxs to create.</param>
+            <param name="prefab">The prefab to be instantiated.</param>
+            <param name="position">GridIndex of the instantiated object.</param>
+            <param name="rotation">Rotation of the instantiated object.</param>
+            <param name="inputSource">Input source of the instantiated object.</param>
             <returns></returns>
         </member>
-        <member name="M:Netick.Unity.Network.StartAsClient(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject)">
+        <member name="M:Netick.Unity.NetworkSandbox.Destroy(Netick.Unity.NetworkObject)">
+            /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// ///
             <summary>
-            Starts Netick as a client.
+            Destroys a network object. Only call this on the server or on the client for spawn-predicted objects which have -1 Ids.
+            <para>Note: never call this on a child <see cref="T:Netick.Unity.NetworkObject"/> of the original prefab, only the root of the prefab.</para> 
             </summary>
-            <returns>The sandbox representing the client</returns>
-        </member>
-        <member name="M:Netick.Unity.Network.StartAsServer(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject)">
-            <summary>
-            Starts Netick as a server.
-            </summary>
-            <param name="port">Network port.</param>
-            <returns>The sandbox representing the server</returns>
+            <param name="obj">The object to destroy.</param>
+            <returns></returns>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.IsServer">
             <summary>
@@ -211,6 +134,18 @@
             Current simulation tick. 
             <para>On the server, <b>it's always going forward/increasing.</b></para>
             <para>On the client, <b>during resimulations it returns the current resimulated tick. </b> To check for resimulations, use <see cref="P:Netick.Unity.NetworkSandbox.IsResimulating"/>.</para>
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.AuthoritativeTick">
+            <summary>
+            Last received tick on the client. On the server, it returns the same value as <see cref="!:Sandbox.Tick."/>
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.PredictedTick">
+            <summary>
+            Last predicted tick. 
+            <para>On the client, <b>it always returns the predicted tick of the client, regardless of whether it's a resimulation or not.</b></para>
+            <para>On the server, <b>it returns the same value as Sandbox.Tick</b></para>
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.IsResimulating">
@@ -309,7 +244,7 @@
             <para>Note: this must be called only for non-networked prefabs. If you want to instantiate a network prefab, use <see cref="!:NetworkInstantiate(GameObject, Vector3, Quaternion, NetworkPlayer)"/> instead.</para>
             </summary>
             <param name="prefab">The prefab to be instantiated.</param>
-            <param name="position">Position of the instantiated object.</param>
+            <param name="position">GridIndex of the instantiated object.</param>
             <param name="rotation">Rotation of the instantiated object.</param>
             <returns></returns>
         </member>
@@ -356,15 +291,6 @@
             Shuts down this sandbox.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.InitializePool(UnityEngine.GameObject,System.Int32,System.Boolean)">
-            <summary>
-            Initializes the pool for the specified prefab. After this method has been called for a certain prefab, all instances of that prefab will be recycled and reset when created/destroyed.
-            <para>Note: this method should only be called on <see cref="M:Netick.Unity.NetworkEventsListener.OnStartup(Netick.Unity.NetworkSandbox)"/>, in other words, just after Netick has been started. </para>
-            </summary>
-            <param name="networkedPrefab">Prefab to enable pooling for.</param>
-            <param name="preloadedAmount">How many instances to be preloaded.</param>
-            <param name="hideInactiveMembers">Pass true to hide inactive pool members.</param>
-        </member>
         <member name="M:Netick.Unity.NetworkSandbox.GetPrefab(System.String)">
             <summary>
             Gets a Network Prefab by name.
@@ -373,29 +299,185 @@
             <param name="name"></param>
             <returns>The Network Prefab</returns>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer,Netick.SpawnPredictionKey)">
+        <member name="T:Netick.Unity.NetworkObject">
             <summary>
-            Instantiates a network prefab. 
-            <para>Commonly, this should only be called on the server, since only the server can instantiate network prefabs. However, the client can also call this to spawn-predict a prefab by providing a spawn key which must be the same on the server and client when this method is called. Read the docs to learn more about how to use spawn-prediction.</para>
-            <para>Note: make sure the prefab has been registered. </para> 
-            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            Any GameObject which needs to be synced/replicated must have a Network Object component. It’s the component that tells Netick a GameObject is networked. Although not every child GameObject needs it, only the root has to have a Network Object.
             </summary>
-            <param name="prefab">The prefab to be instantiated.</param>
-            <param name="position">Position of the instantiated object.</param>
-            <param name="rotation">Rotation of the instantiated object.</param>
-            <param name="inputSource">Input source of the instantiated object.</param>
-            <returns></returns>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.DestroySceneObjects">
-            /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// ///
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.Destroy(Netick.Unity.NetworkObject)">
+        <member name="P:Netick.Unity.NetworkObject.SpawnTick">
             <summary>
-            Destroys a network object. Only call this on the server or on the client for spawn-predicted objects which have -1 Ids.
-            <para>Note: never call this on a child <see cref="T:Netick.Unity.NetworkObject"/> of the original prefab, only the root of the prefab.</para> 
+            The tick which this object was spawned at.
             </summary>
-            <param name="obj">The object to destroy.</param>
-            <returns></returns>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.Parent">
+            <summary>
+            The <see cref="T:Netick.Unity.NetworkObject"/> parent of this object.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsClient">
+            <summary>
+            Returns true if this <see cref="P:Netick.Unity.NetworkObject.Engine"/> is a client.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsServer">
+            <summary>
+            Returns true if this <see cref="P:Netick.Unity.NetworkObject.Engine"/> is the server.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsOwner">
+            <summary>
+            Returns true if this <see cref="P:Netick.Unity.NetworkObject.Engine"/> is the owner of this Object. In this version of Netick: Server=Owner.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsInputSource">
+            <summary>
+            Returns true if this <see cref="P:Netick.Unity.NetworkSandbox.LocalPlayer"/> is providing inputs for this <see cref="T:Netick.Unity.NetworkObject"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsProxy">
+            <summary>
+            Returns true if we neither provide inputs nor own this <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.InputSource">
+            <summary>
+            Returns the source <see cref="T:Netick.NetworkPlayer"/> (<see cref="T:Netick.NetworkPeer"/>/<see cref="T:Netick.ServerConnection"/>) of inputs for this <see cref="T:Netick.Unity.NetworkObject"/>. If the source of inputs is remote (from a client) it returns that <see cref="T:Netick.ServerConnection"/>, while on the
+            input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.InterestGroup">
+            <summary>
+            The interest group of this object. This can only be changed if BroadPhaseFilter is set to Custom.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsResimulating">
+            <summary>
+            Returns true if we are currently resimulating a previous input of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.HasValidId">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkObject"/> has been added to the simulation by Netick, and thus has a valid id.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkObject.SetParent(Netick.Unity.NetworkObject)">
+            <summary>
+            <i><b>[Owner/InputSource Only]</b></i> Changes the parent of this object.
+            </summary>
+            <param name="obj">The object which will become the parent of this object.</param>
+        </member>
+        <member name="T:Netick.Unity.NetickConfig">
+            <summary>
+            Config class for Netick.
+            </summary>
+        </member>
+        <member name="F:Netick.Unity.NetickConfig.STRING_LENGTH_MAX">
+            <summary>
+            Maximum size for an encoded string.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetickBehaviour.Sandbox">
+            <summary>
+            The <see cref="T:Netick.Unity.NetworkSandbox"/> containing this <see cref="P:Netick.Unity.NetickBehaviour.Object"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetickBehaviour.Object">
+            <summary>
+            The <see cref="T:Netick.Unity.NetworkObject"/> this behaviour is attached to.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkStart">
+            <summary>
+            Called when this behaviour has been added to the simulation. 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkDestroy">
+            <summary>
+            Called when this behaviour has been removed from the simulation.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkUpdate">
+            <summary>
+            Called every frame. Executed before NetworkFixedUpdate.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkFixedUpdate">
+            <summary>
+            Called every fixed-time network update/tick. Any changes/updates to the network state must happen here.
+            <para>On the client, if you are the Input Source or if this Object.PredictionMode is set to None, it will be called several times in one update/tick during resimulations. To check for resimulations, use [<see cref="!:IsResimulating"/>].</para> 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkRender">
+             <summary>
+             Called every frame. Executed after NetworkUpdate and NetworkFixedUpdate.
+             </summary>
+            <para>IMPORTANT NOTE: properties (which can be interpolated) marked with [<see cref="T:Netick.Smooth"/>] attribute will return interpolated values when accessed in this method.</para>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.BehaviourId">
+            <summary>
+            The network id of this <see cref="T:Netick.Unity.NetworkBehaviour"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.Id">
+            <summary>
+            The network id of this <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsClient">
+            <summary>
+            Returns true if this <see cref="T:Netick.NetickEngine"/> is a client.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsServer">
+            <summary>
+            Returns true if this <see cref="T:Netick.NetickEngine"/> is the server.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsOwner">
+            <summary>
+            Returns true if this <see cref="T:Netick.NetickEngine"/> is the owner of this Object. In this version of Netick: Server=Owner.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsInputSource">
+            <summary>
+            Returns true if this <see cref="P:Netick.Unity.NetworkSandbox.LocalPlayer"/> is providing inputs to this Object.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsProxy">
+            <summary>
+            Returns true if we neither provide inputs nor own this <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsResimulating">
+            <summary>
+            Returns true if we are currently resimulating a previous input of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsPredicted">
+            <summary>
+            On the client, it returns true only if the client is predicting this object. On the server, it always returns true.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.InputSource">
+            <summary>
+            Returns the source <see cref="T:Netick.NetworkPlayer"/> (<see cref="T:Netick.NetworkPeer"/>/<see cref="T:Netick.ServerConnection"/>) of inputs for this <see cref="T:Netick.Unity.NetworkObject"/>. If the source of inputs is remote (from a client) it returns that <see cref="T:Netick.ServerConnection"/>, while on the
+            input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.FetchInput``1(``0@,System.Int32)">
+            <summary>
+            Fetchs a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.OnInputSourceLeft">
+            <summary>
+            Called on the server when the input source of this Object has disconnected.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.OnSpawnPredictionSucceeded">
+            <summary>
+            Called on the client when the server confirms that this object has been successfully spawn-predicted and therefore has a valid SceneId.
+            </summary>
         </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnConnectRequest(Netick.Unity.NetworkSandbox,Netick.NetworkConnectionRequest)">
             <summary>
@@ -488,123 +570,71 @@
             </summary>
             <param name="entity"></param>
         </member>
-        <member name="P:Netick.Unity.NetickBehaviour.Sandbox">
+        <member name="T:Netick.Unity.StartMode">
             <summary>
-            The <see cref="T:Netick.Unity.NetworkSandbox"/> containing this <see cref="P:Netick.Unity.NetickBehaviour.Object"/>.
+            Manages Netick and its sandboxes, and is used to start and shut down Netick.
             </summary>
         </member>
-        <member name="P:Netick.Unity.NetickBehaviour.Object">
+        <member name="M:Netick.Unity.Network.Init(Netick.NetworkTransport,Netick.Unity.NetickConfig,System.Int32)">
             <summary>
-            The <see cref="T:Netick.Unity.NetworkObject"/> this behaviour is attached to.
+            Initializes Netick. This is automatically called when you start Netick. 
+            <para>If you don't provide a <see cref="T:Netick.Unity.NetickConfig"/>, Netick will use the default config, which can be modified/found in (Netick -> Settings).</para>
+            <para>If you don't provide a <see cref="T:Netick.NetworkTransport"/>, Netick will use the transport assigned in (Netick -> Settings -> Transport).</para>
+            </summary>
+            <param name="transport"></param>
+        </member>
+        <member name="M:Netick.Unity.Network.Shutdown(System.Boolean)">
+            <summary>
+            Shuts down Netick and destroys all sandboxes. The shutdown will occur in the next frame. For immediate shutdown, use: <see cref="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)"/>
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkStart">
+        <member name="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)">
             <summary>
-            Called when this behaviour has been added to the simulation. 
+            Shuts down Netick and destroys all sandboxes immediately.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkDestroy">
+        <member name="M:Netick.Unity.Network.ShutdownSandbox(Netick.Unity.NetworkSandbox,System.Boolean)">
             <summary>
-            Called when this behaviour has been removed from the simulation.
+            Shuts down a specific sandbox.
             </summary>
+            <param name="sandbox">The sandbox to shut down.</param>
         </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkUpdate">
+        <member name="M:Netick.Unity.Network.Focus(Netick.Unity.NetworkSandbox)">
             <summary>
-            Called every frame. Executed before NetworkFixedUpdate.
+            Focus on a specific sandbox.
             </summary>
+            <param name="sandbox">The sandbox to focus on.</param>
         </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkFixedUpdate">
+        <member name="M:Netick.Unity.Network.StartAsServerAndClient(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject,System.Int32)">
             <summary>
-            Called every fixed-time network update/tick. Any changes/updates to the network state must happen here.
-            <para>On the client, if you are the Input Source or if this Object.PredictionMode is set to Everyone, it will be called several times in one update/tick during resimulations. To check for resimulations, use [<see cref="!:IsResimulating"/>].</para> 
+            Starts both a client (or clients) and a server.
             </summary>
+            <param name="serverPort">Network port.</param>
+            <param name="numOfClients">Number of client sandboxs to create.</param>
+            <returns></returns>
         </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkRender">
-             <summary>
-             Called every frame. Executed after NetworkUpdate and NetworkFixedUpdate.
-             </summary>
-            <para>IMPORTANT NOTE: properties (which can be interpolated) marked with [<see cref="T:Netick.Smooth"/>] attribute will return interpolated values when accessed in this method.</para>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.BehaviourId">
+        <member name="M:Netick.Unity.Network.StartAsMultiplePeers(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject,System.Boolean,System.Int32)">
             <summary>
-            The network id of this <see cref="T:Netick.Unity.NetworkBehaviour"/>.
+            Starts multiple peers together.
             </summary>
+            <param name="serverPort">Network port.</param>
+            <param name="numOfClients">Number of client sandboxes to create.</param>
+            <param name="startAServer">Should we start a server too.</param>
+            
+            <returns></returns>
         </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.Id">
+        <member name="M:Netick.Unity.Network.StartAsClient(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject)">
             <summary>
-            The network id of this <see cref="T:System.Object"/>.
+            Starts Netick as a client.
             </summary>
+            <returns>The sandbox representing the client</returns>
         </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsClient">
+        <member name="M:Netick.Unity.Network.StartAsServer(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject)">
             <summary>
-            Returns true if this <see cref="T:Netick.NetickEngine"/> is a client.
+            Starts Netick as a server.
             </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsServer">
-            <summary>
-            Returns true if this <see cref="T:Netick.NetickEngine"/> is the server.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsOwner">
-            <summary>
-            Returns true if this <see cref="T:Netick.NetickEngine"/> is the owner of this Object. In this version of Netick: Server=Owner.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsInputSource">
-            <summary>
-            Returns true if this <see cref="P:Netick.Unity.NetworkSandbox.LocalPlayer"/> is providing inputs to this Object.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsProxy">
-            <summary>
-            Returns true if we neither provide inputs nor own this <see cref="T:System.Object"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsResimulating">
-            <summary>
-            Returns true if we are currently resimulating a previous input of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.InputSource">
-            <summary>
-            Returns the source <see cref="T:Netick.NetworkPlayer"/> (<see cref="T:Netick.NetworkPeer"/>/<see cref="T:Netick.ServerConnection"/>) of inputs for this <see cref="T:Netick.Unity.NetworkObject"/>. If the source of inputs is remote (from a client) it returns that <see cref="T:Netick.ServerConnection"/>, while on the
-            input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.FetchInput``1(``0@)">
-            <summary>
-            Fetchs a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.OnInputSourceLeft">
-            <summary>
-            Called on the server when the input source of this Object has disconnected.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.OnSpawnPredictionSucceeded">
-            <summary>
-            Called on the client when the server confirms that this object has been successfully spawn-predicted and therefore has a valid Id.
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.NetworkRigidbody">
-            <summary>
-            This component is used to replicate the position and rotation of an object. Therefore, it’s the same as the Network Transform, the difference is that Network Rigidbody must be used if you want to have client-side prediction over PhysX objects since it replicates several other properties necessary for correct prediction. 
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.NetickConfig">
-            <summary>
-            Config class for Netick.
-            </summary>
-        </member>
-        <member name="F:Netick.Unity.NetickConfig.STRING_LENGTH_MAX">
-            <summary>
-            Maximum size for an encoded string.
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.SingleInstanceEnforcer">
-            <summary>
-            Add this component to a GameObject to ensure only a single instance of it will exist at the same time, across all sandboxes.
-            </summary>
+            <param name="port">Network port.</param>
+            <returns>The sandbox representing the server</returns>
         </member>
     </members>
 </doc>
