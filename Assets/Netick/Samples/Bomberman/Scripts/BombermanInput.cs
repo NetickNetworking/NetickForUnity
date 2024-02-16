@@ -6,7 +6,7 @@ namespace Netick.Samples.Bomberman
 {
     public struct BombermanInput : INetworkInput
     {
-        public Vector2 Movement;
-        public bool    PlantBomb;
+        public Vector2     Movement;
+        public NetworkBool PlantBomb;
     }
 }

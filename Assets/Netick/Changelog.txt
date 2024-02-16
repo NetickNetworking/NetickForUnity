@@ -1,10 +1,14 @@
+### [0.10.4] Changelog - 2024/2/14
+
+- Added implementation for NetworkAnimator. This is a component that can be used to sync Mecanim parameters and other state variables.
+
 ### [0.10.2] Changelog - 2024/2/8
 
 - Added NetworkLinkedList<T>.
 - Added NetworkQueue<T>.
 - Added NetworkStack<T>.
 - Added NetworkQueueSnapshot<T>, NetworkLinkedListSnapshot<T>, and NetworkStackSnapshot<T> structs with getters for each on OnChangedData. These structs represent the previous state of a network collection.
-- Added NetworkObjectRef helper structs to sync a reference to a network object.
+- Added NetworkObjectRef as a helper struct to sync a reference to a network object.
 - Added NetworkBehaviourRef<T> as a helper struct to sync a reference to a network behavior instance.
 - Added NetworkTimer as a helper struct to simplify doing a networked timer.
 - Added IsAuthortative field to OnChangedData, which can be used to know if the source of the OnChanged event is local or caused by the server.

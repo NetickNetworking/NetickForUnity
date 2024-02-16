@@ -44,14 +44,14 @@ namespace Netick.Samples.FPS
             if (!IsInputSource || !Sandbox.InputEnabled)
                 return;
 
-            Vector2 input = new Vector2(Input.GetAxisRaw("Mouse X") * _sensitivityX, Input.GetAxisRaw("Mouse Y") * _sensitivityY);
+            Vector2 input          = new Vector2(Input.GetAxisRaw("Mouse X") * _sensitivityX, Input.GetAxisRaw("Mouse Y") * _sensitivityY);
 
-            var networkInput = Sandbox.GetInput<FPSInput>();
+            var networkInput       = Sandbox.GetInput<FPSInput>();
             networkInput.YawPitch += input;
             Sandbox.SetInput<FPSInput>(networkInput);
          
             // we apply the rotation in update too to have smooth camera control
-            _camAngles = ClampAngles(_camAngles.x + input.x, _camAngles.y + input.y);
+            _camAngles             = ClampAngles(_camAngles.x + input.x, _camAngles.y + input.y);
             ApplyRotations(_camAngles);
         }
 
@@ -67,7 +67,7 @@ namespace Netick.Samples.FPS
         {
             // rotation
             // note: the rotation happens through the [OnChanged] callback below 
-            YawPitch = ClampAngles(YawPitch.x + input.YawPitch.x, YawPitch.y + input.YawPitch.y);
+            YawPitch     = ClampAngles(YawPitch.x + input.YawPitch.x, YawPitch.y + input.YawPitch.y);
 
             // movement direction
             var movement = transform.TransformVector(new Vector3(input.Movement.x, 0, input.Movement.y)) * _movementSpeed;
@@ -90,7 +90,7 @@ namespace Netick.Samples.FPS
         private void ApplyRotations(Vector2 camAngles)
         {
             // on the player transform, we apply yaw
-            transform.rotation = Quaternion.Euler(new Vector3(0, camAngles.x, 0));
+            transform.rotation             = Quaternion.Euler(new Vector3(0, camAngles.x, 0));
 
             // on the weapon/camera holder, we apply the pitch angle
             _cameraParent.localEulerAngles = new Vector3(camAngles.y, 0, 0);
