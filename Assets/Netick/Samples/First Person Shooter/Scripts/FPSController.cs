@@ -18,7 +18,8 @@ namespace Netick.Samples.FPS
         private Vector2              _camAngles;
 
         // Networked properties
-        [Networked] public Vector2   YawPitch                     { get; set; }
+        [Networked][Smooth]
+        public Vector2               YawPitch                     { get; set; }
    
         public override void NetworkStart()
         {
@@ -57,17 +58,15 @@ namespace Netick.Samples.FPS
 
         public override void NetworkFixedUpdate()
         {
-            if (FetchInput(out FPSInput input))
-            {                
+            if (FetchInput(out FPSInput input))          
                 MoveAndRotate(input);
-            }
         }
 
         private void MoveAndRotate(FPSInput input)
         {
             // rotation
-            // note: the rotation happens through the [OnChanged] callback below 
             YawPitch     = ClampAngles(YawPitch.x + input.YawPitch.x, YawPitch.y + input.YawPitch.y);
+            ApplyRotations(YawPitch);
 
             // movement direction
             var movement = transform.TransformVector(new Vector3(input.Movement.x, 0, input.Movement.y)) * _movementSpeed;
@@ -84,7 +83,12 @@ namespace Netick.Samples.FPS
         private void OnYawPitchChanged(OnChangedData onChanged)
         {
             ApplyRotations(YawPitch);
-            _camAngles = YawPitch;
+        }
+
+        public override void NetworkRender()
+        {
+            if (IsProxy)
+                ApplyRotations(YawPitch);
         }
 
         private void ApplyRotations(Vector2 camAngles)
@@ -94,6 +98,7 @@ namespace Netick.Samples.FPS
 
             // on the weapon/camera holder, we apply the pitch angle
             _cameraParent.localEulerAngles = new Vector3(camAngles.y, 0, 0);
+            _camAngles                     = camAngles;
         }
 
 
