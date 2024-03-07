@@ -79,7 +79,7 @@ namespace Netick.Samples.FPS
         }
 
 
-        [OnChanged(nameof(YawPitch))]
+        [OnChanged(nameof(YawPitch), invokeDuringResimulation: true)]
         private void OnYawPitchChanged(OnChangedData onChanged)
         {
             ApplyRotations(YawPitch);

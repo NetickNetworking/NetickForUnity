@@ -8,7 +8,6 @@ namespace Netick.Samples.FPS
     {
         public Transform    SpawnPos;
         public GameObject   PlayerPrefab;
-        public bool         SpawnPlayerForHost = false;
 
         // This is called to read inputs.
         public override void OnInput(NetworkSandbox sandbox)
@@ -20,34 +19,12 @@ namespace Netick.Samples.FPS
             sandbox.SetInput<FPSInput>(input);
         }
 
-        // This is called on the server and the clients when the scene has been loaded.
-        public override void OnSceneLoaded(NetworkSandbox sandbox)
+        // This is called on the server when a player has connected.
+        public override void OnPlayerConnected(NetworkSandbox sandbox, NetworkPlayer networkPlayer)
         {
-            if (sandbox.IsClient)
-                return;
-
-            for (int i = 0; i < sandbox.ConnectedPlayers.Count; i++)
-            {
-                // if SpawnPlayerForHost is set to false, we don't spawn a player for the server
-                // index zero is the server player
-
-                if (!SpawnPlayerForHost && i == 0)
-                    continue;
-
-                var p          = sandbox.ConnectedPlayers[i];
-
-                var spawnPos   = SpawnPos.position + Vector3.left * (i);
-                var player     = sandbox.NetworkInstantiate(PlayerPrefab, spawnPos, Quaternion.identity, p).GetComponent<FPSController>();
-                p.PlayerObject = player.gameObject;
-            }
-        }
-
-        // This is called on the server when a client has connected.
-        public override void OnClientConnected(NetworkSandbox sandbox, NetworkConnection client)
-        {
-            var spawnPos        = SpawnPos.position + Vector3.left * (1 + sandbox.ConnectedPlayers.Count);
-            var player          = sandbox.NetworkInstantiate(PlayerPrefab, spawnPos, Quaternion.identity, client).GetComponent<FPSController>();
-            client.PlayerObject = player.gameObject;
+            var spawnPos               = SpawnPos.position + Vector3.left * (1 + sandbox.ConnectedPlayers.Count);
+            var player                 = sandbox.NetworkInstantiate(PlayerPrefab, spawnPos, Quaternion.identity, networkPlayer).GetComponent<FPSController>();
+            networkPlayer.PlayerObject = player.gameObject;
         }
     }
 }
