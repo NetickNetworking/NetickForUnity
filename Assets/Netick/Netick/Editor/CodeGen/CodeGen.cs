@@ -49,7 +49,7 @@ namespace Unity.Netick.Helper.CodeGen
       var mainModule = assemblyDefinition.MainModule;
       var asm        = assemblyDefinition.MainModule.Name.Replace(".dll", "");
 
-      if ((asm == "Netick") || (asm == "Netick.Unity"))
+      if (asm == "Netick" || asm == "Netick.Unity")
           return false;
 
       var didProcess = false;

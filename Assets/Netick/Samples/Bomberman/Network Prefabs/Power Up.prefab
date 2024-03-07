@@ -59,7 +59,7 @@ MonoBehaviour:
   Children: []
   PrefabIndex: -1
   Persistent: 0
-  predictionMode: 0
+  _predictionMode: 0
 --- !u!114 &4247151532855953612
 MonoBehaviour:
   m_ObjectHideFlags: 0

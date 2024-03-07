@@ -1,6 +1,6 @@
 {
   "name": "com.karrar.netick",
-  "version": "0.10.15",
+  "version": "0.11.2",
   "displayName": "Netick",
   "description": "A networking library for unity",
   "unity": "2021.3",
@@ -30,4 +30,4 @@
     "email": "karsoftgames@gmail.com",
     "url": "https://www.netick.net"
   }
-}
+}}

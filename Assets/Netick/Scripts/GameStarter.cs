@@ -49,7 +49,7 @@ namespace Netick.Samples
                             Network.StartAsClient(Transport, Port, SandboxPrefab).Connect(Port, ServerIPAddress);
                             break;
                         case StartMode.MultiplePeers:
-                            var sandboxes = Network.StartAsMultiplePeers(Transport, Port, SandboxPrefab, StartServerInMultiplePeersMode, Clients);
+                            var sandboxes = Network.StartAsMultiplePeers(Transport, Port, SandboxPrefab, StartServerInMultiplePeersMode, true, Clients);
 
                             if (AutoConnect)
                             {
@@ -91,20 +91,25 @@ namespace Netick.Samples
                 return;
             }
 
-            if (GUI.Button(new Rect(10, 10, 200, 50), "Run Client"))
+            if (GUI.Button(new Rect(10, 10, 200, 50), "Run Host"))
+            {
+               Network.StartAsHost(Transport, Port, SandboxPrefab);
+            }
+
+            if (GUI.Button(new Rect(10, 70, 200, 50), "Run Client"))
             {
                 var sandbox = Network.StartAsClient(Transport, Port, SandboxPrefab);
                 sandbox.Connect(Port, ServerIPAddress);
             }
 
-            if (GUI.Button(new Rect(10, 70, 200, 50), "Run Server"))
+             if (GUI.Button(new Rect(10, 130, 200, 50), "Run Server"))
             {
                 Network.StartAsServer(Transport, Port, SandboxPrefab);
             }
 
-            if (GUI.Button(new Rect(10, 130, 200, 50), "Run Server + Client"))
+            if (GUI.Button(new Rect(10, 190, 200, 50), "Run Host + Client"))
             {
-                var sandboxes = Network.StartAsMultiplePeers(Transport, Port, SandboxPrefab, StartServerInMultiplePeersMode, Clients);
+                var sandboxes = Network.StartAsMultiplePeers(Transport, Port, SandboxPrefab, StartServerInMultiplePeersMode, true, Clients);
 
                 if (AutoConnect)
                 {
@@ -113,7 +118,7 @@ namespace Netick.Samples
                 }
             }
 
-            ServerIPAddress = GUI.TextField(new Rect(10, 220, 200, 50), ServerIPAddress);
+            ServerIPAddress = GUI.TextField(new Rect(10, 250, 200, 50), ServerIPAddress);
 
         }
     }
