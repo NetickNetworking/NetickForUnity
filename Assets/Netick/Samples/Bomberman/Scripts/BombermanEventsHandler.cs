@@ -44,7 +44,6 @@ namespace Netick.Samples.Bomberman
         {
             var player                 = sandbox.NetworkInstantiate(_playerPrefab, SpawnPositions[Sandbox.ConnectedPlayers.Count], Quaternion.identity, networkPlayer).GetComponent<BombermanController>();
             networkPlayer.PlayerObject = player.gameObject;
-            player.PlayerNumber        = Sandbox.ConnectedPlayers.Count;
             AlivePlayers.Add(player);
         }
 

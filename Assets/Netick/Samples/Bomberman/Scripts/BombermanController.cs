@@ -25,8 +25,6 @@ namespace Netick.Samples.Bomberman
         [Networked]
         public int                   Score              { get; set; } = 0;
         [Networked]
-        public int                   PlayerNumber       { get; set; }
-        [Networked]
         public bool                  Alive              { get; set; } = true;
 
         [Networked(relevancy: Relevancy.InputSource)]
