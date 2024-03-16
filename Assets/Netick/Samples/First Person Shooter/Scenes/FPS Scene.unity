@@ -232,7 +232,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 375435379}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 1472462683, guid: 75145785847c5c04b8a66abc87a456e0, type: 3}
+  m_Script: {fileID: -355052428, guid: da78c2c9df60edc4fb5f65b59fa57c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &476934805
@@ -495,7 +495,6 @@ MonoBehaviour:
   SpawnPos: {fileID: 10129275}
   PlayerPrefab: {fileID: 7011933354638177272, guid: d66d5a97430d3364890108321123b309,
     type: 3}
-  SpawnPlayerForHost: 1
 --- !u!1 &1318413499
 GameObject:
   m_ObjectHideFlags: 0

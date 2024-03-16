@@ -39,13 +39,19 @@
             </summary>
             <param name="entity"></param>
         </member>
+        <member name="M:Netick.IGameEngine.OnUnlinkedEntityDespawned(Netick.Entity)">
+            <summary>
+            This is called when an unliked entity has been removed from the simulation.
+            </summary>
+            <param name="entity"></param>
+        </member>
         <member name="M:Netick.IGameEngine.PopulateEntityMeta(Netick.Entity)">
             <summary>
             This is used to populate the user meta data for an entity.
             </summary>
             <param name="entity"></param>
         </member>
-        <member name="M:Netick.IGameEngine.OnEntityMetaChanged(Netick.NetickEntityMeta,System.Byte*)">
+        <member name="M:Netick.IGameEngine.OnEntityMetaChanged(Netick.NetickEntityMeta,System.Byte*,System.Int32)">
             <summary>
             This method is called on the client when it receives new entity meta data. This must be used to create/setup network entities on the client. It can be called many times not only when the data has changed.
             <para>Note: user entity meta data can be used for custom user data that might be used in creating entities.</para>
@@ -146,9 +152,9 @@
             <para> * Use the parameter "localInvoke" to specify if this Rpc should be executed on the machine it was called from.</para>
              </summary>
         </member>
-        <member name="P:Netick.OnChangedData.IsAuthoritative">
+        <member name="P:Netick.OnChangedData.InvokedForMisprediction">
             <summary>
-            Returns true if this OnChanged callback is caused by the server. Always returns true on the server.
+            Returns true if this OnChanged callback is due to a mismatch between the state of this variable before rollback, and the state after rollback and resimulation.
             </summary>
         </member>
         <member name="M:Netick.OnChangedData.GetPreviousNetworkLinkedList``1(Netick.NetworkLinkedList{``0})">
@@ -207,21 +213,21 @@
             A struct that is used to obtain interpolation data for a network property. 
             </summary>
         </member>
-        <member name="M:Netick.Interpolator.GetInterpolationData``1(Netick.InterpolationMode,``0@,``0@,System.Single@)">
+        <member name="M:Netick.Interpolator.GetInterpolationData``1(Netick.InterpolationSource,``0@,``0@,System.Single@)">
             <summary>
             Tries to obtain interpolation data for this frame.
             </summary>
-            <param name="interpolationMode"></param>
+            <param name="interpolationSource"></param>
             <param name="from"></param>
             <param name="to"></param>
             <param name="alpha"></param>
             <returns>Returns true if there was interpolation data for this frame.</returns>
         </member>
-        <member name="M:Netick.Interpolator.GetInterpolationData``1(Netick.InterpolationMode,System.Int32,``0@,``0@,System.Single@)">
+        <member name="M:Netick.Interpolator.GetInterpolationData``1(Netick.InterpolationSource,System.Int32,``0@,``0@,System.Single@)">
             <summary>
             Tries to obtain interpolation data for this frame. This is the array version.
             </summary>
-            <param name="interpolationMode"></param>
+            <param name="interpolationSource"></param>
             <param name="from"></param>
             <param name="to"></param>
             <param name="alpha"></param>
@@ -244,7 +250,7 @@
         </member>
         <member name="T:Netick.RemoteInterpolation">
             <summary>
-            A class representing the local interpolation of this instance <see cref="T:Netick.NetickEngine"/>. This should be used whenever you want to use Remote Timeline on the client.
+            A class representing the remote interpolation of this instance <see cref="T:Netick.NetickEngine"/>. This should be used whenever you want to use Remote Timeline on the client.
             </summary>
         </member>
         <member name="P:Netick.RemoteInterpolation.CurrentBufferTime">
@@ -389,9 +395,6 @@
             <i><b>[Client Only]</b></i> The round-trip time (RTT) of the client in seconds.
             </summary>
         </member>
-        <member name="F:Netick.NetickEngine.CurrentRpcId">
-            Global Rpc  stuff
-        </member>
         <member name="M:Netick.NetickEngine.DisconnectFromServer">
             <summary>
             <i><b>[Client Only]</b></i> Disconnects this client from the server.
@@ -399,7 +402,7 @@
         </member>
         <member name="M:Netick.NetickEngine.Update(System.Single,System.Single)">
             <summary>
-            Update Netick's logic and 
+            Update Netick's logic. 
             </summary>
         </member>
         <member name="M:Netick.NetickEngine.Render">
@@ -409,13 +412,13 @@
         </member>
         <member name="M:Netick.NetickEngine.AttachBehaviour(Netick.INetickScript)">
             <summary>
-            Attachs a <see cref="!:NetickBehaviour"/> to the simulation.
+            Attachs a <see cref="T:Netick.INetickScript"/> to the simulation.
             </summary>
             <param name="behaviour"></param>
         </member>
         <member name="M:Netick.NetickEngine.DeattachBehaviour(Netick.INetickScript)">
             <summary>
-            Deattachs a <see cref="!:NetickBehaviour"/> from the simulation.
+            Deattachs a <see cref="T:Netick.INetickScript"/> from the simulation.
             </summary>
             <param name="behaviour"></param>
         </member>

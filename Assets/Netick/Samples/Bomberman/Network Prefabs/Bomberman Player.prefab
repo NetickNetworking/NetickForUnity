@@ -51,9 +51,10 @@ MonoBehaviour:
   _BroadPhaseFilter: 0
   _SpatialPrioritization: 0
   _NarrowPhaseFilter: 0
+  AddToNetworkLoop: 1
   GlobalObjectIdHash: 0
   SceneId: -1
-  _PrefabId: 1
+  _PrefabId: 2
   PrefabRoot: {fileID: 0}
   Children: []
   PrefabIndex: -1
@@ -94,7 +95,6 @@ MonoBehaviour:
   _speed: 6
   _speedBoostMultiplayer: 2
   <Score>k__BackingField: 0
-  <PlayerNumber>k__BackingField: 0
   <Alive>k__BackingField: 1
   <MaxBombs>k__BackingField: 1
   <SpeedPowerUpTimer>k__BackingField: 0

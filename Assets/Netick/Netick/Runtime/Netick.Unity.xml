@@ -4,11 +4,6 @@
         <name>Netick.Unity</name>
     </assembly>
     <members>
-        <member name="T:Netick.Unity.SingleInstanceEnforcer">
-            <summary>
-            Add this component to a GameObject to ensure only a single instance of it will exist at the same time, across all sandboxes.
-            </summary>
-        </member>
         <member name="T:Netick.Unity.NetworkRigidbody">
             <summary>
             This component is used to replicate the position and rotation of an object. Therefore, it’s the same as the Network Transform, the difference is that Network Rigidbody must be used if you want to have client-side prediction over PhysX objects since it replicates several other properties necessary for correct prediction. 
@@ -22,6 +17,16 @@
             <param name="networkedPrefab">Prefab to enable pooling for.</param>
             <param name="preloadedAmount">How many instances to be preloaded.</param>
             <param name="hideInactiveMembers">Pass true to hide inactive pool members.</param>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.Instantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion)">
+            <summary>
+            Instantiates a prefab. This must be called instead of <see cref="M:UnityEngine.Object.Instantiate(UnityEngine.Object)"/> or its variations. 
+            <para>Note: this must be called only for non-networked prefabs. If you want to instantiate a network prefab, use <see cref="!:NetworkInstantiate(GameObject, Vector3, Quaternion, NetworkPlayer)"/> instead.</para>
+            </summary>
+            <param name="prefab">The prefab to be instantiated.</param>
+            <param name="position">GridIndex of the instantiated object.</param>
+            <param name="rotation">Rotation of the instantiated object.</param>
+            <returns></returns>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer,Netick.SpawnPredictionKey)">
             <summary>
@@ -53,6 +58,11 @@
         <member name="P:Netick.Unity.NetworkSandbox.IsClient">
             <summary>
             Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a client.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.IsHost">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a host.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.Config">
@@ -103,7 +113,7 @@
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.ConnectedPlayers">
             <summary>
-            <para>A list containing all connected clients currently, in addition to the server.</para>
+            <para>A list containing all connected clients currently, in addition to the server (when started as a host).</para>
             <para>Note: if you only want the clients, use <see cref="P:Netick.Unity.NetworkSandbox.ConnectedClients"/>.</para>
             </summary>
         </member>
@@ -238,22 +248,6 @@
             </summary>
             <param name="behaviour"></param>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.Instantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion)">
-            <summary>
-            Instantiates a prefab. This must be called instead of <see cref="M:UnityEngine.Object.Instantiate(UnityEngine.Object)"/> or its variations. 
-            <para>Note: this must be called only for non-networked prefabs. If you want to instantiate a network prefab, use <see cref="!:NetworkInstantiate(GameObject, Vector3, Quaternion, NetworkPlayer)"/> instead.</para>
-            </summary>
-            <param name="prefab">The prefab to be instantiated.</param>
-            <param name="position">GridIndex of the instantiated object.</param>
-            <param name="rotation">Rotation of the instantiated object.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.SwitchScene(System.Int32)">
-            <summary>
-            <i><b>[Server Only]</b></i> Switches to a different scene. This must be called instead of <see cref="M:UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(System.Int32)"/> or its variations.
-            </summary>
-            <param name="sceneBuildIndex">Index of the desired scene.</param>
-        </member>
         <member name="M:Netick.Unity.NetworkSandbox.Connect(System.Int32,System.String,System.Byte[],System.Int32)">
             <summary>
             <i><b>[Client Only]</b></i> Connects to a remote server. 
@@ -286,10 +280,17 @@
             Requests an update to the match list. Only functional if the low-level transport has support for matchmaking.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.Shutdown(System.Boolean,System.Boolean)">
+        <member name="M:Netick.Unity.NetworkSandbox.SwitchScene(System.Int32)">
             <summary>
-            Shuts down this sandbox.
+            <i><b>[Server Only]</b></i> Switches to a different scene. This must be called instead of <see cref="M:UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(System.Int32)"/> or its variations.
             </summary>
+            <param name="sceneBuildIndex">SceneBuildIndex of the desired scene.</param>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.UnloadSceneAsync(System.Int32)">
+            <summary>
+            Unloads a scene asynchronously. 
+            </summary>
+            <param name="buildIndex"></param>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.GetPrefab(System.String)">
             <summary>
@@ -298,6 +299,11 @@
             </summary>
             <param name="name"></param>
             <returns>The Network Prefab</returns>
+        </member>
+        <member name="T:Netick.Unity.NetworkRigidbody2D">
+            <summary>
+            This component is used to replicate the position and rotation of an object. Therefore, it’s the same as the Network Transform, the difference is that Network Rigidbody 2D must be used if you want to have client-side prediction over Box2D objects since it replicates several other properties necessary for correct prediction. 
+            </summary>
         </member>
         <member name="T:Netick.Unity.NetworkObject">
             <summary>
@@ -366,14 +372,14 @@
             </summary>
             <param name="obj">The object which will become the parent of this object.</param>
         </member>
+        <member name="T:Netick.Unity.SingleInstanceEnforcer">
+            <summary>
+            Add this component to a GameObject to ensure only a single instance of it will exist at the same time, across all sandboxes.
+            </summary>
+        </member>
         <member name="T:Netick.Unity.NetickConfig">
             <summary>
             Config class for Netick.
-            </summary>
-        </member>
-        <member name="F:Netick.Unity.NetickConfig.STRING_LENGTH_MAX">
-            <summary>
-            Maximum size for an encoded string.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetickBehaviour.Sandbox">
@@ -476,8 +482,91 @@
         </member>
         <member name="M:Netick.Unity.NetworkBehaviour.OnSpawnPredictionSucceeded">
             <summary>
-            Called on the client when the server confirms that this object has been successfully spawn-predicted and therefore has a valid SceneId.
+            Called on the client when the server confirms that this object has been successfully spawn-predicted and therefore has a valid SceneLoadId.
             </summary>
+        </member>
+        <member name="T:Netick.Unity.NetworkAnimator">
+            <summary>
+            This component is used to replicate Unity's Animator parameters and states. 
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.Network">
+            <summary>
+            Manages Netick and its clients, and is used to start and shut down Netick.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.Network.Init(Netick.Unity.NetickConfig,System.Int32)">
+            <summary>
+            Initializes Netick. This is automatically called when you start Netick. 
+            <para>If you don't provide a <see cref="T:Netick.Unity.NetickConfig"/>, Netick will use the default config, which can be modified/found in (Netick -> Settings).</para>
+            </summary>
+            <param name="transport"></param>
+        </member>
+        <member name="M:Netick.Unity.Network.Shutdown(System.Boolean)">
+            <summary>
+            Shuts down Netick and destroys all clients. The shutdown will occur in the next frame. For immediate shutdown, use: <see cref="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)">
+            <summary>
+            Shuts down Netick and destroys all clients immediately.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.Network.ShutdownSandbox(Netick.Unity.NetworkSandbox,System.Boolean)">
+            <summary>
+            Shuts down a specific sandbox.
+            </summary>
+            <param name="sandbox">The sandbox to shut down.</param>
+        </member>
+        <member name="M:Netick.Unity.Network.Focus(Netick.Unity.NetworkSandbox)">
+            <summary>
+            Focus on a specific sandbox.
+            </summary>
+            <param name="sandbox">The sandbox to focus on.</param>
+        </member>
+        <member name="M:Netick.Unity.Network.StartAsServerAndClient(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject,System.Int32)">
+            <summary>
+            Starts both a client (or clients) and a server.
+            </summary>
+            <param name="serverPort">Network port.</param>
+            <param name="numOfClients">Number of client sandboxes to create.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.Unity.Network.StartAsMultiplePeers(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject,System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Starts multiple peers together.
+            </summary>
+            <param name="serverPort">Network port.</param>
+            <param name="numOfClients">Number of client clients to create.</param>
+            <param name="startAServer">Should we start a server too.</param>
+            
+            <returns></returns>
+        </member>
+        <member name="M:Netick.Unity.Network.StartAsClient(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject)">
+            <summary>
+            Starts Netick as a client.
+            </summary>
+            <returns>The sandbox representing the client</returns>
+        </member>
+        <member name="M:Netick.Unity.Network.StartAsSinglePlayer(UnityEngine.GameObject)">
+            <summary>
+            Starts Netick in single player mode.
+            </summary>
+            <returns>The sandbox representing the server</returns>
+        </member>
+        <member name="M:Netick.Unity.Network.StartAsHost(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject)">
+            <summary>
+            Starts Netick as a host.
+            </summary>
+            <param name="port">Network port.</param>
+            <returns>The sandbox representing the server</returns>
+        </member>
+        <member name="M:Netick.Unity.Network.StartAsServer(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject)">
+            <summary>
+            Starts Netick as a server.
+            </summary>
+            <param name="port">Network port.</param>
+            <returns>The sandbox representing the server</returns>
         </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnConnectRequest(Netick.Unity.NetworkSandbox,Netick.NetworkConnectionRequest)">
             <summary>
@@ -558,6 +647,20 @@
             <param name="sandbox"></param>
             <param name="client"></param>
         </member>
+        <member name="M:Netick.Unity.NetworkEventsListener.OnPlayerConnected(Netick.Unity.NetworkSandbox,Netick.NetworkPlayer)">
+            <summary>
+            Called on the server when a specific player has connected.
+            </summary>
+            <param name="sandbox"></param>
+            <param name="client"></param>
+        </member>
+        <member name="M:Netick.Unity.NetworkEventsListener.OnPlayerDisconnected(Netick.Unity.NetworkSandbox,Netick.NetworkPlayer,Netick.TransportDisconnectReason)">
+            <summary>
+            Called on the server when a specific player has disconnected.
+            </summary>
+            <param name="sandbox"></param>
+            <param name="client"></param>
+        </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnObjectCreated(Netick.Unity.NetworkObject)">
             <summary>
             Called when a network object has been created/initialized. 
@@ -569,72 +672,6 @@
             Called when a network object has been destroyed/recycled.
             </summary>
             <param name="entity"></param>
-        </member>
-        <member name="T:Netick.Unity.StartMode">
-            <summary>
-            Manages Netick and its sandboxes, and is used to start and shut down Netick.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.Network.Init(Netick.NetworkTransport,Netick.Unity.NetickConfig,System.Int32)">
-            <summary>
-            Initializes Netick. This is automatically called when you start Netick. 
-            <para>If you don't provide a <see cref="T:Netick.Unity.NetickConfig"/>, Netick will use the default config, which can be modified/found in (Netick -> Settings).</para>
-            <para>If you don't provide a <see cref="T:Netick.NetworkTransport"/>, Netick will use the transport assigned in (Netick -> Settings -> Transport).</para>
-            </summary>
-            <param name="transport"></param>
-        </member>
-        <member name="M:Netick.Unity.Network.Shutdown(System.Boolean)">
-            <summary>
-            Shuts down Netick and destroys all sandboxes. The shutdown will occur in the next frame. For immediate shutdown, use: <see cref="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)"/>
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)">
-            <summary>
-            Shuts down Netick and destroys all sandboxes immediately.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.Network.ShutdownSandbox(Netick.Unity.NetworkSandbox,System.Boolean)">
-            <summary>
-            Shuts down a specific sandbox.
-            </summary>
-            <param name="sandbox">The sandbox to shut down.</param>
-        </member>
-        <member name="M:Netick.Unity.Network.Focus(Netick.Unity.NetworkSandbox)">
-            <summary>
-            Focus on a specific sandbox.
-            </summary>
-            <param name="sandbox">The sandbox to focus on.</param>
-        </member>
-        <member name="M:Netick.Unity.Network.StartAsServerAndClient(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject,System.Int32)">
-            <summary>
-            Starts both a client (or clients) and a server.
-            </summary>
-            <param name="serverPort">Network port.</param>
-            <param name="numOfClients">Number of client sandboxs to create.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.Unity.Network.StartAsMultiplePeers(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject,System.Boolean,System.Int32)">
-            <summary>
-            Starts multiple peers together.
-            </summary>
-            <param name="serverPort">Network port.</param>
-            <param name="numOfClients">Number of client sandboxes to create.</param>
-            <param name="startAServer">Should we start a server too.</param>
-            
-            <returns></returns>
-        </member>
-        <member name="M:Netick.Unity.Network.StartAsClient(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject)">
-            <summary>
-            Starts Netick as a client.
-            </summary>
-            <returns>The sandbox representing the client</returns>
-        </member>
-        <member name="M:Netick.Unity.Network.StartAsServer(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject)">
-            <summary>
-            Starts Netick as a server.
-            </summary>
-            <param name="port">Network port.</param>
-            <returns>The sandbox representing the server</returns>
         </member>
     </members>
 </doc>

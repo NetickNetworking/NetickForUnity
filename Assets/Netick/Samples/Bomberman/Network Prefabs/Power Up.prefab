@@ -52,9 +52,10 @@ MonoBehaviour:
   _BroadPhaseFilter: 0
   _SpatialPrioritization: 0
   _NarrowPhaseFilter: 0
+  AddToNetworkLoop: 1
   GlobalObjectIdHash: 0
   SceneId: -1
-  _PrefabId: 3
+  _PrefabId: 4
   PrefabRoot: {fileID: 0}
   Children: []
   PrefabIndex: -1
