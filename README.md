@@ -7,9 +7,9 @@ Netick is a free server-authoritative C#/.NET networking solution for Unity, and
 
 ## Features
   * Client-Side Prediction.
+  * Full and Partial Delta Snapshots.
   * Snapshot Interpolation.
   * Remote Procedure Calls (RPCs).
-  * Full and Partial Delta Snapshots.
   * Interest Management [Pro].
   * Lag Compensation [Pro].
   * Code Gen.
