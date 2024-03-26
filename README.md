@@ -26,7 +26,7 @@ If you have any questions, need support, or want to report a bug, visit our disc
 https://discord.com/invite/uV6bfG66Fx
  
 ## Support
-Please consider supporting me on Patreon so we are able to keep working on and improving Netick!
+Please consider supporting us on Patreon or here in GitHub so we are able to keep working on and improving Netick!
 https://www.patreon.com/user?u=82493081
 
 Enjoy!
