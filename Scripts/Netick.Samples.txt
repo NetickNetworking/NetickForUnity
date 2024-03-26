@@ -1,0 +1,15 @@
+{
+    "name": "Netick.Samples",
+    "references": [
+        "GUID:32b718c5820ccce438606ca82358f1da"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
