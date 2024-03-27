@@ -26,7 +26,11 @@ Netick 2 uses an innovative replication algorithm that moves multiplayer game de
 
 Netick 2 also lets you fully predict anything in the game: network properties, collections, etc. It also lets you easily interpolate anything. This greatly simplifies development for complicated or demanding projects.
 
-Netick 2 aims to, and hopefully does, solve networking for most types of multiplayer games.
+Netick 2 aims to solve networking for most types of multiplayer games.
+
+![Benchmark](https://i.ibb.co/3cwvNjk/chart-1.png)
+
+
 
 ## Showcase
 ![Showcase](https://i.ibb.co/gPMHc7G/netick-games2.png)
