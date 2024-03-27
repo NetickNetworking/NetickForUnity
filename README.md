@@ -21,7 +21,6 @@ Netick is a free server-authoritative C#/.NET networking solution for Unity, and
 And many others.
 
 ## Technology and Performance
-
 ### Bandwidth
 Netick 2 uses an innovative state replication algorithm that moves multiplayer game development forward. Not only does it achieve the lowest bandwidth usage ever seen, but it also simplifies networked games by ensuring full networked state update atomicity. Netick 2 uses a novel approach for Delta Snapshots that makes it possible to use Interest Management and Delta Snapshots together, performatively. This has been unheard of in AAA or indie games, due to the difficulty or impracticality of doing that. However, in Netick 2, it just works.
 
@@ -32,9 +31,7 @@ Netick 2 also lets you fully predict anything in the game: network properties, c
 
 ### CPU
 
-Netick 2 core is written with unsafe C# code, achieving the highest level of performance. According to simulated testing, it's able to write 200 packets to 200 clients (sized ~1000 bytes) in less than 1.5ms, all in a single core. This means the networking CPU cost of your game is as little as possible, leaving you room to do other things in the game.
-
-
+Netick 2 core is written with unsafe C# code, achieving the highest level of performance. According to simulated testing, it's able to write 200 packets (each ~1000 bytes) to 200 clients in less than 1.5ms, all in a single core. This means the networking CPU cost of your game is as little as possible, leaving you room to do other things in the game.
 
 
 ## Showcase
