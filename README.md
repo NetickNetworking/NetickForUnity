@@ -6,6 +6,19 @@ Unity integeration of Netick.
 
 Netick is a server-authoritative C#/.NET networking solution for Unity, and, in fact, for all C#-supporting game engines, it's entirely engine-agnostic. It's the world's highest-performing networking solution for Unity, achieving the lowest bandwidth and CPU usage, proven by third-party open-source benchmarks. It’s built with an architecture that’s different from other free solutions. Netick makes building quality and cheat-free multiplayer games easier than ever before. Whether it's a competitive CS-like shooter, a 200-player battle royale, or a survival game, Netick can do it. 
 
+## Installation
+
+### Prerequisites
+You need Unity Editor version 2021 or later.
+
+### Steps
+- Open the Unity Package Manager by navigating to Window > Package Manager along the top bar.
+- Click the plus icon.
+- Select Add package from git URL
+- Enter https://github.com/karrarrahim/NetickForUnity.git
+- Under Packages in the Package Manager, you should now see Unity Transport with it's current version number.
+- You can then import one of the samples to get started.
+
 
 ## Features
   * Client-Side Prediction.
