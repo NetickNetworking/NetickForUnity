@@ -44,7 +44,7 @@ Netick 2 also lets you fully predict anything in the game: network properties, c
 
 ### CPU
 
-Netick 2 core is written with unsafe C# code, achieving the highest level of performance. According to simulated testing, it's able to write 200 packets (each ~1000 bytes) to 200 clients in less than 1.5ms, all in a single core. This means the networking CPU cost of your game is as little as possible, leaving you room to do other things in the game. It also means you can have more players than before, with higher tickrate.
+Netick 2 core is written with unsafe C# code, achieving the highest level of performance. According to simulated testing, it's able to write 1 packet (each ~1000 bytes) to 200 clients in less than 1.4ms, all in a single core. This means the networking CPU cost of your game is as little as possible, leaving you room to do other things in the game. It also means you can have more players than before, with higher tickrate.
 
 
 ## Showcase
