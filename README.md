@@ -16,7 +16,7 @@ You need Unity Editor version 2021 or later.
 - Click the plus icon.
 - Select Add package from git URL
 - Enter https://github.com/karrarrahim/NetickForUnity.git
-- Under Packages in the Package Manager, you should now see Unity Transport with it's current version number.
+- Under Packages in the Package Manager, you should now see Netick with it's current version number.
 - You can then import one of the samples to get started.
 
 
