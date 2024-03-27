@@ -2,7 +2,7 @@
 
 ![Netick Pic](https://i.ibb.co/QbCLKD3/Netick-Github.png)
 
-[Docs](https://netick.net/docs/2/index.html) | [Discord](https://discord.com/invite/uV6bfG66Fx) | [API](https://netick.net/docs/2/api/index.html)
+[Docs](https://netick.net/docs/2/index.html)        |        [Discord](https://discord.com/invite/uV6bfG66Fx)        |        [API](https://netick.net/docs/2/api/index.html)
 
 Unity integeration of Netick.
 
