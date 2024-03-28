@@ -23,10 +23,12 @@ You need Unity Editor version 2021 or later.
 
 
 ## Features
+  * Stable, clean, and powerful API.
   * Client-Side Prediction.
   * Full and Partial Delta Snapshots.
   * Snapshot Interpolation.
   * Remote Procedure Calls (RPCs).
+  * Sandboxing
   * Physics Prediction
   * Interest Management [Pro].
   * Lag Compensation [Pro].
@@ -56,6 +58,7 @@ Netick 2 core is written with unsafe C# code, achieving the highest level of per
 ## Helpful links:
   * Discord: https://discord.com/invite/uV6bfG66Fx
   * Docs: https://www.netick.net/docs.html
+  * API: https://netick.net/docs/2/api/index.html
   * Site: http://www.netick.net
 
 If you have any questions, need support, or want to report a bug, visit our discord: 
