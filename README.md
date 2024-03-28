@@ -37,7 +37,7 @@ And many others.
 
 ## Technology and Performance
 ### Bandwidth
-Netick 2 uses an innovative state replication algorithm that moves multiplayer game development forward. Not only does it achieve the lowest bandwidth usage ever seen, but it also simplifies networked games by ensuring full networked state update atomicity. Netick 2 uses a novel approach for Delta Snapshots that makes it possible to use Interest Management and Delta Snapshots together, performatively. This has been unheard of in AAA or indie games, due to the difficulty or impracticality of doing that. However, in Netick 2, it just works.
+Netick 2 uses an innovative state synchronization algorithm that moves multiplayer game development forward. Not only does it achieve the lowest bandwidth usage ever seen, but it also simplifies networked games by ensuring full networked state update atomicity. Netick 2 uses a novel approach for Delta Snapshots that makes it possible to use Interest Management and Delta Snapshots together, performatively. This has been unheard of in AAA or indie games, due to the difficulty or impracticality of doing that. However, in Netick 2, it just works.
 
 Netick 2 also lets you fully predict anything in the game: network properties, collections, etc. It also lets you easily interpolate anything. This greatly simplifies development for complicated or demanding projects.
 
