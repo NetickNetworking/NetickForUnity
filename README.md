@@ -11,7 +11,7 @@ Netick is a server-authoritative C#/.NET networking solution for Unity, and, in 
 ## Installation
 
 ### Prerequisites
-You need Unity Editor version 2021 or later.
+Unity Editor version 2021 or later.
 
 ### Steps
 - Open the Unity Package Manager by navigating to Window > Package Manager along the top bar.
