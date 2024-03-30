@@ -2,7 +2,8 @@
 
 ![Netick Pic](https://i.ibb.co/QbCLKD3/Netick-Github.png)
 
-[![Manual](https://img.shields.io/badge/docs-manual-informational.svg)](https://netick.net/docs/2/index.html) [![API](https://img.shields.io/badge/docs-api-informational.svg)](https://netick.net/docs/2/api/index.html) [![Discord](https://img.shields.io/discord/449263083769036810.svg?label=discord&logo=discord&color=informational)](https://discord.com/invite/uV6bfG66Fx)
+[![Manual](https://img.shields.io/badge/docs-manual-informational.svg)](https://netick.net/docs/2/index.html) [![API](https://img.shields.io/badge/docs-api-informational.svg)](https://netick.net/docs/2/api/index.html) ![Static Badge](https://img.shields.io/badge/discord-8A2BE2?link=https%3A%2F%2Fdiscord.com%2Finvite%2FuV6bfG66Fx)
+
 
 [Docs](https://netick.net/docs/2/index.html)        |        [Discord](https://discord.com/invite/uV6bfG66Fx)        |        [API](https://netick.net/docs/2/api/index.html)
 
