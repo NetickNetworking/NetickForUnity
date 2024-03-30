@@ -1,4 +1,4 @@
-# Netick: Networking Engine for Unity
+# Netick: Networking Engine for Unity [Beta]
 
 ![Netick Pic](https://i.ibb.co/QbCLKD3/Netick-Github.png)
 
@@ -6,7 +6,7 @@
 
 Unity integeration of Netick.
 
-Netick is a server-authoritative C#/.NET networking solution for Unity, and, in fact, for all C#-supporting game engines, it's entirely engine-agnostic. It's the world's highest-performing networking solution for Unity, achieving the lowest bandwidth and CPU usage, proven by third-party open-source benchmarks. It’s built with an architecture that’s different from other free solutions. Netick makes building quality and cheat-free multiplayer games easier than ever before. Whether it's a competitive CS-like shooter, a 200-player battle royale, or a survival game, Netick can do it. 
+Netick is a server-authoritative C#/.NET networking solution for Unity, and, in fact, for all C#-supporting game engines, it's entirely engine-agnostic. Netick is the state-of-the-art networking solution, it's the world's highest-performing networking solution for Unity, achieving the lowest bandwidth and CPU usage, proven by third-party open-source benchmarks. It’s built with an architecture that’s different from other free solutions. Netick makes building quality and cheat-free multiplayer games easier than ever before. Whether it's a competitive CS-like shooter, a 200-player battle royale, or a survival game, Netick can do it. 
 
 ## Installation
 
