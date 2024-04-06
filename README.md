@@ -8,6 +8,8 @@ Unity integeration of Netick.
 
 Netick is a server-authoritative C#/.NET networking solution for Unity, and, in fact, for all C#-supporting game engines, it's entirely engine-agnostic. Netick is the state-of-the-art networking solution, it's the world's highest-performing networking solution for Unity, achieving the lowest bandwidth and CPU usage, proven by third-party open-source benchmarks. It’s built with an architecture that’s different from other free solutions. Netick makes building quality and cheat-free multiplayer games easier than ever before. Whether it's a competitive CS-like shooter, a 200-player battle royale, or a survival game, Netick can do it. 
 
+![Showcase](https://i.ibb.co/gPMHc7G/netick-games2.png)
+
 ## Installation
 
 ### Prerequisites
@@ -49,10 +51,6 @@ Netick 2 also lets you fully predict anything in the game: network properties, c
 ### CPU
 
 Netick 2 core is written with unsafe C# code, achieving the highest level of performance. According to simulated testing, it's able to write 1 packet (each ~1000 bytes) to 200 clients in less than 1.4ms, all in a single core (using any modern Intel CPU). This means the networking CPU cost of your game is as little as possible, leaving you room to do other things in the game. It also means you can have more players than before, with higher tickrate.
-
-
-## Showcase
-![Showcase](https://i.ibb.co/gPMHc7G/netick-games2.png)
 
 
 ## Helpful links:
