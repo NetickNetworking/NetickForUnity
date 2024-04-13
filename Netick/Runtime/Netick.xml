@@ -431,6 +431,9 @@
         <member name="F:Netick.ClientSimulation.SimReady">
             -------------------------------- -------------------------------- -------------------------------- --------------------------------
         </member>
+        <member name="M:Netick.ClientSimulation.AddSnaps">
+             -------------------------------- -------------------------------- -------------------------------- --------------------------------
+        </member>
         <member name="T:Netick.NetworkStackSnapshot`1">
             <summary>
             A snapshot of the previous state of a NetworkStack collection. Note this must not be used outside the the scope of an OnChanged call.

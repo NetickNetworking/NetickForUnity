@@ -24,7 +24,7 @@
             <para>Note: this must be called only for non-networked prefabs. If you want to instantiate a network prefab, use <see cref="!:NetworkInstantiate(GameObject, Vector3, Quaternion, NetworkPlayer)"/> instead.</para>
             </summary>
             <param name="prefab">The prefab to be instantiated.</param>
-            <param name="position">GridIndex of the instantiated object.</param>
+            <param name="position">Position of the instantiated object.</param>
             <param name="rotation">Rotation of the instantiated object.</param>
             <returns></returns>
         </member>
@@ -36,7 +36,7 @@
             <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
             </summary>
             <param name="prefab">The prefab to be instantiated.</param>
-            <param name="position">GridIndex of the instantiated object.</param>
+            <param name="position">Position of the instantiated object.</param>
             <param name="rotation">Rotation of the instantiated object.</param>
             <param name="inputSource">Input source of the instantiated object.</param>
             <returns></returns>
@@ -280,6 +280,12 @@
             Requests an update to the match list. Only functional if the low-level transport has support for matchmaking.
             </summary>
         </member>
+        <member name="M:Netick.Unity.NetworkSandbox.SwitchScene(System.String)">
+            <summary>
+            <i><b>[Server Only]</b></i> Switches to a different scene. This must be called instead of <see cref="M:UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(System.Int32)"/> or its variations.
+            </summary>
+            <param name="sceneBuildIndex">SceneBuildIndex of the desired scene.</param>
+        </member>
         <member name="M:Netick.Unity.NetworkSandbox.SwitchScene(System.Int32)">
             <summary>
             <i><b>[Server Only]</b></i> Switches to a different scene. This must be called instead of <see cref="M:UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(System.Int32)"/> or its variations.
@@ -308,11 +314,6 @@
         <member name="T:Netick.Unity.NetworkObject">
             <summary>
             Any GameObject which needs to be synced/replicated must have a Network Object component. It’s the component that tells Netick a GameObject is networked. Although not every child GameObject needs it, only the root has to have a Network Object.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.SpawnTick">
-            <summary>
-            The tick which this object was spawned at.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkObject.Parent">
@@ -409,8 +410,8 @@
         </member>
         <member name="M:Netick.Unity.NetickBehaviour.NetworkFixedUpdate">
             <summary>
-            Called every fixed-time network update/tick. Any changes/updates to the network state must happen here.
-            <para>On the client, if you are the Input Source or if this Object.PredictionMode is set to None, it will be called several times in one update/tick during resimulations. To check for resimulations, use [<see cref="!:IsResimulating"/>].</para> 
+            Called every fixed-time network step. Any changes to the networked state should happen here.
+            <para>On the client, if you are the Input Source or if this Object.PredictionMode is set to Everyone, it will be called several times in one update/tick during resimulations. To check for resimulations, use [<see cref="!:IsResimulating"/>].</para> 
             </summary>
         </member>
         <member name="M:Netick.Unity.NetickBehaviour.NetworkRender">
@@ -495,6 +496,9 @@
             Manages Netick and its clients, and is used to start and shut down Netick.
             </summary>
         </member>
+        <member name="P:Netick.Unity.Network.StartMode">
+            e
+        </member>
         <member name="M:Netick.Unity.Network.Init(Netick.Unity.NetickConfig,System.Int32)">
             <summary>
             Initializes Netick. This is automatically called when you start Netick. 
@@ -537,7 +541,7 @@
             Starts multiple peers together.
             </summary>
             <param name="serverPort">Network port.</param>
-            <param name="numOfClients">Number of client clients to create.</param>
+            <param name="numOfClients">Number of clients to create.</param>
             <param name="startAServer">Should we start a server too.</param>
             
             <returns></returns>
