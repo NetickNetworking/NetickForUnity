@@ -31,7 +31,7 @@ Unity Editor version 2021 or later.
 - Select Add package from git URL
 - Enter https://github.com/NetickNetworking/NetickForUnity.git
 - Under Packages in the Package Manager, you should now see Netick with it's current version number.
-- You can then import one of the samples to get started. Or you can follow our [getting started guide.](#technology-and-performance) for how to do a simple game with Netick.
+- You can then import one of the samples to get started. Or you can follow our [getting started guide](#technology-and-performance) for how to do a simple game with Netick.
 
 ## Features
 
