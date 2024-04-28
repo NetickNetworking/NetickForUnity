@@ -8,7 +8,7 @@ namespace Netick.Samples.Bomberman
     {
         // Networked properties
         [Networked]
-        public bool Visible { get; set; } = true;
+        public NetworkBool Visible { get; set; } = true;
 
         [OnChanged(nameof(Visible))]
         private void OnVisibleChanged(OnChangedData onChangedData)

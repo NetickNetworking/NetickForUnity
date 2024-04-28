@@ -1,14 +1,22 @@
-# Netick: Networking Engine for Unity [Beta]
-
 ![Netick Pic](https://i.ibb.co/QbCLKD3/Netick-Github.png)
 
-[![Manual](https://img.shields.io/badge/docs-manual-informational.svg)](https://netick.net/docs/2/index.html) [![API](https://img.shields.io/badge/docs-api-informational.svg)](https://netick.net/docs/2/api/index.html) [![Discord](https://img.shields.io/badge/discord-grey?logo=discord&logoColor=white)](https://discord.com/invite/uV6bfG66Fx)
+<p align="center">
+  <h3 align="center">High-Performance Networking Engine for Unity</h3>
+</p>
 
-Unity integeration of Netick.
+<p align="center">
+  <a href="https://netick.net/docs/2/articles/understanding-client-server-model.html">Manual</a>
+  ·
+  <a href="https://netick.net/docs/2/articles/getting-started-guide/0-overview.html">Getting Started</a>
+  ·
+  <a href="https://netick.net/docs/2/api/index.html">API</a>
+  ·
+  <a href="https://discord.com/invite/uV6bfG66Fx">Discord</a>
+</p>
 
-Netick is a server-authoritative C#/.NET networking solution for Unity, and, in fact, for all C#-supporting game engines, it's entirely engine-agnostic. Netick is the state-of-the-art networking solution, it's the world's highest-performing networking solution for Unity, achieving the lowest bandwidth and CPU usage, proven by third-party open-source benchmarks. It’s built with an architecture that’s different from other free solutions. Netick makes building quality and cheat-free multiplayer games easier than ever before. Whether it's a competitive CS-like shooter, a 200-player battle royale, or a survival game, Netick can do it. 
+Netick is a server-authoritative C#/.NET networking solution for Unity, and, in fact, for all C#-supporting game engines, it's entirely engine-agnostic. Netick is the state-of-the-art networking solution, it's the world's highest-performing networking solution for Unity, **achieving the lowest bandwidth and CPU usage, proven by** [**open-source benchmarks.**](#technology-and-performance) It’s built with an architecture that’s different from other free solutions. Netick makes building quality and cheat-free multiplayer games easier than ever before. Whether it's a competitive CS-like shooter, a 200-player battle royale, or a survival game, Netick can do it. 
 
-![Showcase](https://i.ibb.co/gPMHc7G/netick-games2.png)
+![Showcase](https://i.ibb.co/JRJvkCr/netick-games3.png)
 
 ## Installation
 
@@ -22,7 +30,7 @@ Unity Editor version 2021 or later.
 - Enter https://github.com/karrarrahim/NetickForUnity.git
 - Under Packages in the Package Manager, you should now see Netick with it's current version number.
 - You can then import one of the samples to get started.
-
+ 
 
 ## Features
   * Stable, clean, and powerful API.

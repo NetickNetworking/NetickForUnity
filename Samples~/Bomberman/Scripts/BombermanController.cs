@@ -25,7 +25,7 @@ namespace Netick.Samples.Bomberman
         [Networked]
         public int                   Score              { get; set; } = 0;
         [Networked]
-        public bool                  Alive              { get; set; } = true;
+        public NetworkBool           Alive              { get; set; } = true;
 
         [Networked(relevancy: Relevancy.InputSource)]
         public int                   MaxBombs           { get; set; } = 1;
