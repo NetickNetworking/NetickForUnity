@@ -22,7 +22,7 @@ Netick is a server-authoritative C#/.NET networking solution for Unity, and, in 
 
 ### Prerequisites
 
-Unity Editor version 2021 or later.
+Unity Editor 2021 or later.
 
 ### Steps
 
