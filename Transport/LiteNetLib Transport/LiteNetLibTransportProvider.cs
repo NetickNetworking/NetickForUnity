@@ -34,20 +34,24 @@ namespace Netick.Transport
 
       public unsafe override void Send(IntPtr ptr, int length)
       {
-        byte* p = (byte*)ptr.ToPointer();
+        SendLNL((byte*)ptr.ToPointer(), length, DeliveryMethod.Unreliable);
+      }
 
+      public unsafe override void SendUserData(IntPtr ptr, int length, TransportDeliveryMethod transportDeliveryMethod)
+      {
+        SendLNL((byte*)ptr.ToPointer(), length, transportDeliveryMethod == TransportDeliveryMethod.Reliable ? DeliveryMethod.ReliableOrdered : DeliveryMethod.Unreliable);
+      }
+
+      private unsafe void SendLNL(byte* ptr, int length, DeliveryMethod deliveryMethod)
+      {
         for (int i = 0; i < length; i++)
-          Transport._bytes[i] = p[i];
-
-        LNLPeer.Send(Transport._bytes, 0, length, DeliveryMethod.Unreliable);
+          Transport._bytes[i] = ptr[i];
+        LNLPeer.Send(Transport._bytes, 0, length, deliveryMethod);
       }
     }
 
     private NetManager                         _netManager;
-
-
     private BitBuffer                          _buffer;
- //   private int                                _bufferSize;
 
     private readonly byte[]                    _bytes = new byte[2048];
     private readonly byte[]                    _connectionBytes = new byte[200];
