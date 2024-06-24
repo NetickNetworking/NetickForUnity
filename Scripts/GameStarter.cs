@@ -17,6 +17,8 @@ namespace Netick.Samples
 
         public bool                     AutoStart;
         public bool                     AutoConnect;
+        public bool                     ShowDisconnectButton           = true;
+        public bool                     ShowConnectButton              = true;
 
         [Header("Network")]
         [Range(0, 65535)]
@@ -72,12 +74,16 @@ namespace Netick.Samples
                 {
                     if (Sandbox.IsConnected)
                     {
-                        GUI.Label(new Rect(10, 130, 200, 50), $"Connected to {Sandbox.ServerEndPoint}");
+                        if (ShowDisconnectButton)
+                        {
+                            GUI.Label(new Rect(10, 130, 200, 50), $"Connected to {Sandbox.ServerEndPoint}");
 
-                        if (GUI.Button(new Rect(10, 220, 200, 50), "Disconnect"))
-                            Sandbox.DisconnectFromServer();
+                            if (GUI.Button(new Rect(10, 220, 200, 50), "Disconnect"))
+                                Sandbox.DisconnectFromServer();
+                        }
+                       
                     }
-                    else
+                    else if (ShowConnectButton)
                     {
                         if (GUI.Button(new Rect(10, 10, 200, 50), "Connect"))
                             Sandbox.Connect(Port, ServerIPAddress);
