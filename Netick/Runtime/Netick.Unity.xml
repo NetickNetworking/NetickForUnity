@@ -18,6 +18,14 @@
             <param name="preloadedAmount">How many instances to be preloaded.</param>
             <param name="hideInactiveMembers">Pass true to hide inactive pool members.</param>
         </member>
+        <member name="M:Netick.Unity.NetworkSandbox.GetPrefab(System.String)">
+            <summary>
+            Gets a Network Prefab by name.
+            <para>Note: this causes GC.</para>
+            </summary>
+            <param name="name"></param>
+            <returns>The Network Prefab</returns>
+        </member>
         <member name="M:Netick.Unity.NetworkSandbox.Instantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion)">
             <summary>
             Instantiates a prefab. This must be called instead of <see cref="M:UnityEngine.Object.Instantiate(UnityEngine.Object)"/> or its variations. 
@@ -49,6 +57,11 @@
             </summary>
             <param name="obj">The object to destroy.</param>
             <returns></returns>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.PhysicsPrediction">
+            <summary>
+            Use this to enable/disable Physics Prediction in the client at runtime.
+            </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.IsServer">
             <summary>
@@ -103,6 +116,11 @@
         <member name="P:Netick.Unity.NetworkSandbox.IsConnected">
             <summary>
             <i><b>[Client Only]</b></i> Returns true if this client is currently connected to a server.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.Transport">
+            <summary>
+            The underlying transport used for low-level networking.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.ConnectedClients">
@@ -256,7 +274,7 @@
             </summary>
             <param name="ip">IP address of the server.</param>
             <param name="port">Port of the server.</param>
-            <param name="connectionData">Data sent with the connection request. Could be used to decide whether or not to allow the connection.</param>
+            <param name="connectionData">RawValue sent with the connection request. Could be used to decide whether or not to allow the connection.</param>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.Kick(Netick.ServerConnection)">
             <summary>
@@ -292,19 +310,21 @@
             </summary>
             <param name="sceneBuildIndex">SceneBuildIndex of the desired scene.</param>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.UnloadSceneAsync(System.Int32)">
+        <member name="M:Netick.Unity.NetworkSandbox.LoadSceneAsync(System.String,UnityEngine.SceneManagement.LoadSceneMode)">
             <summary>
-            Unloads a scene asynchronously. 
+            <i><b>[Server Only]</b></i>  Loads a scene asynchronously. 
             </summary>
             <param name="buildIndex"></param>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.GetPrefab(System.String)">
+        <member name="M:Netick.Unity.NetworkSandbox.UnloadSceneAsync(System.String)">
             <summary>
-            Gets a Network Prefab by name.
-            <para>Note: this causes GC.</para>
+            <i><b>[Server Only]</b></i>  Unloads a scene asynchronously. 
             </summary>
-            <param name="name"></param>
-            <returns>The Network Prefab</returns>
+        </member>
+        <member name="T:Netick.Unity.NetworkArray`1">
+            <summary>
+            A networked array.
+            </summary>
         </member>
         <member name="T:Netick.Unity.NetworkRigidbody2D">
             <summary>
@@ -367,11 +387,40 @@
             Returns true if this <see cref="T:Netick.Unity.NetworkObject"/> has been added to the simulation by Netick, and thus has a valid id.
             </summary>
         </member>
+        <member name="P:Netick.Unity.NetworkObject.StateSize">
+            <summary>
+            Returns the networked state size of this object in bytes.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkObject.SetStateFrom(System.Byte*)">
+            <summary>
+            Sets the state of this object. Ignores [OnChanged] callbacks when setting the data.
+            </summary>
+            <param name="source"></param>
+        </member>
         <member name="M:Netick.Unity.NetworkObject.SetParent(Netick.Unity.NetworkObject)">
             <summary>
             <i><b>[Owner/InputSource Only]</b></i> Changes the parent of this object.
             </summary>
             <param name="obj">The object which will become the parent of this object.</param>
+        </member>
+        <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Vector3)">
+            <summary>
+            Instantly moves the object. By calling this method, the object won't be interpolated for one tick.
+            </summary>
+            <param name="position"></param>
+        </member>
+        <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Vector3,UnityEngine.Quaternion)">
+            <summary>
+            Instantly moves the object. By calling this method, the object won't be interpolated for one tick.
+            </summary>
+            <param name="position"></param>
+        </member>
+        <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Quaternion)">
+            <summary>
+            Instantly moves the object. By calling this method, the object won't be interpolated for one tick.
+            </summary>
+            <param name="position"></param>
         </member>
         <member name="T:Netick.Unity.SingleInstanceEnforcer">
             <summary>
@@ -471,6 +520,17 @@
             input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
             </summary>
         </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.StateSize">
+            <summary>
+            Returns the networked state size of this behavior in bytes.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.SetStateFrom(System.Byte*)">
+            <summary>
+            Sets the state of this behavior. Ignores [OnChanged] callbacks when setting the data.
+            </summary>
+            <param name="source"></param>
+        </member>
         <member name="M:Netick.Unity.NetworkBehaviour.FetchInput``1(``0@,System.Int32)">
             <summary>
             Fetchs a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
@@ -493,13 +553,10 @@
         </member>
         <member name="T:Netick.Unity.Network">
             <summary>
-            Manages Netick and its clients, and is used to start and shut down Netick.
+            Manages Netick and its sandboxes, and is used to start and shut down Netick.
             </summary>
         </member>
-        <member name="P:Netick.Unity.Network.StartMode">
-            e
-        </member>
-        <member name="M:Netick.Unity.Network.Init(Netick.Unity.NetickConfig,System.Int32)">
+        <member name="M:Netick.Unity.Network.Init(Netick.Unity.NetickConfig)">
             <summary>
             Initializes Netick. This is automatically called when you start Netick. 
             <para>If you don't provide a <see cref="T:Netick.Unity.NetickConfig"/>, Netick will use the default config, which can be modified/found in (Netick -> Settings).</para>
@@ -508,12 +565,12 @@
         </member>
         <member name="M:Netick.Unity.Network.Shutdown(System.Boolean)">
             <summary>
-            Shuts down Netick and destroys all clients. The shutdown will occur in the next frame. For immediate shutdown, use: <see cref="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)"/>
+            Shuts down Netick and destroys all sandboxes. The shutdown will occur in the next frame. For immediate shutdown, use: <see cref="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)"/>
             </summary>
         </member>
         <member name="M:Netick.Unity.Network.ShutdownImmediately(System.Boolean)">
             <summary>
-            Shuts down Netick and destroys all clients immediately.
+            Shuts down Netick and destroys all sandboxes immediately.
             </summary>
         </member>
         <member name="M:Netick.Unity.Network.ShutdownSandbox(Netick.Unity.NetworkSandbox,System.Boolean)">
@@ -601,6 +658,24 @@
         <member name="M:Netick.Unity.NetworkEventsListener.OnShutdown(Netick.Unity.NetworkSandbox)">
             <summary>
             Called when Netick has been shut down.
+            </summary>
+            <param name="sandbox"></param>
+        </member>
+        <member name="M:Netick.Unity.NetworkEventsListener.OnVisibilityChanged(Netick.Unity.NetworkSandbox)">
+            <summary>
+            Called when a sandbox visibility changes. Use Sandbox.IsVisible to find if the sandbox is visible or not.
+            </summary>
+            <param name="sandbox"></param>
+        </member>
+        <member name="M:Netick.Unity.NetworkEventsListener.OnSceneOperationBegan(Netick.Unity.NetworkSandbox,Netick.Unity.NetworkSceneOperation)">
+            <summary>
+            Called on both the client and the server when a scene load/unload operation was started.
+            </summary>
+            <param name="sandbox"></param>
+        </member>
+        <member name="M:Netick.Unity.NetworkEventsListener.OnSceneOperationDone(Netick.Unity.NetworkSandbox,Netick.Unity.NetworkSceneOperation)">
+            <summary>
+            Called on both the client and the server when a scene load/unload operation finished.
             </summary>
             <param name="sandbox"></param>
         </member>
