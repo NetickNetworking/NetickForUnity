@@ -18,6 +18,22 @@ Netick is a server-authoritative C#/.NET networking solution for Unity, and, in 
 
 ![Showcase](https://i.ibb.co/JRJvkCr/netick-games3.png)
 
+
+What makes Netick vastly superior to other networking solutions are three core pillars:
+
+### Simplicity
+Netick is very simple. The API is intuitive and straightforward. Netick makes writing predicted, high-end, and cheat-free networked games as close to writing single-player games as possible. RPCs are almost completely not used, thus simplifying everything. It will no longer feel like you are writing a multiplayer game.
+
+### Consistency
+While other solutions are plagued by internal de-syncs and race conditions, Netick is completely void of any such issues. There are no race conditions or de-syncs in Netick, you won't have any such issues on the worst connections. Your game will behave the same way for good and very bad connections. Netick is the only solution in the market that offers this guarantee. It is designed from the ground up to satisfy this requirement.
+
+### Exceptional Bandwidth Usage
+Netick uses an innovative Delta Snapshots algorithm that achieves the lowest bandwidth usage seen ever, proven by open-source benchmarks. Netick uses 10x higher compression precision than other networking solutions, yet uses less bandwidth.
+
+### Radical CPU Performance
+Netick is written with high-performance unmanaged C# code in a data-oriented fashion, achieving an unseen level of performance. Netick is designed to not use any CPU time when something does not move or changes. You can have 10K synced objects (non-empty) and use no additional CPU time. Again, Netick is the only solution in the market that does this. This has been referred to as "Dark Magic" by one of our users, it really is magic!
+
+
 ## Installation
 
 ### Prerequisites
@@ -53,7 +69,7 @@ And many others.
 
 ### Bandwidth
 
-Netick 2 uses an innovative state synchronization algorithm that moves multiplayer game development forward. Not only does it achieve the lowest bandwidth usage ever seen, but it also simplifies networked games by ensuring full networked state update atomicity. Netick 2 uses a novel approach for Delta Snapshots that makes it possible to use Interest Management and Delta Snapshots together, performatively. This has been unheard of in AAA or indie games, due to the difficulty or impracticality of doing that. However, in Netick 2, it just works.
+Netick 2 uses an innovative state synchronization algorithm that moves multiplayer game development forward. Not only does it achieve the lowest bandwidth usage ever seen, but it also simplifies networked games by ensuring full networked state update atomicity, completely eliminating all network-related race conditions/desyncs. Netick 2 uses a novel approach for Delta Snapshots that makes it possible to use Interest Management and Delta Snapshots together, performatively. This has been unheard of in AAA or indie games, due to the difficulty or impracticality of doing that. However, in Netick 2, it just works.
 
 Netick also lets you fully sync, predict, and interpolate anything in the game: network properties, collections, etc. This greatly simplifies development for complicated or demanding projects.
 
