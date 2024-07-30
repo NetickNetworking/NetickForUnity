@@ -19,7 +19,7 @@ Netick is a server-authoritative C#/.NET networking solution for Unity, and, in 
 ![Showcase](https://i.ibb.co/JRJvkCr/netick-games3.png)
 
 
-What makes Netick vastly superior to other networking solutions are three core pillars:
+What makes Netick vastly superior to other networking solutions are four core pillars:
 
 ### Simplicity
 Netick is very simple. The API is intuitive and straightforward. Netick makes writing predicted, high-end, and cheat-free networked games as close to writing single-player games as possible. RPCs are almost completely not used, thus simplifying everything. It will no longer feel like you are writing a multiplayer game.
@@ -31,7 +31,7 @@ While other solutions are plagued by internal de-syncs and race conditions, Neti
 Netick uses an innovative Delta Snapshots algorithm that achieves the lowest bandwidth usage seen ever, proven by open-source benchmarks. Netick uses 10x higher compression precision than other networking solutions, yet uses less bandwidth.
 
 ### Radical CPU Performance
-Netick is written with high-performance unmanaged C# code in a data-oriented fashion, achieving an unseen level of performance. Netick is designed to not use any CPU time when something does not move or changes. You can have 10K synced objects (non-empty) and use no additional CPU time. Again, Netick is the only solution in the market that does this. This has been referred to as "Dark Magic" by one of our users, it really is magic!
+Netick is written with high-performance unmanaged C# code in a data-oriented fashion, achieving an unseen level of performance. Netick is designed to not use any CPU time when something does not move or change. You can have 10K synced objects (non-empty) and use no additional CPU time. Again, Netick is the only solution in the market that does this. This has been referred to as "Dark Magic" by one of our users, it really is magic!
 
 
 ## Installation
