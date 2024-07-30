@@ -22,10 +22,10 @@ Netick is a server-authoritative C#/.NET networking solution for Unity, and, in 
 What makes Netick vastly superior to other networking solutions are four core pillars:
 
 ### Simplicity
-Netick is very simple. The API is intuitive and straightforward. Netick makes writing predicted, high-end, and cheat-free networked games as close to writing single-player games as possible. RPCs are almost completely not used, thus simplifying everything. It will no longer feel like you are writing a multiplayer game.
+Netick is **very simple**. The API is intuitive and straightforward. Netick makes writing predicted, high-end, and cheat-free networked games as close to writing single-player games as possible. RPCs are almost completely not used, thus simplifying everything. It will no longer feel like you are writing a multiplayer game.
 
 ### Consistency
-While other solutions are plagued by internal de-syncs and race conditions, Netick is completely void of any such issues. There are no race conditions or de-syncs in Netick, you won't have any such issues on the worst connections. Your game will behave the same way for good and very bad connections. Netick is the only solution in the market that offers this guarantee. It is designed from the ground up to satisfy this requirement.
+While other solutions are plagued by internal de-syncs and race conditions, Netick is completely void of any such issues. Netick ensures the entire networked state of the game is synced atomically and fully together in a tick-aligned manner, thus eliminating all race conditions and de-syncs. Your game will also behave the same way for good and bad connections. Netick is the only solution in the market that offers this guarantee. It is designed from the ground up to satisfy this requirement.
 
 ### Exceptional Bandwidth Usage
 Netick uses an innovative Delta Snapshots algorithm that achieves the lowest bandwidth usage seen ever, proven by open-source benchmarks. Netick uses 10x higher compression precision than other networking solutions, yet uses less bandwidth.
