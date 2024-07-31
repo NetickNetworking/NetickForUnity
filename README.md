@@ -14,7 +14,7 @@
   <a href="https://discord.com/invite/uV6bfG66Fx">Discord</a>
 </p>
 
-Netick is a server-authoritative C#/.NET networking solution for Unity, and, in fact, for all C#-supporting game engines, it's entirely engine-agnostic. Netick is the state-of-the-art networking solution, it's the highest-performing networking solution for Unity, **achieving the lowest bandwidth and CPU usage, proven by** [**open-source benchmarks.**](#technology-and-performance) It’s built with an architecture that’s different from other free solutions. Netick makes building quality and cheat-free multiplayer games easier than ever before. Whether it's a competitive CS-like shooter, a 200-player battle royal, or a survival game, Netick can do it.
+Netick is a free server-authoritative C#/.NET networking solution for Unity, and, in fact, for all C#-supporting game engines, it's entirely engine-agnostic. Netick is the state-of-the-art networking solution, it's the highest-performing networking solution for Unity, **achieving the lowest bandwidth and CPU usage, proven by** [**open-source benchmarks.**](#technology-and-performance) It’s built with an architecture that’s different from other free solutions. Netick makes building quality and cheat-free multiplayer games easier than ever before. Whether it's a competitive CS-like shooter, a 200-player battle royal, or a survival game, Netick can do it.
 
 ![Showcase](https://i.ibb.co/JRJvkCr/netick-games3.png)
 
