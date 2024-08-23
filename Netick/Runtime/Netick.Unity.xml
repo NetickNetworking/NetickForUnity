@@ -9,55 +9,6 @@
             This component is used to replicate the position and rotation of an object. Therefore, it’s the same as the Network Transform, the difference is that Network Rigidbody must be used if you want to have client-side prediction over PhysX objects since it replicates several other properties necessary for correct prediction. 
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.InitializePool(UnityEngine.GameObject,System.Int32,System.Boolean)">
-            <summary>
-            Initializes the pool for the specified prefab. After this method has been called for a certain prefab, all instances of that prefab will be recycled and reset when created/destroyed.
-            <para>Note: this method should only be called on <see cref="M:Netick.Unity.NetworkEventsListener.OnStartup(Netick.Unity.NetworkSandbox)"/>, in other words, just after Netick has been started. </para>
-            </summary>
-            <param name="networkedPrefab">Prefab to enable pooling for.</param>
-            <param name="preloadedAmount">How many instances to be preloaded.</param>
-            <param name="hideInactiveMembers">Pass true to hide inactive pool members.</param>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.GetPrefab(System.String)">
-            <summary>
-            Gets a Network Prefab by name.
-            <para>Note: this causes GC.</para>
-            </summary>
-            <param name="name"></param>
-            <returns>The Network Prefab</returns>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.Instantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion)">
-            <summary>
-            Instantiates a prefab. This must be called instead of <see cref="M:UnityEngine.Object.Instantiate(UnityEngine.Object)"/> or its variations. 
-            <para>Note: this must be called only for non-networked prefabs. If you want to instantiate a network prefab, use <see cref="!:NetworkInstantiate(GameObject, Vector3, Quaternion, NetworkPlayer)"/> instead.</para>
-            </summary>
-            <param name="prefab">The prefab to be instantiated.</param>
-            <param name="position">Position of the instantiated object.</param>
-            <param name="rotation">Rotation of the instantiated object.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer,Netick.SpawnPredictionKey)">
-            <summary>
-            Instantiates a network prefab. 
-            <para>Commonly, this should only be called on the server, since only the server can instantiate network prefabs. However, the client can also call this to spawn-predict a prefab by providing a spawn key which must be the same on the server and client when this method is called. Read the docs to learn more about how to use spawn-prediction.</para>
-            <para>Note: make sure the prefab has been registered. </para> 
-            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
-            </summary>
-            <param name="prefab">The prefab to be instantiated.</param>
-            <param name="position">Position of the instantiated object.</param>
-            <param name="rotation">Rotation of the instantiated object.</param>
-            <param name="inputSource">Input source of the instantiated object.</param>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.Destroy(Netick.Unity.NetworkObject)">
-            /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// /// ///
-            <summary>
-            Destroys a network object. Only call this on the server or on the client for spawn-predicted objects which have -1 Ids.
-            <para>Note: never call this on a child <see cref="T:Netick.Unity.NetworkObject"/> of the original prefab, only the root of the prefab.</para> 
-            </summary>
-            <param name="obj">The object to destroy.</param>
-            <returns></returns>
-        </member>
         <member name="P:Netick.Unity.NetworkSandbox.PhysicsPrediction">
             <summary>
             Use this to enable/disable Physics Prediction in the client at runtime.
@@ -142,9 +93,7 @@
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.Objects">
             <summary>
-            A list containing all simulated/registered network objects [<see cref="T:Netick.Unity.NetworkObject"/>] currently.
-            
-            <para>Note: to get a network object by id, use: <see cref="M:Netick.Unity.NetworkSandbox.TryGetObject(System.Int32,Netick.Unity.NetworkObject@)"/> </para>
+            A dictionary containing all simulated/registered network objects [<see cref="T:Netick.Unity.NetworkObject"/>] currently.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.LocalPlayer">
@@ -189,6 +138,16 @@
         <member name="P:Netick.Unity.NetworkSandbox.OutKBps">
             <summary>
             Outgoing data in kilobytes per second (KBps).
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.InPacketLoss">
+            <summary>
+            <i><b>[Client Only]</b></i> Estimation of incoming packets that are being lost. Value ranges between 0.0 and 1.0, with 1.0 meaning all packets are being lost.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.OutPacketLoss">
+            <summary>
+            <i><b>[Client Only]</b></i> Estimation of outgoing packets that are being lost. Value ranges between 0.0 and 1.0, with 1.0 meaning all packets are being lost.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.InterpolationDelay">
@@ -320,6 +279,54 @@
             <summary>
             <i><b>[Server Only]</b></i>  Unloads a scene asynchronously. 
             </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.InitializePool(UnityEngine.GameObject,System.Int32,System.Boolean)">
+            <summary>
+            Initializes the pool for the specified prefab. After this method has been called for a certain prefab, all instances of that prefab will be recycled and reset when created/destroyed.
+            <para>Note: this method should only be called on <see cref="M:Netick.Unity.NetworkEventsListener.OnStartup(Netick.Unity.NetworkSandbox)"/>, in other words, just after Netick has been started. </para>
+            </summary>
+            <param name="networkedPrefab">Prefab to enable pooling for.</param>
+            <param name="preloadedAmount">How many instances to be preloaded.</param>
+            <param name="hideInactiveMembers">Pass true to hide inactive pool members.</param>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.GetPrefab(System.String)">
+            <summary>
+            Gets a Network Prefab by name.
+            <para>Note: this causes GC.</para>
+            </summary>
+            <param name="name"></param>
+            <returns>The Network Prefab</returns>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.Instantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion)">
+            <summary>
+            Instantiates a prefab. This must be called instead of <see cref="M:UnityEngine.Object.Instantiate(UnityEngine.Object)"/> or its variations. 
+            <para>Note: this must be called only for non-networked prefabs. If you want to instantiate a network prefab, use <see cref="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)"/> instead.</para>
+            </summary>
+            <param name="prefab">The prefab to be instantiated.</param>
+            <param name="position">Position of the instantiated object.</param>
+            <param name="rotation">Rotation of the instantiated object.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
+            <summary>
+            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
+            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            </summary>
+            <param name="prefab">The prefab to be instantiated.</param>
+            <param name="position">Position of the instantiated object.</param>
+            <param name="rotation">Rotation of the instantiated object.</param>
+            <param name="inputSource">Input source of the instantiated object.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.Destroy(Netick.Unity.NetworkObject)">
+            <summary>
+            <i><b>[Server Only]</b></i> Destroys a network object.
+            <para>Note: never call this on a child <see cref="T:Netick.Unity.NetworkObject"/> of the original prefab, only the root of the prefab.</para> 
+            </summary>
+            <param name="obj">The object to destroy.</param>
+            <returns></returns>
         </member>
         <member name="T:Netick.Unity.NetworkArray`1">
             <summary>
@@ -533,7 +540,12 @@
         </member>
         <member name="M:Netick.Unity.NetworkBehaviour.FetchInput``1(``0@,System.Int32)">
             <summary>
-            Fetchs a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
+            Fetches a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.FetchInput``1(``0@,System.Boolean@,System.Int32)">
+            <summary>
+            Fetches a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
             </summary>
         </member>
         <member name="M:Netick.Unity.NetworkBehaviour.OnInputSourceLeft">
@@ -561,7 +573,6 @@
             Initializes Netick. This is automatically called when you start Netick. 
             <para>If you don't provide a <see cref="T:Netick.Unity.NetickConfig"/>, Netick will use the default config, which can be modified/found in (Netick -> Settings).</para>
             </summary>
-            <param name="transport"></param>
         </member>
         <member name="M:Netick.Unity.Network.Shutdown(System.Boolean)">
             <summary>
@@ -690,13 +701,6 @@
             Called on both the client and the server before beginning to load the new scene.
             </summary>
             <param name="sandbox"></param>
-        </member>
-        <member name="M:Netick.Unity.NetworkEventsListener.OnClientSceneLoaded(Netick.Unity.NetworkSandbox,Netick.NetworkConnection)">
-            <summary>
-            Called on the server when a specific client finished loading the scene.
-            </summary>
-            <param name="sandbox"></param>
-            <param name="client"></param>
         </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnConnectedToServer(Netick.Unity.NetworkSandbox,Netick.NetworkConnection)">
             <summary>
