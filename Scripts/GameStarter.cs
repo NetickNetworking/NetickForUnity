@@ -17,13 +17,20 @@ namespace Netick.Samples
 
         public bool                     AutoStart;
         public bool                     AutoConnect;
-        public bool                     ShowDisconnectButton           = true;
-        public bool                     ShowConnectButton              = true;
-
+      
         [Header("Network")]
         [Range(0, 65535)]
         public int                      Port;
         public string                   ServerIPAddress                = "127.0.0.1";
+
+        [Header("Headless Server FPS")]
+        public bool                     Cap                         = true;
+        public int                      FPS                            = 450;
+
+        [Header("UI")]
+        public bool                     ShowDisconnectButton           = true;
+        public bool                     ShowConnectButton              = true;
+        public Vector2                  Offset                         = new Vector2(36, 0);
 
         private void Reset()
         {
@@ -35,6 +42,7 @@ namespace Netick.Samples
         {
             if (Application.isBatchMode)
             {
+                Application.targetFrameRate = FPS;
                 Network.StartAsServer(Transport, Port, SandboxPrefab);
             }
 
@@ -72,24 +80,27 @@ namespace Netick.Samples
             {
                 if (Sandbox != null && Sandbox.IsClient)
                 {
+                    if (!Sandbox.IsVisible)          
+                        return;
+
                     if (Sandbox.IsConnected)
                     {
                         if (ShowDisconnectButton)
                         {
-                            GUI.Label(new Rect(10, 130, 200, 50), $"Connected to {Sandbox.ServerEndPoint}");
+                            GUI.Label(new Rect(Offset.x, Offset.y + 170, 200, 50), $"Connected to {Sandbox.ServerEndPoint}");
 
-                            if (GUI.Button(new Rect(10, 220, 200, 50), "Disconnect"))
+                            if (GUI.Button(new Rect(Offset.x, Offset.y +  220, 200, 50), "Disconnect"))
                                 Sandbox.DisconnectFromServer();
                         }
                        
                     }
                     else if (ShowConnectButton)
                     {
-                        if (GUI.Button(new Rect(10, 10, 200, 50), "Connect"))
+                        if (GUI.Button(new Rect(Offset.x, Offset.y +  40, 200, 50), "Connect"))
                             Sandbox.Connect(Port, ServerIPAddress);
 
-                        ServerIPAddress = GUI.TextField(new Rect(10, 70, 200, 50), ServerIPAddress);
-                        Port = int.Parse(GUI.TextField(new Rect(10, 130, 200, 50), Port.ToString()));
+                        ServerIPAddress = GUI.TextField(new Rect(Offset.x, Offset.y +  100, 200, 50), ServerIPAddress);
+                        Port            = int.Parse(GUI.TextField(new Rect(Offset.x, Offset.y+ 160, 200, 50), Port.ToString()));
                     }
                 }
 
@@ -97,23 +108,23 @@ namespace Netick.Samples
                 return;
             }
 
-            if (GUI.Button(new Rect(10, 10, 200, 50), "Run Host"))
+            if (GUI.Button(new Rect(Offset.x, Offset.y + 40, 200, 50), "Run Host"))
             {
                Network.StartAsHost(Transport, Port, SandboxPrefab);
             }
 
-            if (GUI.Button(new Rect(10, 70, 200, 50), "Run Client"))
+            if (GUI.Button(new Rect(Offset.x, Offset.y + 100, 200, 50), "Run Client"))
             {
                 var sandbox = Network.StartAsClient(Transport, Port, SandboxPrefab);
                 sandbox.Connect(Port, ServerIPAddress);
             }
 
-             if (GUI.Button(new Rect(10, 130, 200, 50), "Run Server"))
+            if (GUI.Button(new Rect(Offset.x, Offset.y + 160, 200, 50), "Run Server"))
             {
                 Network.StartAsServer(Transport, Port, SandboxPrefab);
             }
 
-            if (GUI.Button(new Rect(10, 190, 200, 50), "Run Host + Client"))
+            if (GUI.Button(new Rect(Offset.x, Offset.y + 220, 200, 50), "Run Host + Client"))
             {
                 var sandboxes = Network.StartAsMultiplePeers(Transport, Port, SandboxPrefab, StartServerInMultiplePeersMode, true, Clients);
 
@@ -124,7 +135,7 @@ namespace Netick.Samples
                 }
             }
 
-            ServerIPAddress = GUI.TextField(new Rect(10, 250, 200, 50), ServerIPAddress);
+            ServerIPAddress = GUI.TextField(new Rect(Offset.x, Offset.y + 280, 200, 50), ServerIPAddress);
 
         }
     }
