@@ -24,7 +24,7 @@ namespace Netick.Samples
         public string                   ServerIPAddress                = "127.0.0.1";
 
         [Header("Headless Server FPS")]
-        public bool                     Cap                         = true;
+        public bool                     Cap                            = true;
         public int                      FPS                            = 450;
 
         [Header("UI")]

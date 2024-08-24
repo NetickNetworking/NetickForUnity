@@ -17,9 +17,9 @@ namespace Netick.Samples
          public float    MediumPacketLossThreshold = 1;
          public float    HighPacketLossThreshold   = 10;
 
-         public Vector2  Icon1Offset               = new Vector2(-80, 30);
-         public Vector2  Icon2Offset               = new Vector2(-80, 70);
-         public Vector2  Icon3Offset               = new Vector2(-80, 110);
+         public Vector2  PacketLossIconOffset      = new Vector2(-80, 30);
+         public Vector2  LatencyIconOffset         = new Vector2(-80, 70);
+         public Vector2  ServerLagIconOffset       = new Vector2(-80, 110);
          public float    IconSize                  = 30;
 
          private Texture _packetLossIcon;
@@ -62,9 +62,9 @@ namespace Netick.Samples
 
         public void DrawIcons()
         {
-            var pktLossIconPos   = Icon1Offset + (Screen.width * Vector2.right);
-            var latencyIconPos   = Icon2Offset + (Screen.width * Vector2.right);
-            var serverLagIconPos = Icon3Offset + (Screen.width * Vector2.right);
+            var pktLossIconPos   = PacketLossIconOffset + (Screen.width * Vector2.right);
+            var latencyIconPos   = LatencyIconOffset + (Screen.width * Vector2.right);
+            var serverLagIconPos = ServerLagIconOffset + (Screen.width * Vector2.right);
 
             var pktLoss          = Mathf.Max(Sandbox.InPacketLoss, Sandbox.OutPacketLoss) * 100; // multiplying by 100 to convert from a decimal to a percentage.
             var rtt              = Sandbox.RTT * 1000f; // multiplying by 1000 to convert from seconds to milliseconds.
