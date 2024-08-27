@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System;
 using Netick.Unity;
+using UnityEngine.UIElements;
 
 namespace Netick.Transport
 {
@@ -16,7 +17,7 @@ namespace Netick.Transport
     [Tooltip("Time duration (in seconds) until a connection is dropped when no packets were received.")]
     public float DisconnectTimeout      = 5;
     [Tooltip("Time interval (in seconds) between connection attempts.")]
-    public float ReconnectInterval     = 0.5f;
+    public float ReconnectInterval      = 0.5f;
     [Tooltip("Max number of connect attempts.")]
     public int   MaxConnectAttempts     = 10;
     [Tooltip("LiteNetLib internal logic update interval (in seconds).")]
@@ -222,6 +223,10 @@ namespace Netick.Transport
       if (_clients.TryGetValue(peer, out var c))
       {
         var len = reader.AvailableBytes;
+
+        if (_bytes.Length < reader.AvailableBytes)
+          _bytes      = new byte[reader.AvailableBytes];
+
         reader.       GetBytes(_bytes, 0, reader.AvailableBytes);
      
         fixed(byte* ptr = _bytes)
