@@ -63,8 +63,8 @@ namespace Netick.Samples
         public void DrawIcons()
         {
             var pktLossIconPos   = PacketLossIconOffset + (Screen.width * Vector2.right);
-            var latencyIconPos   = LatencyIconOffset + (Screen.width * Vector2.right);
-            var serverLagIconPos = ServerLagIconOffset + (Screen.width * Vector2.right);
+            var latencyIconPos   = LatencyIconOffset    + (Screen.width * Vector2.right);
+            var serverLagIconPos = ServerLagIconOffset  + (Screen.width * Vector2.right);
 
             var pktLoss          = Mathf.Max(Sandbox.InPacketLoss, Sandbox.OutPacketLoss) * 100; // multiplying by 100 to convert from a decimal to a percentage.
             var rtt              = Sandbox.RTT * 1000f; // multiplying by 1000 to convert from seconds to milliseconds.
