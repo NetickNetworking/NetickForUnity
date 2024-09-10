@@ -37,7 +37,7 @@ namespace Netick.Samples
         {
             if (Network.IsRunning)
             {
-                if (Sandbox != null && Sandbox.IsConnected)
+                if (Sandbox != null && Sandbox.IsConnected && Sandbox.IsVisible)
                 {
                     DrawText(0, "RTT",           (Sandbox.RTT * 1000f).ToString(), "ms");
                     DrawText(1, "In",            Sandbox.InKBps.ToString(), "KB/s");
