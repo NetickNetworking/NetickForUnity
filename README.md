@@ -71,7 +71,7 @@ And many others.
 
 ### Bandwidth
 
-Netick 2 uses an innovative state synchronization algorithm that moves multiplayer game development forward. Not only does it achieve the lowest bandwidth usage ever seen, but it also simplifies networked games by ensuring full/atomic networked state synchronization, completely eliminating all netcode-related race conditions/desyncs, making developing networked games very as close to developing single-player games as possible. Netick 2 uses a novel approach for Delta Snapshots that makes it possible to use Interest Management and Delta Snapshots together, in a performant way. This has been unheard of in AAA or indie games, due to the difficulty or impracticality of doing that. However, in Netick 2, it just works.
+Netick 2 uses an innovative state synchronization algorithm that moves multiplayer game development forward. Not only does it achieve the lowest bandwidth usage ever seen, but it also simplifies networked games by ensuring full/atomic networked state synchronization, completely eliminating all netcode-related race conditions/desyncs, making developing networked games as close to developing single-player games as possible. Netick 2 uses a novel approach for Delta Snapshots that makes it possible to use Interest Management and Delta Snapshots together, in a performant way. This has been unheard of in AAA or indie games, due to the difficulty or impracticality of doing that. However, in Netick 2, it just works.
 
 Netick lets you fully sync, predict, and interpolate anything in the game: network properties, collections, etc. This greatly simplifies development for complicated or demanding projects.
 
