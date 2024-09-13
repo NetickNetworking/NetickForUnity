@@ -29,6 +29,11 @@
             Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a host.
             </summary>
         </member>
+        <member name="P:Netick.Unity.NetworkSandbox.IsPlayer">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a player, which is the case when running as a Client, Host, or in Single-Player mode.
+            </summary>
+        </member>
         <member name="P:Netick.Unity.NetworkSandbox.Config">
             <summary>
             Configuration data for Netick.
@@ -178,6 +183,22 @@
             <para>Note: it's called with every resimulation on the client.</para> 
             </summary>
         </member>
+        <member name="M:Netick.Unity.NetworkSandbox.GetInput``1(System.Int32)">
+            <summary>
+            Gets a specific input for the next tick.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.SetInput``1(``0,System.Int32)">
+            <summary>
+            Sets a specific input for the next tick.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="input"></param>
+            <param name="index"></param>
+        </member>
         <member name="M:Netick.Unity.NetworkSandbox.GetObject(System.Int32)">
             <summary>
             Gets the <see cref="T:Netick.Unity.NetworkObject"/> with the specified id. Returns null in case no object with that id exists.
@@ -201,16 +222,22 @@
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.TickToTime(Netick.Tick)">
             <summary>
-            Converts <paramref name="tick"/> to time in seconds.
+            Converts ticks to time in seconds.
             </summary>
             <param name="tick"></param>
             <returns></returns>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.TickToTime(System.Single)">
             <summary>
-            Converts <paramref name="tick"/> to time in seconds.
+            Converts ticks to time in seconds.
             </summary>
             <param name="tick"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.TimeToTick(System.Single)">
+            <summary>
+            Converts time (in seconds) to ticks.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.AttachBehaviour(Netick.Unity.NetickBehaviour)">
@@ -219,7 +246,7 @@
             </summary>
             <param name="behaviour"></param>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.DeattachBehaviour(Netick.Unity.NetickBehaviour)">
+        <member name="M:Netick.Unity.NetworkSandbox.DetachBehaviour(Netick.Unity.NetickBehaviour)">
             <summary>
             Deattachs a <see cref="T:Netick.Unity.NetickBehaviour"/> from the simulation.
             </summary>
@@ -410,6 +437,11 @@
             <i><b>[Owner/InputSource Only]</b></i> Changes the parent of this object.
             </summary>
             <param name="obj">The object which will become the parent of this object.</param>
+        </member>
+        <member name="T:Netick.Unity.NetworkTransform">
+            <summary>
+            This component is used to replicate the position and rotation of an object.  
+            </summary>
         </member>
         <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Vector3)">
             <summary>
