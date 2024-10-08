@@ -7,6 +7,9 @@ namespace Netick.Samples.FPS
     public class FPSController : NetworkBehaviour
     {
         [SerializeField]
+        private Transform            _renderTransform;
+
+        [SerializeField]
         private float                _movementSpeed                = 10;
         [SerializeField]
         private float                _sensitivityX                 = 1.6f;
@@ -17,7 +20,7 @@ namespace Netick.Samples.FPS
         private CharacterController  _CC;
         private Vector2              _camAngles;
 
-        // Networked properties
+        // Networked Properties
         [Networked][Smooth]
         public Vector2               YawPitch                     { get; set; }
    
@@ -36,7 +39,7 @@ namespace Netick.Samples.FPS
 
         public override void OnInputSourceLeft()
         {
-            // destroy the player object when its input source (controller player) leaves the game
+            // destroy the player object when its input source (controller player) leaves the game.
             Sandbox.Destroy(Object);
         }
 
@@ -45,15 +48,17 @@ namespace Netick.Samples.FPS
             if (!IsInputSource || !Sandbox.InputEnabled)
                 return;
 
-            Vector2 input          = new Vector2(Input.GetAxisRaw("Mouse X") * _sensitivityX, Input.GetAxisRaw("Mouse Y") * _sensitivityY);
+            Vector2 mouseInputs      = new Vector2(Input.GetAxisRaw("Mouse X") * _sensitivityX, Input.GetAxisRaw("Mouse Y") * _sensitivityY);
 
-            var networkInput       = Sandbox.GetInput<FPSInput>();
-            networkInput.YawPitch += input;
-            Sandbox.SetInput<FPSInput>(networkInput);
+            var networkInput         = Sandbox.GetInput<FPSInput>();
+            networkInput.Movement    = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            networkInput.ShootInput |= Input.GetMouseButton(0);
+            networkInput.YawPitch   += mouseInputs;
+            Sandbox.SetInput(networkInput);
          
-            // we apply the rotation in update too to have smooth camera control
-            _camAngles             = ClampAngles(_camAngles.x + input.x, _camAngles.y + input.y);
-            ApplyRotations(_camAngles);
+            // we apply the rotation in update too to have smooth camera control.
+            _camAngles               = ClampAngles(_camAngles.x + mouseInputs.x, _camAngles.y + mouseInputs.y);
+            ApplyRotations(_camAngles, false);
         }
 
         public override void NetworkFixedUpdate()
@@ -64,17 +69,20 @@ namespace Netick.Samples.FPS
 
         private void MoveAndRotate(FPSInput input)
         {
-            // rotation
-            YawPitch     = ClampAngles(YawPitch.x + input.YawPitch.x, YawPitch.y + input.YawPitch.y);
-            ApplyRotations(YawPitch);
+            // clamp movement inputs. 
+            input.Movement = new Vector3(Mathf.Clamp(input.Movement.x, -1f, 1f), Mathf.Clamp(input.Movement.y, -1f, 1f)); 
 
-            // movement direction
-            var movement = transform.TransformVector(new Vector3(input.Movement.x, 0, input.Movement.y)) * _movementSpeed;
-            movement.y   = 0;
+            // rotation.
+            YawPitch       = ClampAngles(YawPitch.x + input.YawPitch.x, YawPitch.y + input.YawPitch.y);
+            ApplyRotations(YawPitch,false);
 
-            var gravity  = 15f * Vector3.down;
+            // movement direction.
+            var movement   = transform.TransformVector(new Vector3(input.Movement.x, 0, input.Movement.y)) * _movementSpeed;
+            movement.y     = 0;
 
-            // move
+            var gravity    = 15f * Vector3.down;
+
+            // move.
             _CC.Move((movement + gravity) * Sandbox.FixedDeltaTime);
         }
 
@@ -82,25 +90,27 @@ namespace Netick.Samples.FPS
         [OnChanged(nameof(YawPitch), invokeDuringResimulation: true)]
         private void OnYawPitchChanged(OnChangedData onChanged)
         {
-            ApplyRotations(YawPitch);
+            ApplyRotations(YawPitch, false);
         }
 
         public override void NetworkRender()
         {
             if (IsProxy)
-                ApplyRotations(YawPitch);
+                ApplyRotations(YawPitch, true);
         }
 
-        private void ApplyRotations(Vector2 camAngles)
+        private void ApplyRotations(Vector2 camAngles, bool isProxy)
         {
-            // on the player transform, we apply yaw
-            transform.rotation             = Quaternion.Euler(new Vector3(0, camAngles.x, 0));
+            // on the player transform, we apply yaw.
+            if (isProxy)
+              _renderTransform.rotation    = Quaternion.Euler(new Vector3(0, camAngles.x, 0));
+            else
+              transform.rotation           = Quaternion.Euler(new Vector3(0, camAngles.x, 0));
 
-            // on the weapon/camera holder, we apply the pitch angle
+            // on the weapon/camera holder, we apply the pitch angle.
             _cameraParent.localEulerAngles = new Vector3(camAngles.y, 0, 0);
             _camAngles                     = camAngles;
         }
-
 
         private Vector2 ClampAngles(float yaw, float pitch)
         {

@@ -70,11 +70,11 @@ namespace Netick.Transport
     private readonly byte[]                    _connectionBytes = new byte[200];
 
     private int                                _port;
-    private Dictionary<NetPeer, LNLConnection> _clients         = new Dictionary<NetPeer, LNLConnection>();
-    private Queue<LNLConnection>               _freeClients     = new Queue<LNLConnection>();
+    private Dictionary<NetPeer, LNLConnection> _clients         = new();
+    private Queue<LNLConnection>               _freeClients     = new();
 
     // LAN Discovery
-    private List<Session>                      _sessions        = new List<Session>();
+    private List<Session>                      _sessions        = new();
     private NetDataWriter                      _writer          = new NetDataWriter();
     private string                             _machineName;
 
@@ -88,7 +88,7 @@ namespace Netick.Transport
       _buffer                        = new BitBuffer(createChunks: false);
       _netManager                    = new NetManager((INetEventListener)this) { AutoRecycle = true };
       _machineName                   = Environment.MachineName;
-      _netManager.DisconnectTimeout  = (int)( _provider.DisconnectTimeout * 1000);
+      _netManager.DisconnectTimeout  = (int)(_provider.DisconnectTimeout * 1000);
       _netManager.ReconnectDelay     = (int)(_provider.ReconnectInterval * 1000);
       _netManager.MaxConnectAttempts = _provider.MaxConnectAttempts;
       _netManager.UpdateTime         = (int)(_provider.UpdateInterval * 1000);

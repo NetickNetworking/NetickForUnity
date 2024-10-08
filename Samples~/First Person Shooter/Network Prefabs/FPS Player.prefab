@@ -158,8 +158,8 @@ GameObject:
   - component: {fileID: 7011933354638177220}
   - component: {fileID: 5100633453439203130}
   - component: {fileID: 3197551385548652812}
-  - component: {fileID: 6851739389618402669}
   - component: {fileID: 1417749684482701243}
+  - component: {fileID: 6918953610149222310}
   m_Layer: 0
   m_Name: FPS Player
   m_TagString: Untagged
@@ -223,25 +223,13 @@ MonoBehaviour:
   TeleportDistance: 50
   PositionPrecision: 3
   Settings: 5
-  TransformSpace: 0
+  TransformSpace: 1
+  EnablePredictionErrorCorrectionSmoothing: 0
+  InterpolationMultiplier: 20
+  CorrectionMultiplier: 3
+  CorrectionMaxBlendAlpha: 0.7
+  TeleportErrorThreshold: 50
   _interpolationSource: 0
---- !u!114 &6851739389618402669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7011933354638177272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 754e582306c60a24eb1619b9878f55fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _movementSpeed: 10
-  _sensitivityX: 1.6
-  _sensitivityY: -1
-  _cameraParent: {fileID: 3369032719007731524}
-  <YawPitch>k__BackingField: {x: 0, y: 0}
 --- !u!143 &1417749684482701243
 CharacterController:
   m_ObjectHideFlags: 0
@@ -268,3 +256,21 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6918953610149222310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7011933354638177272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754e582306c60a24eb1619b9878f55fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _renderTransform: {fileID: 4519677825914407182}
+  _movementSpeed: 10
+  _sensitivityX: 1.6
+  _sensitivityY: -1
+  _cameraParent: {fileID: 3369032719007731524}
+  <YawPitch>k__BackingField: {x: 0, y: 0}

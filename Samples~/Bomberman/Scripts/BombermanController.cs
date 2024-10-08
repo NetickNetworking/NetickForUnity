@@ -9,7 +9,7 @@ namespace Netick.Samples.Bomberman
 {
     public class BombermanController : NetworkBehaviour
     {
-        public List<Bomb>            SpawnedBombs                    = new List<Bomb>();
+        public List<Bomb>            SpawnedBombs                    = new(4);
         [HideInInspector]
         public Vector3               SpawnPos;
         [SerializeField]
@@ -17,11 +17,10 @@ namespace Netick.Samples.Bomberman
         [SerializeField]
         private float                _speedBoostMultiplayer          = 2f;
 
-      
         private GameObject           _bombPrefab;
         private CharacterController  _CC;
 
-        // Networked properties
+        // Networked Properties
         [Networked]
         public int                   Score              { get; set; } = 0;
         [Networked]
@@ -33,23 +32,19 @@ namespace Netick.Samples.Bomberman
         public float                 SpeedPowerUpTimer  { get; set; } = 0;
         [Networked(relevancy: Relevancy.InputSource)]
         public float                 BombPowerUpTimer   { get; set; } = 0;
- 
-        void Awake()
-        {
-            // We store the spawn pos so that we use it later during respawn
-            SpawnPos    = transform.position;
-            _CC         = GetComponent<CharacterController>();
-        } 
 
         public override void NetworkStart()
         {
-            _bombPrefab = Sandbox.GetPrefab("Bomb");
+           _bombPrefab = Sandbox.GetPrefab("Bomb");
+           // we store the spawn pos so that we use it later during respawn.
+           SpawnPos    = transform.position;
+           _CC         = GetComponent<CharacterController>();
         }
 
         public override void OnInputSourceLeft()
         {
             Sandbox.GetComponent<BombermanEventsHandler>().KillPlayer(this);
-            // destroy the player object when its input source (controller player) leaves the game
+            // destroy the player object when its input source (controller player) leaves the game.
             Sandbox.Destroy(Object);
         }
 
@@ -60,27 +55,30 @@ namespace Netick.Samples.Bomberman
 
             if (FetchInput(out BombermanInput input))
             {
+                // clamp movement inputs.
+                input.Movement         = new Vector3(Mathf.Clamp(input.Movement.x, -1f, 1f), Mathf.Clamp(input.Movement.y, -1f, 1f)); 
+
                 if (BombPowerUpTimer > 0)
-                    BombPowerUpTimer -= Sandbox.FixedDeltaTime;
+                    BombPowerUpTimer  -= Sandbox.FixedDeltaTime;
                 else
-                    MaxBombs = 1;
+                    MaxBombs           = 1;
 
                 if (SpeedPowerUpTimer > 0)
                     SpeedPowerUpTimer -= Sandbox.FixedDeltaTime;
 
-                var hasSpeedBoost  = SpeedPowerUpTimer > 0;
-                var speed          = hasSpeedBoost ? _speed * _speedBoostMultiplayer : _speed;
+                var hasSpeedBoost      = SpeedPowerUpTimer > 0;
+                var speed              = hasSpeedBoost ? _speed * _speedBoostMultiplayer : _speed;
 
                 _CC.Move(input.Movement * speed * Sandbox.FixedDeltaTime);
 
-                // we make sure the z coord of the pos of the player is always zero
-                transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
+                // we make sure the z coord of the pos of the player is always zero.
+                transform.position     = new Vector3(transform.position.x, transform.position.y, 0f);
              
                 if (IsServer && input.PlantBomb && SpawnedBombs.Count < MaxBombs)
                 {
-                    // * round the bomb pos so that it snaps to the nearest square.
-                    var bomb = Sandbox.NetworkInstantiate(_bombPrefab, Round(transform.position), Quaternion.identity).GetComponent<Bomb>();
-                    bomb.Bomber = this;
+                    // round the bomb pos so that it snaps to the nearest square.
+                    var bomb           = Sandbox.NetworkInstantiate(_bombPrefab, Round(transform.position), Quaternion.identity).GetComponent<Bomb>();
+                    bomb.Bomber        = this;
                 }
             }
         }
@@ -100,31 +98,31 @@ namespace Netick.Samples.Bomberman
 
         public void Die()
         {
-            Alive = false;
+            Alive              = false;
             Sandbox.GetComponent<BombermanEventsHandler>().KillPlayer(this);
         }
 
         public void Respawn()
         {
-            Alive = true;
             Sandbox.GetComponent<BombermanEventsHandler>().RespawnPlayer(this);
-
-            transform.position = SpawnPos;
-
+            
+            Alive              = true;
             SpeedPowerUpTimer  = 0;
             BombPowerUpTimer   = 0;
             MaxBombs           = 1;
+
+            transform.position = SpawnPos;
         }
 
         [OnChanged(nameof(Alive))]
         private void OnAliveChanged(OnChangedData onChangedData)
         {
-            // Based on state of Alive:
+            // based on state of Alive:
 
-            // * Hide/show player object
+            // * hide/show player object.
             GetComponentInChildren<Renderer>().SetEnabled(Sandbox,Alive);
 
-            // * Enable/disable the CharacterController
+            // * enable/disable the CharacterController.
             _CC.enabled                                = Alive;
         }
 

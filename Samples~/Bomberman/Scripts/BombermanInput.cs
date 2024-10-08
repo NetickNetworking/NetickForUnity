@@ -4,9 +4,11 @@ using Netick.Unity;
 
 namespace Netick.Samples.Bomberman
 {
+    [Networked]
     public struct BombermanInput : INetworkInput
     {
-        public Vector2     Movement;
+        [Networked]
+        public Vector2     Movement { get; set; }
         public NetworkBool PlantBomb;
     }
 }

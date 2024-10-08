@@ -284,6 +284,11 @@ MonoBehaviour:
   AutoConnect: 0
   Port: 36728
   ServerIPAddress: 127.0.0.1
+  Cap: 1
+  FPS: 450
+  ShowDisconnectButton: 1
+  ShowConnectButton: 1
+  Offset: {x: 36, y: 0}
 --- !u!1 &2037625649
 GameObject:
   m_ObjectHideFlags: 0
@@ -7195,7 +7200,7 @@ MeshFilter:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1809360484}
   - {fileID: 2037625652}
   - {fileID: 1070948398}
+  - {fileID: 1809360484}
   - {fileID: 3762179930698311635}

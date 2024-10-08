@@ -15,26 +15,19 @@ namespace Netick.Samples.Bomberman
         public float       PowerUpTime = 35;
         private Material   _mat;
 
-        // Networked properties
+        // Networked Properties
         [Networked]
         public PowerUpType Type { get; set; }
 
         private void Awake()
         {
-            _mat = GetComponentInChildren<Renderer>().material;
+            _mat        = GetComponentInChildren<Renderer>().material;
         }
 
-        private void Update()
+        public override void NetworkRender()
         {
-            if (Type == PowerUpType.IncreaseBombs)
-                _mat.color = GetColor(Color.green);
-            else
-                _mat.color = GetColor(Color.blue);
-        }
-
-        private Color GetColor(Color color)
-        {
-            return Color.Lerp(color, color * 0.5f, Mathf.InverseLerp(-1f, 1f, Mathf.Sin(15f * Time.time)));
+            var color = Type == PowerUpType.IncreaseBombs ? Color.green : Color.blue;
+            _mat.color = Color.Lerp(color, color * 0.5f, Mathf.InverseLerp(-1f, 1f, Mathf.Sin(15f * Time.time)));
         }
 
         public void OnTriggerEnter(Collider other)
@@ -44,7 +37,7 @@ namespace Netick.Samples.Bomberman
 
             var player = other.gameObject.GetComponent<BombermanController>();
 
-            if (Sandbox.IsServer)
+            if (Sandbox.IsServer && player != null)
             {
                 player.ReceivePowerUp(Type, PowerUpTime);
                 Sandbox.Destroy(Object);

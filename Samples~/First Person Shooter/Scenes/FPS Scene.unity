@@ -453,6 +453,11 @@ MonoBehaviour:
   AutoConnect: 0
   Port: 36339
   ServerIPAddress: 127.0.0.1
+  Cap: 1
+  FPS: 450
+  ShowDisconnectButton: 1
+  ShowConnectButton: 1
+  Offset: {x: 36, y: 0}
 --- !u!4 &1293352709
 Transform:
   m_ObjectHideFlags: 0
@@ -480,6 +485,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6475ef2cc420914e87d5433265300cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Offset: {x: 27, y: 20}
+  MediumLatencyThreshold: 150
+  HighLatencyThreshold: 250
+  MediumPacketLossThreshold: 1
+  HighPacketLossThreshold: 10
+  PacketLossIconOffset: {x: -80, y: 30}
+  LatencyIconOffset: {x: -80, y: 70}
+  ServerLagIconOffset: {x: -80, y: 110}
+  IconSize: 30
 --- !u!114 &1293352711
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -790,9 +804,9 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 1293352709}
-  - {fileID: 1318413501}
   - {fileID: 2022675087}
+  - {fileID: 1318413501}
+  - {fileID: 1293352709}
   - {fileID: 476934809}
   - {fileID: 10129275}
   - {fileID: 1929588644}

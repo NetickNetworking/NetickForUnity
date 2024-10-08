@@ -6,7 +6,7 @@ namespace Netick.Samples.Bomberman
 {
     public class Block : NetworkBehaviour
     {
-        // Networked properties
+        // Networked Properties
         [Networked]
         public NetworkBool Visible { get; set; } = true;
 
