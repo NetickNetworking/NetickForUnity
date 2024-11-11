@@ -6,7 +6,7 @@
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Karrar Rahim")]
 [assembly: AssemblyProduct("Netick")]
-[assembly: AssemblyCopyright("Karrar Rahim 2023")]
+[assembly: AssemblyCopyright("Karrar Rahim 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 #endif

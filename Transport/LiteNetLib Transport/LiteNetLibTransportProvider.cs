@@ -1,13 +1,11 @@
 using LiteNetLib;
 using LiteNetLib.Utils;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Net;
 using System.Net.Sockets;
 using System;
 using Netick.Unity;
-using UnityEngine.UIElements;
 
 namespace Netick.Transport
 {
@@ -22,7 +20,6 @@ namespace Netick.Transport
     public int   MaxConnectAttempts     = 10;
     [Tooltip("LiteNetLib internal logic update interval (in seconds).")]
     public float UpdateInterval         = 0.015f;
-
     public override NetworkTransport    MakeTransportInstance() => new LiteNetLibTransport(this);
   }
 
@@ -33,51 +30,24 @@ namespace Netick.Transport
       public LiteNetLibTransport        Transport;
       public NetPeer                    LNLPeer;
       public override IEndPoint         EndPoint => LNLPeer.EndPoint.ToNetickEndPoint();
-
       public override int               Mtu =>      LNLPeer.Mtu;
-
       public LNLConnection(LiteNetLibTransport transport)
       {
         Transport = transport;
       }
-
-      public unsafe override void Send(IntPtr ptr, int length)
-      {
-        SendLNL((byte*)ptr.ToPointer(), length, DeliveryMethod.Unreliable);
-      }
-
-      public unsafe override void SendUserData(IntPtr ptr, int length, TransportDeliveryMethod transportDeliveryMethod)
-      {
-        SendLNL((byte*)ptr.ToPointer(), length, transportDeliveryMethod == TransportDeliveryMethod.Reliable ? DeliveryMethod.ReliableOrdered : DeliveryMethod.Unreliable);
-      }
-
-      private unsafe void SendLNL(byte* ptr, int length, DeliveryMethod deliveryMethod)
-      {
-        if (Transport._bytes.Length < length)
-          Transport._bytes    = new byte[length];
-
-        for (int i = 0; i < length; i++)
-          Transport._bytes[i] = ptr[i];
-        LNLPeer.Send(Transport._bytes, 0, length, deliveryMethod);
-      }
+      public unsafe override void Send(IntPtr ptr, int length)                                         => LNLPeer.Send(new ReadOnlySpan<byte>(ptr.ToPointer(), length), DeliveryMethod.Unreliable);
+      public unsafe override void SendUserData(IntPtr ptr, int length, TransportDeliveryMethod method) => LNLPeer.Send(new ReadOnlySpan<byte>(ptr.ToPointer(), length), method == TransportDeliveryMethod.Unreliable ? DeliveryMethod.Unreliable : DeliveryMethod.ReliableOrdered);
     }
 
     private LiteNetLibTransportProvider        _provider;
     private NetManager                         _netManager;
-    private BitBuffer                          _buffer;
-
-    private byte[]                             _bytes           = new byte[2048];
-    private readonly byte[]                    _connectionBytes = new byte[200];
-
-    private int                                _port;
-    private Dictionary<NetPeer, LNLConnection> _clients         = new();
-    private Queue<LNLConnection>               _freeClients     = new();
-
-    // LAN Discovery
-    private List<Session>                      _sessions        = new();
     private NetDataWriter                      _writer          = new NetDataWriter();
-    private string                             _machineName;
-
+    private BitBuffer                          _buffer;
+    private byte[]                             _connectionBytes = new byte[200];
+    private int                                _port;
+    private Dictionary<NetPeer, LNLConnection> _clients;
+    private Queue<LNLConnection>               _freeClients;
+   
     public LiteNetLibTransport(LiteNetLibTransportProvider provider)
     {
       this._provider                 = provider;
@@ -85,43 +55,36 @@ namespace Netick.Transport
 
     public override void Init()
     {
+      _clients                       = new(Engine.Config.MaxPlayers);
+      _freeClients                   = new(Engine.Config.MaxPlayers);
       _buffer                        = new BitBuffer(createChunks: false);
-      _netManager                    = new NetManager((INetEventListener)this) { AutoRecycle = true };
-      _machineName                   = Environment.MachineName;
+      _netManager                    = new NetManager(this) { AutoRecycle = true };
       _netManager.DisconnectTimeout  = (int)(_provider.DisconnectTimeout * 1000);
       _netManager.ReconnectDelay     = (int)(_provider.ReconnectInterval * 1000);
       _netManager.MaxConnectAttempts = _provider.MaxConnectAttempts;
       _netManager.UpdateTime         = (int)(_provider.UpdateInterval * 1000);
-     
+
       for (int i = 0; i < Engine.Config.MaxPlayers; i++)
         _freeClients.Enqueue(new LNLConnection(this));
     }
 
-    public override void PollEvents()
-    {
-      _netManager.PollEvents();
-    }
-
-    public override void ForceUpdate()
-    {
-      _netManager.TriggerUpdate();
-    }
+    public override void PollEvents()  => _netManager.PollEvents();
+    public override void ForceUpdate() => _netManager.TriggerUpdate();
 
     public override void Run(RunMode mode, int port)
     {
+      _port = port;
+
       if (mode == RunMode.Client)
       {
         _netManager.UnconnectedMessagesEnabled = true;
         _netManager.Start();
       }
-
       else
       {
-        _netManager.BroadcastReceiveEnabled = true;
+        _netManager.BroadcastReceiveEnabled    = true;
         _netManager.Start(port);
       }
-
-      _port = port;
     }
 
     public override void Shutdown()
@@ -135,9 +98,7 @@ namespace Netick.Transport
         _netManager.Start();
 
       if (connectionData == null)
-      {
         _netManager.Connect(address, port, "");
-      }
       else
       {
         _writer.    Reset();
@@ -159,9 +120,8 @@ namespace Netick.Transport
         return;
       }
 
-      int len       = request.Data.AvailableBytes;
-      request.Data.GetBytes(_connectionBytes, 0, len);
-      bool accepted = NetworkPeer.OnConnectRequest(_connectionBytes, len, request.RemoteEndPoint.ToNetickEndPoint());
+      request.Data.GetBytes(_connectionBytes, 0, request.Data.AvailableBytes);
+      bool accepted = NetworkPeer.OnConnectRequest(_connectionBytes, request.Data.AvailableBytes, request.RemoteEndPoint.ToNetickEndPoint());
 
       if (accepted)
         request.Accept();
@@ -173,9 +133,8 @@ namespace Netick.Transport
     {
       var connection     = _freeClients.Dequeue();
       connection.LNLPeer = peer;
-
-      _clients.   Add(peer, connection);
-      NetworkPeer.OnConnected(connection);
+      _clients.          Add(peer, connection);
+      NetworkPeer.       OnConnected(connection);
     }
 
     void INetEventListener.OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
@@ -200,45 +159,30 @@ namespace Netick.Transport
           NetworkPeer.OnConnectFailed(ConnectionFailedReason.Refused);
           return;
         }
-
       }
 
       if (peer == null)
-      {
         return;
-      }
 
       if (_clients.ContainsKey(peer))
       {
         TransportDisconnectReason reason = disconnectInfo.Reason == DisconnectReason.Timeout ? TransportDisconnectReason.Timeout : TransportDisconnectReason.Shutdown;
-
         NetworkPeer. OnDisconnected(_clients[peer], reason);
         _freeClients.Enqueue(_clients[peer]);
         _clients.    Remove(peer);
       }
     }
 
-     unsafe void INetEventListener.OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliveryMethod)
+    unsafe void INetEventListener.OnNetworkReceive(NetPeer peer, NetPacketReader reader, byte channel, DeliveryMethod deliveryMethod)
     {
-      if (_clients.TryGetValue(peer, out var c))
+      if (!_clients.TryGetValue(peer, out var c))
+        return;
+
+      fixed (byte* ptr = reader.RawData)
       {
-        var len = reader.AvailableBytes;
-
-        if (_bytes.Length < reader.AvailableBytes)
-          _bytes      = new byte[reader.AvailableBytes];
-
-        reader.       GetBytes(_bytes, 0, reader.AvailableBytes);
-     
-        fixed(byte* ptr = _bytes)
-        {
-          _buffer.    SetFrom(ptr, len, _bytes.Length);
-          NetworkPeer.Receive(c, _buffer);
-        }
+        _buffer.    SetFrom(ptr + reader.Position, reader.AvailableBytes, reader.RawData.Length);
+        NetworkPeer.Receive(c, _buffer);
       }
-    }
-
-    void INetEventListener.OnNetworkReceiveUnconnected(IPEndPoint remoteEndPoint, NetPacketReader reader, UnconnectedMessageType messageType)
-    {
     }
 
     void INetEventListener.OnNetworkError(IPEndPoint endPoint, SocketError socketError)
@@ -247,9 +191,8 @@ namespace Netick.Transport
       NetworkPeer.OnConnectFailed(ConnectionFailedReason.Refused);
     }
 
+    void INetEventListener.OnNetworkReceiveUnconnected(IPEndPoint remoteEndPoint, NetPacketReader reader, UnconnectedMessageType messageType) { }
     void INetEventListener.OnNetworkLatencyUpdate(NetPeer peer, int latency) { }
   }
-
-
 }
 
