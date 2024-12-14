@@ -1,6 +1,10 @@
 {
   "name": "com.karrar.netick",
+<<<<<<< Updated upstream
   "version": "0.12.72",
+=======
+  "version": "0.12.85",
+>>>>>>> Stashed changes
   "displayName": "Netick",
   "description": "A networking solution for Unity",
   "unity": "2021.3",
