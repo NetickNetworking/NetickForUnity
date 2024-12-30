@@ -120,8 +120,9 @@ namespace Netick.Transport
         return;
       }
 
-      request.Data.GetBytes(_connectionBytes, 0, request.Data.AvailableBytes);
-      bool accepted = NetworkPeer.OnConnectRequest(_connectionBytes, request.Data.AvailableBytes, request.RemoteEndPoint.ToNetickEndPoint());
+      int len       = request.Data.AvailableBytes;
+      request.Data.GetBytes(_connectionBytes, 0, len);
+      bool accepted = NetworkPeer.OnConnectRequest(_connectionBytes, len, request.RemoteEndPoint.ToNetickEndPoint());
 
       if (accepted)
         request.Accept();
