@@ -1,6 +1,6 @@
 {
   "name": "com.karrar.netick",
-  "version": "0.13.13",
+  "version": "0.13.14",
   "displayName": "Netick",
   "description": "A networking solution for Unity",
   "unity": "2021.3",
