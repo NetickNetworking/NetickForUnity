@@ -22,7 +22,7 @@ namespace Netick.Samples
         {
             var spawnPos        = SpawnPosition.position;
             if (StaggerSpawns)
-                spawnPos       += (HorizontalOffset * Vector3.left) * (1 + sandbox.ConnectedPlayers.Count);
+                spawnPos       += (HorizontalOffset * Vector3.left) * (sandbox.ConnectedPlayers.Count - 1);
             var player          = sandbox.NetworkInstantiate(PlayerPrefab, spawnPos, SpawnPosition.rotation, client);
             client.PlayerObject = player;
         }
