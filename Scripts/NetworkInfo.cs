@@ -5,6 +5,9 @@ using Network = Netick.Unity.Network;
 
 namespace Netick.Samples
 {
+    /// <summary>
+    /// This is a helper script for quick prototyping, used to show useful network information of Netick.
+    /// </summary>
     [AddComponentMenu("Netick/Network Info")]
     public class NetworkInfo : NetworkEventsListener
     { 

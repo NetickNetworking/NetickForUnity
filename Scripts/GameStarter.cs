@@ -5,6 +5,9 @@ using Network = Netick.Unity.Network;
 
 namespace Netick.Samples
 {
+    /// <summary>
+    /// This is a helper script for quick prototyping, used to start Netick.
+    /// </summary>
     [AddComponentMenu("Netick/Game Starter")]
     public class GameStarter : NetworkEventsListener
     {
