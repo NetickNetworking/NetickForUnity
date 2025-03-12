@@ -113,8 +113,8 @@ namespace Netick.Samples
 
     // -- Build Scenes
     // NetworkSceneHandler already implements exactly the code shown here, the reason we still included it in here is for demonstration purposes.
-    protected override AsyncOperation LoadBuildSceneAsync(int buildIndex, LoadSceneParameters loadSceneParameters) => SceneManager.LoadSceneAsync(buildIndex, loadSceneParameters);
-    protected override AsyncOperation UnloadBuildSceneAsync(Scene scene) => SceneManager.UnloadSceneAsync(scene);
+    protected override ISceneOperation        LoadBuildSceneAsync         (int buildIndex, LoadSceneParameters loadSceneParameters)                         => new BuildSceneOperation(SceneManager.LoadSceneAsync(buildIndex, loadSceneParameters));
+    protected override ISceneOperation        UnloadBuildSceneAsync       (Scene scene)                                                                     => new BuildSceneOperation(SceneManager.UnloadSceneAsync(scene));
   }
 
   public static class AddressableSceneHandlerSandboxExtensions
