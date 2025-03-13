@@ -1,4 +1,4 @@
-![Netick Pic](https://i.ibb.co/20MBxJ25/Netick-Github-Main.png)
+![Netick Pic](https://i.ibb.co/TBFFQ225/Netick-Github-Main.png)
 
 <p align="center">
   <h3 align="center">High-Performance Networking Engine for Unity</h3>
