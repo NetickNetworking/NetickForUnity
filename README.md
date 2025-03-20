@@ -1,4 +1,4 @@
-![Netick Pic](https://i.ibb.co/QbCLKD3/Netick-Github.png)
+![Netick Pic](https://i.ibb.co/C56h3dcT/Netick-Github-Main.png)
 
 <p align="center">
   <h3 align="center">High-Performance Networking Engine for Unity</h3>
@@ -16,7 +16,7 @@
 
 Netick is a free server-authoritative state-sync networking solution for Unity, and, in fact, for all C#-supporting game engines, it's entirely engine-agnostic. Netick is the state-of-the-art networking solution, it's the highest-performing networking solution for Unity, **achieving the lowest bandwidth and CPU usage, shown by** [**open-source benchmarks.**](#technology-and-performance) Built with an architecture that’s different from other solutions, Netick makes writing cheat-free networked games as close to writing single-player games as possible. Whether it's a competitive CS-like shooter, a 200-player battle royal, or a survival game, Netick can do it.
 
-![Showcase](https://i.ibb.co/JRJvkCr/netick-games3.png)
+![Showcase](https://i.ibb.co/9kNSY07z/Netick-Github-Showcase.png)
 
 What makes Netick vastly superior to other networking solutions are four core pillars:
 
@@ -34,7 +34,7 @@ Netick uses an innovative Delta Snapshots algorithm that achieves the lowest ban
 
 ### Radical CPU Performance
 
-Netick is written with high-performance unmanaged C# code in a data-oriented fashion, achieving an unseen level of performance. Netick is designed to not use any CPU time when something does not move or change. You can have 10K synced objects (non-empty) and use no additional CPU time. Again, Netick is the only solution in the market that does this. This has been referred to as "Dark Magic" by one of our users.
+Netick is written with high-performance unmanaged C# code in a data-oriented fashion, achieving an unseen level of performance. Netick is designed to not use any CPU time when something does not move or change. You can have 10K synced objects (non-empty) and use no additional CPU time. Again, Netick is the only solution in the market that does this. This has been referred to as "Dark Magic" by one of our users. In addition, according to simulated testing, **Netick 2 can compress and write 250 continually moving objects (syncing position and rotation) to 250 clients in less than 0.35ms**, all in a single core (using any modern Intel CPU), giving you the best server performance ever seen in the market.
 
 ## Installation
 
@@ -80,7 +80,7 @@ Netick lets you fully sync, predict, and interpolate anything in the game: netwo
 
 ### CPU
 
-Netick 2 core is written with unsafe C# code, achieving the highest level of performance. According to simulated testing, it's able to write 1 packet (for 100 moving objects) to 200 clients in less than 1.4ms, all in a single core (using any modern Intel CPU). This means the networking CPU cost of your game is as little as possible, leaving you room to do other things in the game. It also means you can have more players than before, with higher tickrate, while requiring less demanding server specs.
+Netick 2 core is written with unmanaged C# code, utilizing novel algorithms and achieving the highest level of performance. According to simulated testing, **Netick 2 can compress and write 250 continually moving objects (syncing position and rotation) to 250 clients in less than 0.35ms**, all in a single core (using any modern Intel CPU), giving you the best server performance ever seen in the market. This means the networking CPU cost of your game is as little as possible, leaving you room to do other things in the game. It also means you can have more players than before, with a higher tickrate, while requiring less demanding server specs.
 
 ## Helpful links:
 

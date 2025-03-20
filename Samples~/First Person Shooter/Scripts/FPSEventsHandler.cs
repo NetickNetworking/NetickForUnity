@@ -12,7 +12,7 @@ namespace Netick.Samples.FPS
         // This is called on the server when a player has connected.
         public override void OnPlayerConnected(NetworkSandbox sandbox, NetworkPlayer networkPlayer)
         {
-            var spawnPos               = SpawnPos.position + Vector3.left * (1 + sandbox.ConnectedPlayers.Count);
+            var spawnPos               = SpawnPos.position + (Vector3.left * sandbox.ConnectedPlayers.Count);
             var player                 = sandbox.NetworkInstantiate(PlayerPrefab, spawnPos, Quaternion.identity, networkPlayer).GetComponent<FPSController>();
             networkPlayer.PlayerObject = player.gameObject;
         }

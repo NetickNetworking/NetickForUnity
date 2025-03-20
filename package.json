@@ -1,11 +1,12 @@
 {
   "name": "com.karrar.netick",
-  "version": "0.12.95",
+  "version": "0.13.31",
   "displayName": "Netick",
   "description": "A networking solution for Unity",
   "unity": "2021.3",
   "dependencies": {
-    "com.unity.nuget.mono-cecil": "1.11.4"
+    "com.unity.nuget.mono-cecil": "1.11.4",
+    "com.unity.addressables": "1.22.3"
   },
   "documentationUrl": "https://www.netick.net/docs.html",
   "samples": [

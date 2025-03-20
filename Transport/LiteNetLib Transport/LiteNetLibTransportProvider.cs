@@ -196,4 +196,3 @@ namespace Netick.Transport
     void INetEventListener.OnNetworkLatencyUpdate(NetPeer peer, int latency) { }
   }
 }
-
