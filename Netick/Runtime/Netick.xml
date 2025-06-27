@@ -4,8 +4,68 @@
         <name>Netick</name>
     </assembly>
     <members>
+        <member name="M:Netick.NativeUDPSocket.Deinitialize">
+            --------------------------------------------------------------------------------------------------------------
+            --------------------------------------------------------------------------------------------------------------
+            --------------------------------------------------------------------------------------------------------------
+            --------------------------------------------------------------------------------------------------------------
+        </member>
         <member name="M:Netick.NetickTransport.OnConnectRequest(Netick.NetworkConnectionRequest)">
             -------------------------------
+        </member>
+        <member name="T:Netick.SequenceId">
+            <summary>
+            A rolling sequence counter for ordering values. Repeats indefinitely
+            with 1022 possible unique values (0 is treated as invalid internally).
+            
+            Consumes 10 bits when encoded for transmission.
+            </summary>
+        </member>
+        <member name="M:Netick.NotServerException.#ctor">
+            <summary>
+            Constructs a NotServerException
+            </summary>
+        </member>
+        <member name="M:Netick.NotServerException.#ctor(System.String)">
+            <summary>
+            Constructs a NotServerException with a message
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:Netick.NotServerException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructs a NotServerException with a message and a inner exception
+            </summary>
+            <param name="message">The exception message</param>
+            <param name="inner">The inner exception</param>
+        </member>
+        <member name="M:Netick.NotClientException.#ctor">
+            <summary>
+            Constructs a NotClientException
+            </summary>
+        </member>
+        <member name="M:Netick.NotClientException.#ctor(System.String)">
+            <summary>
+            Constructs a NotClientException with a message
+            </summary>
+            <param name="message">The exception message</param>
+        </member>
+        <member name="M:Netick.NotClientException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructs a NotClientException with a message and a inner exception
+            </summary>
+            <param name="message">The exception message</param>
+            <param name="inner">The inner exception</param>
+        </member>
+        <member name="M:Netick.BadPacketException.#ctor">
+            <summary>
+            Constructs a BadPacketException
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkPlayerId">
+            <summary>
+            Represents an networked struct identifier for a <see cref="T:Netick.NetworkPlayer"/>.
+            </summary>
         </member>
         <member name="T:Netick.NetworkQueueSnapshot`1">
             <summary>
@@ -15,6 +75,325 @@
         <member name="T:Netick.NetworkQueue`1">
             <summary>
             A networked <see cref="T:System.Collections.Generic.Queue`1"/> collection.
+            </summary>
+        </member>
+        <member name="P:Netick.AdaptiveRemoteInterpolation.CurrentBufferTime">
+            <summary>
+            Interpolation time in seconds.
+            </summary>
+        </member>
+        <member name="P:Netick.AdaptiveRemoteInterpolation.Time">
+            <summary>
+            Time in seconds.
+            </summary>
+        </member>
+        <member name="T:Netick.Interpolator">
+            <summary>
+            A struct that is used to obtain interpolation data for a network variable. 
+            </summary>
+        </member>
+        <member name="M:Netick.Interpolator.GetInterpolationData``1(Netick.InterpolationSource,``0@,``0@,System.Single@)">
+            <summary>
+            Tries to obtain interpolation data for this frame.
+            </summary>
+            <param name="interpolationSource"></param>
+            <param name="from"></param>
+            <param name="to"></param>
+            <param name="alpha"></param>
+            <returns>Returns true if there was interpolation data for this frame.</returns>
+        </member>
+        <member name="M:Netick.Interpolator.GetInterpolationData``1(Netick.InterpolationSource,System.Int32,``0@,``0@,System.Single@)">
+            <summary>
+            Tries to obtain interpolation data for this frame. This is the array version.
+            </summary>
+            <param name="interpolationSource"></param>
+            <param name="from"></param>
+            <param name="to"></param>
+            <param name="alpha"></param>
+            <returns>Returns true if there was interpolation data for this frame.</returns>
+        </member>
+        <member name="T:Netick.Interpolation">
+            <summary>
+            A class representing an abstract interpolation interface, which is implemented by <see cref="T:Netick.RemoteInterpolation"/> and <see cref="T:Netick.LocalInterpolation"/>
+            </summary>
+        </member>
+        <member name="T:Netick.LocalInterpolation">
+            <summary>
+            A class representing the local interpolation of this instance <see cref="T:Netick.NetickEngine"/>. This should be used whenever you want to use Predicted Timeline on the client.
+            </summary>
+        </member>
+        <member name="P:Netick.LocalInterpolation.Time">
+            <summary>
+            Time in seconds.
+            </summary>
+        </member>
+        <member name="T:Netick.RemoteInterpolation">
+            <summary>
+            A class representing the remote interpolation of this instance <see cref="T:Netick.NetickEngine"/>. This should be used whenever you want to use Remote Timeline on the client.
+            </summary>
+        </member>
+        <member name="P:Netick.RemoteInterpolation.CurrentBufferTime">
+            <summary>
+            Interpolation time in seconds.
+            </summary>
+        </member>
+        <member name="P:Netick.RemoteInterpolation.Time">
+            <summary>
+            Time in seconds.
+            </summary>
+        </member>
+        <member name="P:Netick.OnChangedData.InvokedForMisprediction">
+            <summary>
+            Returns true if this OnChanged callback is due to a mismatch between the state of this variable before rollback, and the state after rollback and resimulation.
+            </summary>
+        </member>
+        <member name="M:Netick.OnChangedData.GetPreviousNetworkDictionary``2(Netick.NetworkDictionary{``0,``1})">
+            <summary>
+            Gets a snapshot of the previous state of a NetworkDictionary collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetPreviousNetworkHashSet``1(Netick.NetworkHashSet{``0})">
+            <summary>
+            Gets a snapshot of the previous state of a NetworkHashSet collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetPreviousNetworkLinkedList``1(Netick.NetworkLinkedList{``0})">
+            <summary>
+            Gets a snapshot of the previous state of a NetworkLinkedList collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetPreviousNetworkUnorderedList``1(Netick.NetworkUnorderedList{``0})">
+            <summary>
+            Gets a snapshot of the previous state of a NetworkUnorderedList collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetPreviousNetworkQueue``1(Netick.NetworkQueue{``0})">
+            <summary>
+            Gets a snapshot of the previous state of a NetworkQueue collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetPreviousNetworkStack``1(Netick.NetworkStack{``0})">
+            <summary>
+            Gets a snapshot of the previous state of a NetworkStack collection.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetPreviousValue``1">
+            <summary>
+            Gets previous value for the changed network property. 
+            <para>Note: this must only be used with non-array network properties. For arrays, use <see cref="M:Netick.OnChangedData.GetArrayPreviousElementValue``1(System.Int32)"/> instead. </para>
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetPreviousValueAsPointer">
+            <summary>
+            Gets a pointer to the previous value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetArrayChangedElementIndex">
+            <summary>
+            Gets the index of the changed element of the array.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetArrayPreviousElementValue``1(System.Int32)">
+            <summary>
+            Gets the value of the changed element of the array. This is an unsafe method, use it carefully and make sure to never go outside range to avoid a crash.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.OnChangedData.GetArrayPreviousElementValue``1">
+            <summary>
+            Gets the index of the changed element of the array.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:Netick.NetworkDictionarySnapshot`2">
+            <summary>
+            A snapshot of the state of a <see cref="T:Netick.NetworkDictionary`2"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkDictionary`2">
+            <summary>
+            A networked <see cref="T:System.Collections.Generic.Dictionary`2"/> collection.
+            </summary>
+        </member>
+        <member name="T:Netick.OnChanged">
+            <summary>
+            Use this attribute on a method you want to call when a specific property value changes. Example: [OnChanged(nameof(PropertyName)]
+            </summary>
+        </member>
+        <member name="T:Netick.Rpc">
+             <summary>
+             Use this attribute on any method you want to make an RPC. Should have the return type of void.
+            <para> * Use the parameter "source" to specify who is allowed to send this RPC.</para>
+            <para> * Use the parameter "target" to specify who is allowed to receive and execute this RPC.</para>
+            <para> * Use the parameter "isReliable" to specify if this Rpc should be reliable or not, meaning it won't be lost (due to packet loss).</para>
+            <para> * Use the parameter "localInvoke" to specify if this Rpc should be executed on the machine it was called from.</para>
+             </summary>
+        </member>
+        <member name="T:Netick.NetworkHashSetSnapshot`1">
+            <summary>
+            A snapshot of the state of a <see cref="T:Netick.NetworkHashSet`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkHashSet`1">
+            <summary>
+            A networked <see cref="T:System.Collections.Generic.HashSet`1"/> collection.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkStackSnapshot`1">
+            <summary>
+            A snapshot of the state of a <see cref="T:Netick.NetworkStack`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkStack`1">
+            <summary>
+            A networked <see cref="T:System.Collections.Generic.Stack`1"/> collection.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkLinkedListSnapshot`1">
+            <summary>
+            A snapshot of the state of a <see cref="T:Netick.NetworkLinkedList`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
+            </summary>
+        </member>
+        <member name="F:Netick.NetworkLinkedListNode`1.Index">
+            <summary>
+            Index of this node within the collection.
+            </summary>
+        </member>
+        <member name="F:Netick.NetworkLinkedListNode`1.Next">
+            <summary>
+            Index of the next node.
+            </summary>
+        </member>
+        <member name="F:Netick.NetworkLinkedListNode`1.Previous">
+            <summary>
+            Index of the previous node.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkLinkedList`1">
+            <summary>
+            A networked linked list collection. This is an ordered list meaning that the elements insertion order is maintained when iterating through the collection.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkPlayer">
+            <summary>
+            Represents a network player, which can be either a local player (representing this player) or a remote connection (representing a connected client)).
+            </summary>
+        </member>
+        <member name="P:Netick.NetworkPlayer.PlayerId">
+            <summary>
+            The networked index of this player. 
+            <para>Note: it returns -1 on the client for the local player when not connected to a server.</para>
+            <para>Note: the server player always has Id 0.</para>
+            </summary>
+        </member>
+        <member name="P:Netick.NetworkPlayer.PlayerObject">
+            <summary>
+            Use this to associate an object with this player. This is a local variable that is not synced.
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.ConnectedClients">
+            <summary>
+            A list containing all connected clients currently.
+            <para>Note: if you want the clients + the server, use <see cref="P:Netick.NetickEngine.ConnectedPlayers"/>.</para>
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.ConnectedPlayers">
+            <summary>
+            <para>A list containing all connected clients currently, in addition to the server.</para>
+            <para>Note: if you only want the clients, use <see cref="P:Netick.NetickEngine.ConnectedClients"/>.</para>
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.ServerEndPoint">
+            <summary>
+            <c><b>[Client Only]</b></c> The <see cref="T:System.Net.IPEndPoint"/> of the server you are connected to. Returns null if you are not connected to any server, or if you are the server.
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.IsConnected">
+            <summary>
+            <c><b>[Client Only]</b></c> Returns true if this client is currently connected to a server.
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.FixedDeltaTime">
+            <summary>
+            Time period between simulation ticks.
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:Netick.NetickEngine.Tick" -->
+        <member name="P:Netick.NetickEngine.IsResimulating">
+            <summary>
+            Returns true if we are currently resimulating a previous input/tick of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.InKBps">
+            <summary>
+            Incoming data in kilobytes per second (KBps).
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.OutKBps">
+            <summary>
+            Outgoing data in kilobytes per second (KBps).
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.InPacketLoss">
+            <summary>
+            <c><b>[Client Only]</b></c> Estimation of incoming packets that are being lost. Value ranges between 0.0 and 1.0, with 1.0 meaning all packets are being lost.
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.OutPacketLoss">
+            <summary>
+            <c><b>[Client Only]</b></c> Estimation of outgoing packets that are being lost. Value ranges between 0.0 and 1.0, with 1.0 meaning all packets are being lost.
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.InterpolationDelay">
+            <summary>
+            <c><b>[Client Only]</b></c> Interpolation delay in seconds.
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.RTT">
+            <summary>
+            <c><b>[Client Only]</b></c> The round-trip time (RTT) of the client in seconds.
+            </summary>
+        </member>
+        <member name="M:Netick.NetickEngine.DisconnectFromServer">
+            <summary>
+            <c><b>[Client Only]</b></c> Disconnects this client from the server.
+            </summary>
+        </member>
+        <member name="M:Netick.NetickEngine.AttachBehaviour(Netick.INetickScript,System.Boolean)">
+            <summary>
+            Attaches a <see cref="T:Netick.INetickScript"/> to the simulation.
+            </summary>
+        </member>
+        <member name="M:Netick.NetickEngine.DetachBehaviour(Netick.INetickScript)">
+            <summary>
+            Detaches a <see cref="T:Netick.INetickScript"/> from the simulation.
+            </summary>
+        </member>
+        <member name="M:Netick.NetickEngine.GetWorldStateTotalSize">
+            <summary>
+            Returns the size of the entirety of the game's networked state snapshot size, in bytes. This includes the sizes of all allocated blocks.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Netick.NetickEngine.Update(System.Single,System.Single)">
+            <summary>
+            Updates Netick logic. 
+            </summary>
+        </member>
+        <member name="M:Netick.NetickEngine.Render">
+            <summary>
+            Call this to invoke NetworkRender on simulated entities. This might not be needed if you are running a headless build.
             </summary>
         </member>
         <member name="M:Netick.IGameEngine.GetConnectionMetaSizeWords">
@@ -102,7 +481,7 @@
         <member name="M:Netick.INetickScript.NetworkFixedUpdate">
             <summary>
             Called every fixed-time network update/tick. Any changes/updates to the network state must happen here.
-            <para>On the client, if you are the Input Source or if this Entity.PredictionMode is set to None, it will be called several times in one update/tick during resimulations. To check for resimulations, use [<see cref="P:Netick.Entity.IsResimulating"/>].</para> 
+            <para>On the client, if you are the Input Source or if this Entity.PredictionMode is set to Global, it will be called several times in one update/tick during resimulations. To check for resimulations, use [<see cref="P:Netick.Entity.IsResimulating"/>].</para> 
             </summary>
         </member>
         <member name="M:Netick.INetickScript.NetworkRender">
@@ -112,157 +491,29 @@
         </member>
         <member name="T:Netick.INetickNetworkScript">
             <summary>
-            A network scripts which can have networked properties and rpcs.
+            A script which can have networked properties and rpcs.
             </summary>
         </member>
         <member name="M:Netick.INetickEntity.Initialize(Netick.NetickEngine,Netick.Entity)">
             <summary>
-            Used to initialize the user entity and assign Engine and Entity
+            Used to initialize the user entity and assign Engine and Entity.
             </summary>
             <param name="netickEngine"></param>
             <param name="entity"></param>
         </member>
-        <member name="P:Netick.OnChangedData.InvokedForMisprediction">
+        <member name="T:Netick.NetworkUnorderedListSnapshot`1">
             <summary>
-            Returns true if this OnChanged callback is due to a mismatch between the state of this variable before rollback, and the state after rollback and resimulation.
+            A snapshot of the state of a <see cref="T:Netick.NetworkUnorderedList`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
             </summary>
         </member>
-        <member name="M:Netick.OnChangedData.GetPreviousNetworkDictionary``2(Netick.NetworkDictionary{``0,``1})">
+        <member name="T:Netick.NetworkUnorderedList`1">
             <summary>
-            Gets a snapshot of the previous state of a NetworkDictionary collection.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.OnChangedData.GetPreviousNetworkHashSet``1(Netick.NetworkHashSet{``0})">
-            <summary>
-            Gets a snapshot of the previous state of a NetworkHashSet collection.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.OnChangedData.GetPreviousNetworkLinkedList``1(Netick.NetworkLinkedList{``0})">
-            <summary>
-            Gets a snapshot of the previous state of a NetworkLinkedList collection.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.OnChangedData.GetPreviousNetworkQueue``1(Netick.NetworkQueue{``0})">
-            <summary>
-            Gets a snapshot of the previous state of a NetworkQueue collection.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.OnChangedData.GetPreviousNetworkStack``1(Netick.NetworkStack{``0})">
-            <summary>
-            Gets a snapshot of the previous state of a NetworkStack collection.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.OnChangedData.GetPreviousValue``1">
-            <summary>
-            Gets previous value for the changed network property. 
-            <para>Note: this must only be used with non-array network properties. For arrays, use <see cref="M:Netick.OnChangedData.GetArrayPreviousElementValue``1(System.Int32)"/> instead. </para>
-            </summary>
-            <typeparam name="T"></typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.OnChangedData.GetPreviousValueAsPointer">
-            <summary>
-            Gets a pointer to the previous value
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.OnChangedData.GetArrayChangedElementIndex">
-            <summary>
-            Gets the index of the changed element of the array.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.OnChangedData.GetArrayPreviousElementValue``1(System.Int32)">
-            <summary>
-            Gets the value of the changed element of the array. This is an unsafe method, use it carefully and make sure to never go outside range to avoid a crash.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Netick.OnChangedData.GetArrayPreviousElementValue``1">
-            <summary>
-            Gets the index of the changed element of the array.
-            </summary>
-            <typeparam name="T"></typeparam>
-            <returns></returns>
-        </member>
-        <member name="T:Netick.NetworkDictionarySnapshot`2">
-            <summary>
-            A snapshot of the state of a <see cref="T:Netick.NetworkDictionary`2"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
+            A networked list collection. This is an unordered list meaning that the order of the elements during iteration is undefined.
             </summary>
         </member>
-        <member name="T:Netick.NetworkDictionary`2">
+        <member name="T:Netick.NetworkBool">
             <summary>
-            A networked <see cref="T:System.Collections.Generic.Dictionary`2"/> collection.
-            </summary>
-        </member>
-        <member name="T:Netick.Interpolator">
-            <summary>
-            A struct that is used to obtain interpolation data for a network property. 
-            </summary>
-        </member>
-        <member name="M:Netick.Interpolator.GetInterpolationData``1(Netick.InterpolationSource,``0@,``0@,System.Single@)">
-            <summary>
-            Tries to obtain interpolation data for this frame.
-            </summary>
-            <param name="interpolationSource"></param>
-            <param name="from"></param>
-            <param name="to"></param>
-            <param name="alpha"></param>
-            <returns>Returns true if there was interpolation data for this frame.</returns>
-        </member>
-        <member name="M:Netick.Interpolator.GetInterpolationData``1(Netick.InterpolationSource,System.Int32,``0@,``0@,System.Single@)">
-            <summary>
-            Tries to obtain interpolation data for this frame. This is the array version.
-            </summary>
-            <param name="interpolationSource"></param>
-            <param name="from"></param>
-            <param name="to"></param>
-            <param name="alpha"></param>
-            <returns>Returns true if there was interpolation data for this frame.</returns>
-        </member>
-        <member name="T:Netick.Interpolation">
-            <summary>
-            A class representing an abstract interpolation interface, which is implemented by <see cref="T:Netick.RemoteInterpolation"/> and <see cref="T:Netick.LocalInterpolation"/>
-            </summary>
-        </member>
-        <member name="T:Netick.LocalInterpolation">
-            <summary>
-            A class representing the local interpolation of this instance <see cref="T:Netick.NetickEngine"/>. This should be used whenever you want to use Predicted Timeline on the client.
-            </summary>
-        </member>
-        <member name="P:Netick.LocalInterpolation.Time">
-            <summary>
-            Time in seconds.
-            </summary>
-        </member>
-        <member name="T:Netick.RemoteInterpolation">
-            <summary>
-            A class representing the remote interpolation of this instance <see cref="T:Netick.NetickEngine"/>. This should be used whenever you want to use Remote Timeline on the client.
-            </summary>
-        </member>
-        <member name="P:Netick.RemoteInterpolation.CurrentBufferTime">
-            <summary>
-            Interpolation time in seconds.
-            </summary>
-        </member>
-        <member name="P:Netick.RemoteInterpolation.Time">
-            <summary>
-            Time in seconds.
-            </summary>
-        </member>
-        <member name="P:Netick.AdaptiveRemoteInterpolation.CurrentBufferTime">
-            <summary>
-            Interpolation time in seconds.
-            </summary>
-        </member>
-        <member name="P:Netick.AdaptiveRemoteInterpolation.Time">
-            <summary>
-            Time in seconds.
+            Always use NetworkBool instead of bool, for networked properties and RPC parameters.
             </summary>
         </member>
         <member name="M:Netick.NetworkRpc.InternalIsResim(Netick.NetickEngine)">
@@ -285,229 +536,29 @@
             Internal method. Never call this.
             </summary>
         </member>
-        <member name="T:Netick.SequenceId">
-            <summary>
-            A rolling sequence counter for ordering values. Repeats indefinitely
-            with 1022 possible unique values (0 is treated as invalid internally).
-            
-            Consumes 10 bits when encoded for transmission.
-            </summary>
-        </member>
-        <member name="T:Netick.NetworkHashSetSnapshot`1">
-            <summary>
-            A snapshot of the state of a <see cref="T:Netick.NetworkHashSet`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
-            </summary>
-        </member>
-        <member name="T:Netick.NetworkHashSet`1">
-            <summary>
-            A networked <see cref="T:System.Collections.Generic.HashSet`1"/> collection.
-            </summary>
-        </member>
-        <member name="T:Netick.NetworkStackSnapshot`1">
-            <summary>
-            A snapshot of the state of a <see cref="T:Netick.NetworkStack`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
-            </summary>
-        </member>
-        <member name="T:Netick.NetworkStack`1">
-            <summary>
-            A networked <see cref="T:System.Collections.Generic.Stack`1"/> collection.
-            </summary>
-        </member>
-        <member name="M:Netick.NotServerException.#ctor">
-            <summary>
-            Constructs a NotServerException
-            </summary>
-        </member>
-        <member name="M:Netick.NotServerException.#ctor(System.String)">
-            <summary>
-            Constructs a NotServerException with a message
-            </summary>
-            <param name="message">The exception message</param>
-        </member>
-        <member name="M:Netick.NotServerException.#ctor(System.String,System.Exception)">
-            <summary>
-            Constructs a NotServerException with a message and a inner exception
-            </summary>
-            <param name="message">The exception message</param>
-            <param name="inner">The inner exception</param>
-        </member>
-        <member name="M:Netick.NotClientException.#ctor">
-            <summary>
-            Constructs a NotClientException
-            </summary>
-        </member>
-        <member name="M:Netick.NotClientException.#ctor(System.String)">
-            <summary>
-            Constructs a NotClientException with a message
-            </summary>
-            <param name="message">The exception message</param>
-        </member>
-        <member name="M:Netick.NotClientException.#ctor(System.String,System.Exception)">
-            <summary>
-            Constructs a NotClientException with a message and a inner exception
-            </summary>
-            <param name="message">The exception message</param>
-            <param name="inner">The inner exception</param>
-        </member>
-        <member name="M:Netick.BadPacketException.#ctor">
-            <summary>
-            Constructs a BadPacketException
-            </summary>
-        </member>
-        <member name="T:Netick.NetworkLinkedListSnapshot`1">
-            <summary>
-            A snapshot of the state of a <see cref="T:Netick.NetworkLinkedList`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
-            </summary>
-        </member>
-        <member name="T:Netick.NetworkLinkedList`1">
-            <summary>
-            A networked linked list collection. This is an ordered list meaning that the elements insertion order is maintained when iterating through the collection.
-            </summary>
-        </member>
         <member name="F:Netick.CustomizableSocketTransport._connectRequestBuffer">
             ----------------------------------------------------
         </member>
-        <member name="T:Netick.NetworkPlayer">
+        <member name="P:Netick.NetworkConnection.InPacketLossBurst">
             <summary>
-            Represents a network player, which can be either a local player (representing this sandbox) or a remote connection (representing a connected client)).
+            The longest inward packet loss burst (more than 2 packets lost in a row) in the last 10 seconds.
             </summary>
         </member>
-        <member name="P:Netick.NetworkPlayer.PlayerId">
+        <member name="P:Netick.NetworkConnection.InPacketLoss">
             <summary>
-            The networked index of this player. 
-            <para>Note: it returns -1 on the client for the local player when not connected to a server.</para>
-            <para>Note: the server player always has Id 0.</para>
+            Estimation of incoming packets that are being lost. Value ranges between 0.0 and 1.0, with 1.0 meaning all packets are being lost.
             </summary>
         </member>
-        <member name="P:Netick.NetworkPlayer.PlayerObject">
+        <member name="P:Netick.NetworkConnection.OutPacketLoss">
             <summary>
-            Use this to associate an object with this player.
+            Estimation of outgoing packets that are being lost. Value ranges between 0.0 and 1.0, with 1.0 meaning all packets are being lost.
             </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.ConnectedClients">
-            <summary>
-            A list containing all connected clients currently.
-            <para>Note: if you want the clients + the server, use <see cref="P:Netick.NetickEngine.ConnectedPlayers"/>.</para>
-            </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.ConnectedPlayers">
-            <summary>
-            <para>A list containing all connected clients currently, in addition to the server.</para>
-            <para>Note: if you only want the clients, use <see cref="P:Netick.NetickEngine.ConnectedClients"/>.</para>
-            </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.ServerEndPoint">
-            <summary>
-            <i><b>[Client Only]</b></i> The <see cref="T:System.Net.IPEndPoint"/> of the server you are connected to. Returns null if you are not connected to any server, or if you are the server.
-            </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.IsConnected">
-            <summary>
-            <i><b>[Client Only]</b></i> Returns true if this client is currently connected to a server.
-            </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.FixedDeltaTime">
-            <summary>
-            Time period between simulation ticks.
-            </summary>
-        </member>
-        <!-- Badly formed XML comment ignored for member "P:Netick.NetickEngine.Tick" -->
-        <member name="P:Netick.NetickEngine.IsResimulating">
-            <summary>
-            Returns true if we are currently resimulating a previous input/tick of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
-            </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.InKBps">
-            <summary>
-            Incoming data in kilobytes per second (KBps).
-            </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.OutKBps">
-            <summary>
-            Outgoing data in kilobytes per second (KBps).
-            </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.InterpolationDelay">
-            <summary>
-            <i><b>[Client Only]</b></i> Interpolation delay in seconds.
-            </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.RTT">
-            <summary>
-            <i><b>[Client Only]</b></i> The round-trip time (RTT) of the client in seconds.
-            </summary>
-        </member>
-        <member name="M:Netick.NetickEngine.DisconnectFromServer">
-            <summary>
-            <i><b>[Client Only]</b></i> Disconnects this client from the server.
-            </summary>
-        </member>
-        <member name="M:Netick.NetickEngine.Update(System.Single,System.Single)">
-            <summary>
-            Update Netick's logic. 
-            </summary>
-        </member>
-        <member name="M:Netick.NetickEngine.Render">
-            <summary>
-            Call this to invoke NetworkRender on simulated entities. This might not be needed if you are running a headless build.
-            </summary>
-        </member>
-        <member name="M:Netick.NetickEngine.AttachBehaviour(Netick.INetickScript)">
-            <summary>
-            Attachs a <see cref="T:Netick.INetickScript"/> to the simulation.
-            </summary>
-            <param name="behaviour"></param>
-        </member>
-        <member name="M:Netick.NetickEngine.DeattachBehaviour(Netick.INetickScript)">
-            <summary>
-            Deattachs a <see cref="T:Netick.INetickScript"/> from the simulation.
-            </summary>
-            <param name="behaviour"></param>
         </member>
         <member name="M:Netick.NetworkConnection.SendData(System.Byte,System.Byte*,System.Int32,Netick.TransportDeliveryMethod)">
             <summary>
             Sends data to this connection. 
             <para>Note: the low-level transport must implement <see cref="M:Netick.TransportConnection.SendUserData(System.IntPtr,System.Int32,Netick.TransportDeliveryMethod)"/> for this method to have an effect.</para>
             </summary>
-            <param name="id"></param>
-            <param name="data"></param>
-            <param name="length"></param>
-        </member>
-        <member name="M:Netick.NativeUDPSocket.Deinitialize">
-            --------------------------------------------------------------------------------------------------------------
-            --------------------------------------------------------------------------------------------------------------
-            --------------------------------------------------------------------------------------------------------------
-            --------------------------------------------------------------------------------------------------------------
-        </member>
-        <member name="F:Netick.ClientSimulation.SimReady">
-            -------------------------------- -------------------------------- -------------------------------- --------------------------------
-        </member>
-        <member name="M:Netick.ClientSimulation.AddSnaps">
-             -------------------------------- -------------------------------- -------------------------------- --------------------------------
-        </member>
-        <member name="T:Netick.NetworkUnorderedListSnapshot`1">
-            <summary>
-            A snapshot of the state of a <see cref="T:Netick.NetworkUnorderedList`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
-            </summary>
-        </member>
-        <member name="T:Netick.NetworkUnorderedList`1">
-            <summary>
-            A networked list collection. This is an unordered list meaning that the order of the elements during iteration is undefined.
-            </summary>
-        </member>
-        <member name="T:Netick.OnChanged">
-            <summary>
-            Use this attribute on a method you want to call when a specific property value changes. Example: [OnChanged(nameof(PropertyName)]
-            </summary>
-        </member>
-        <member name="T:Netick.Rpc">
-             <summary>
-             Use this attribute on any method you want to make an RPC. Should have the return type of void, and not be static.
-            <para> * Use the parameter "source" to specify who is allowed to send this RPC.</para>
-            <para> * Use the parameter "target" to specify who is allowed to receive and execute this RPC.</para>
-            <para> * Use the parameter "isReliable" to specify if this Rpc should be reliable or not, meaning it won't be lost (due to packet loss).</para>
-            <para> * Use the parameter "localInvoke" to specify if this Rpc should be executed on the machine it was called from.</para>
-             </summary>
         </member>
     </members>
 </doc>

@@ -45,7 +45,8 @@ namespace Netick.Samples
     {
       if (Application.isBatchMode)
       {
-        Application.targetFrameRate = FPS;
+        if (Cap)
+          Application.targetFrameRate = FPS;
         Network.StartAsServer(Transport, Port, SandboxPrefab);
       }
 

@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.43668216, g: 0.48427725, b: 0.56452835, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -503,12 +502,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1293352707}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb5a4e3a1e885b04e8f36bf0b0597274, type: 3}
+  m_Script: {fileID: 11500000, guid: 13d95c28de1bac54f8b26fc8dd960077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnPos: {fileID: 10129275}
   PlayerPrefab: {fileID: 7011933354638177272, guid: d66d5a97430d3364890108321123b309,
     type: 3}
+  SpawnPosition: {fileID: 10129275}
+  HorizontalOffset: 5
+  StaggerSpawns: 1
+  DestroyPlayerObjectWhenLeaving: 1
 --- !u!1 &1318413499
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,6 +674,7 @@ Terrain:
   m_DetailObjectDensity: 1
   m_HeightmapPixelError: 5
   m_SplatMapDistance: 1000
+  m_HeightmapMinimumLODSimplification: 0
   m_HeightmapMaximumLOD: 0
   m_ShadowCastingMode: 2
   m_DrawHeightmap: 1

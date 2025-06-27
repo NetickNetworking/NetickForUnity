@@ -17,25 +17,27 @@ namespace Netick.Samples
     public bool       StaggerSpawns                  = true;
     public bool       DestroyPlayerObjectWhenLeaving = true;
 
-    // This is called on the server when a player has connected.
-    public override void OnPlayerConnected(NetworkSandbox sandbox, Netick.NetworkPlayer client)
+    // This is called when a player has joined the game.
+    public override void OnPlayerJoined(NetworkSandbox sandbox, NetworkPlayerId player)
     {
+      if (sandbox.IsClient)
+        return;
       var spawnPos = SpawnPosition.position;
       if (StaggerSpawns)
-        spawnPos += (HorizontalOffset * Vector3.left) * (sandbox.ConnectedPlayers.Count - 1);
-      var player = sandbox.NetworkInstantiate(PlayerPrefab, spawnPos, SpawnPosition.rotation, client);
-      client.PlayerObject = player;
+        spawnPos += (HorizontalOffset * Vector3.left) * (sandbox.Players.Count - 1);
+      var playerObj = sandbox.NetworkInstantiate(PlayerPrefab, spawnPos, SpawnPosition.rotation, player);
+      sandbox.SetPlayerObject(player, playerObj);
     }
 
-    // This is called on the server when a player has disconnected.
-    public override void OnPlayerDisconnected(NetworkSandbox sandbox, Netick.NetworkPlayer client, TransportDisconnectReason transportDisconnectReason)
+    // This is called when a player has left the game.
+    public override void OnPlayerLeft(NetworkSandbox sandbox, NetworkPlayerId player)
     {
+      if (sandbox.IsClient)
+        return;
       if (!DestroyPlayerObjectWhenLeaving)
         return;
-
-      var netObj = client.PlayerObject as NetworkObject;
-      if (netObj != null)
-        Sandbox.Destroy(netObj);
+      if (sandbox.TryGetPlayerObject(player, out var playerObj))
+        Sandbox.Destroy(playerObj);
     }
   }
 }
