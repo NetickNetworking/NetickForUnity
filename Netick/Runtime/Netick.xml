@@ -64,7 +64,7 @@
         </member>
         <member name="T:Netick.NetworkPlayerId">
             <summary>
-            Represents an networked struct identifier for a <see cref="T:Netick.NetworkPlayer"/>.
+            Represents a networked struct identifier for a <see cref="T:Netick.NetworkPlayer"/>.
             </summary>
         </member>
         <member name="T:Netick.NetworkQueueSnapshot`1">
@@ -76,6 +76,57 @@
             <summary>
             A networked <see cref="T:System.Collections.Generic.Queue`1"/> collection.
             </summary>
+        </member>
+        <member name="P:Netick.NetworkQueue`1.Count">
+            <summary>
+            Gets the number of elements contained in the queue.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkQueue`1.Clear">
+            <summary>
+            Removes all elements from the queue.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkQueue`1.Enqueue(`0)">
+            <summary>
+            Adds an item to the end of the queue if there is capacity.
+            </summary>
+            <param name="item">The item to add.</param>
+            <returns><c>true</c> if the item was added; otherwise, <c>false</c> if the queue is full.</returns>
+        </member>
+        <member name="M:Netick.NetworkQueue`1.Dequeue">
+            <summary>
+            Removes and returns the item at the beginning of the queue.
+            </summary>
+            <returns>The item removed from the beginning of the queue.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if the queue is empty.</exception>
+        </member>
+        <member name="M:Netick.NetworkQueue`1.TryDequeue(`0@)">
+            <summary>
+            Attempts to remove and return the item at the beginning of the queue.
+            </summary>
+            <param name="result">When this method returns, contains the object removed from the queue, or the default value if the queue is empty.</param>
+            <returns><c>true</c> if an item was dequeued; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Netick.NetworkQueue`1.Peek">
+            <summary>
+            Returns the item at the beginning of the queue without removing it.
+            </summary>
+            <returns>The item at the beginning of the queue.</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if the queue is empty.</exception>
+        </member>
+        <member name="M:Netick.NetworkQueue`1.TryPeek(`0@)">
+            <summary>
+            Attempts to return the item at the beginning of the queue without removing it.
+            </summary>
+            <param name="result">When this method returns, contains the object at the beginning of the queue, or the default value if the queue is empty.</param>
+            <returns><c>true</c> if an item was found; otherwise, <c>false</c>.</returns>
+        </member>
+        <member name="M:Netick.NetworkQueue`1.Add(`0)">
+            <summary>
+            Adds an item to the underlying original queue. Used for local operations.
+            </summary>
+            <param name="item">The item to add.</param>
         </member>
         <member name="P:Netick.AdaptiveRemoteInterpolation.CurrentBufferTime">
             <summary>
@@ -96,20 +147,12 @@
             <summary>
             Tries to obtain interpolation data for this frame.
             </summary>
-            <param name="interpolationSource"></param>
-            <param name="from"></param>
-            <param name="to"></param>
-            <param name="alpha"></param>
             <returns>Returns true if there was interpolation data for this frame.</returns>
         </member>
         <member name="M:Netick.Interpolator.GetInterpolationData``1(Netick.InterpolationSource,System.Int32,``0@,``0@,System.Single@)">
             <summary>
             Tries to obtain interpolation data for this frame. This is the array version.
             </summary>
-            <param name="interpolationSource"></param>
-            <param name="from"></param>
-            <param name="to"></param>
-            <param name="alpha"></param>
             <returns>Returns true if there was interpolation data for this frame.</returns>
         </member>
         <member name="T:Netick.Interpolation">
@@ -221,9 +264,92 @@
             A snapshot of the state of a <see cref="T:Netick.NetworkDictionary`2"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
             </summary>
         </member>
+        <member name="M:Netick.NetworkDictionarySnapshot`2.ContainsKey(`0)">
+            <summary>
+            Determines whether the dictionary contains the specified key.
+            </summary>
+            <param name="key">The key to locate in the dictionary.</param>
+            <returns>true if the dictionary contains an element with the specified key; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkDictionarySnapshot`2.ContainsValue(`1)">
+            <summary>
+            Determines whether the dictionary contains a specific value.
+            </summary>
+            <param name="value">The value to locate in the dictionary.</param>
+            <returns>true if the value is found; otherwise, false.</returns>
+        </member>
         <member name="T:Netick.NetworkDictionary`2">
             <summary>
             A networked <see cref="T:System.Collections.Generic.Dictionary`2"/> collection.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkDictionary`2.Clear">
+            <summary>
+            Removes all keys and values from the dictionary.
+            </summary>
+        </member>
+        <member name="P:Netick.NetworkDictionary`2.Item(`0)">
+            <summary>
+            Gets or sets the value associated with the specified key.
+            </summary>
+            <param name="key">The key whose value to get or set.</param>
+            <returns>The value associated with the specified key.</returns>
+            <exception cref="T:System.Collections.Generic.KeyNotFoundException">Thrown when the key does not exist in the dictionary.</exception>
+        </member>
+        <member name="P:Netick.NetworkDictionary`2.Count">
+            <summary>
+            Gets the number of elements contained in the dictionary.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkDictionary`2.Add(`0,`1)">
+            <summary>
+            Adds the specified key and value to the dictionary.
+            </summary>
+            <param name="key">The key of the element to add.</param>
+            <param name="value">The value of the element to add.</param>
+            <returns>true if the key/value pair was added; false if the key already exists or the dictionary is full.</returns>
+        </member>
+        <member name="M:Netick.NetworkDictionary`2.Remove(`0)">
+            <summary>
+            Removes the value with the specified key from the dictionary.
+            </summary>
+            <param name="key">The key of the element to remove.</param>
+            <returns>true if the element is successfully removed; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkDictionary`2.TryGetValue(`0,`1@)">
+            <summary>
+            Tries to get the value associated with the specified key.
+            </summary>
+            <param name="key">The key whose value to get.</param>
+            <param name="value">When this method returns, contains the value associated with the specified key, if the key is found; otherwise, the default value for the type of the value parameter.</param>
+            <returns>true if the key was found; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkDictionary`2.SetKeyValue(`0,`1)">
+            <summary>
+            Sets the value associated with the specified key if it exists in the dictionary.
+            If the key is found, updates its value.
+            </summary>
+            <returns>true if the key was found and updated; otherwise, false</returns>
+        </member>
+        <member name="M:Netick.NetworkDictionary`2.ContainsKey(`0)">
+            <summary>
+            Determines whether the dictionary contains the specified key.
+            </summary>
+            <param name="key">The key to locate in the dictionary.</param>
+            <returns>true if the dictionary contains an element with the specified key; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkDictionary`2.ContainsValue(`1)">
+            <summary>
+            Determines whether the dictionary contains a specific value.
+            </summary>
+            <param name="value">The value to locate in the dictionary.</param>
+            <returns>true if the value is found; otherwise, false.</returns>
+        </member>
+        <member name="T:Netick.InterestManagementGroup">
+            <summary>
+            Represents a group used for interest management in the Netick.
+            An InterestManagementGroup contains a collection of entities and manages which clients are interested in those entities,
+            typically for the purpose of optimizing network traffic by only sending relevant updates to clients.
             </summary>
         </member>
         <member name="T:Netick.OnChanged">
@@ -240,14 +366,57 @@
             <para> * Use the parameter "localInvoke" to specify if this Rpc should be executed on the machine it was called from.</para>
              </summary>
         </member>
+        <member name="T:Netick.NetworkTimer">
+            <summary>
+            A helper struct that can be used to as a timer for various gameplay purposes.
+            </summary>
+        </member>
         <member name="T:Netick.NetworkHashSetSnapshot`1">
             <summary>
             A snapshot of the state of a <see cref="T:Netick.NetworkHashSet`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
             </summary>
         </member>
+        <member name="M:Netick.NetworkHashSetSnapshot`1.Contains(`0)">
+            <summary>
+            Determines whether the hashset snapshot contains a specific value.
+            </summary>
+            <param name="item">The object to locate in the snapshot.</param>
+            <returns>true if item is found; otherwise, false.</returns>
+        </member>
         <member name="T:Netick.NetworkHashSet`1">
             <summary>
             A networked <see cref="T:System.Collections.Generic.HashSet`1"/> collection.
+            </summary>
+        </member>
+        <member name="P:Netick.NetworkHashSet`1.Count">
+            <summary>
+            Gets the number of elements contained in the set.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkHashSet`1.Add(`0)">
+            <summary>
+            Adds an item to the set.
+            </summary>
+            <param name="item">The element to add.</param>
+            <returns>true if the element is added to the set; false if the element is already present or the set was full.</returns>
+        </member>
+        <member name="M:Netick.NetworkHashSet`1.Remove(`0)">
+            <summary>
+            Removes the specified item from the set.
+            </summary>
+            <param name="item">The element to remove.</param>
+            <returns>true if the element is successfully removed; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkHashSet`1.Contains(`0)">
+            <summary>
+            Determines whether the set contains a specific value.
+            </summary>
+            <param name="item">The object to locate in the set.</param>
+            <returns>true if item is found; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkHashSet`1.Clear">
+            <summary>
+            Removes all item from the set.
             </summary>
         </member>
         <member name="T:Netick.NetworkStackSnapshot`1">
@@ -255,14 +424,83 @@
             A snapshot of the state of a <see cref="T:Netick.NetworkStack`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
             </summary>
         </member>
+        <member name="P:Netick.NetworkStackSnapshot`1.Count">
+            <summary>
+            Gets the number of elements in the stack.
+            </summary>
+        </member>
         <member name="T:Netick.NetworkStack`1">
             <summary>
             A networked <see cref="T:System.Collections.Generic.Stack`1"/> collection.
             </summary>
         </member>
+        <member name="P:Netick.NetworkStack`1.Count">
+            <summary>
+            Gets the number of items contained in the stack.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkStack`1.Clear">
+            <summary>
+            Removes all items from the stack.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkStack`1.Push(`0)">
+            <summary>
+            Pushes an item onto the top of the stack.
+            </summary>
+            <param name="item">The item to push onto the stack.</param>
+            <returns>True if the item was pushed; false if the stack is full.</returns>
+        </member>
+        <member name="M:Netick.NetworkStack`1.Pop">
+            <summary>
+            Removes and returns the item at the top of the stack.
+            </summary>
+            <returns>The item removed from the top of the stack, or default if the stack is empty.</returns>
+        </member>
+        <member name="M:Netick.NetworkStack`1.TryPop(`0@)">
+            <summary>
+            Attempts to remove and return the item at the top of the stack.
+            </summary>
+            <param name="result">The item removed from the top of the stack, or default if the stack is empty.</param>
+            <returns>True if an item was removed; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkStack`1.Peek">
+            <summary>
+            Returns the item at the top of the stack without removing it.
+            </summary>
+            <returns>The item at the top of the stack, or default if the stack is empty.</returns>
+        </member>
+        <member name="M:Netick.NetworkStack`1.TryPeek(`0@)">
+            <summary>
+            Attempts to return the item at the top of the stack without removing it.
+            </summary>
+            <param name="result">The item at the top of the stack, or default if the stack is empty.</param>
+            <returns>True if an item was returned; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkStack`1.Add(`0)">
+            <summary>
+            Adds an item to the original stack (used for internal state).
+            </summary>
+            <param name="item">The element to add.</param>
+        </member>
         <member name="T:Netick.NetworkLinkedListSnapshot`1">
             <summary>
             A snapshot of the state of a <see cref="T:Netick.NetworkLinkedList`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
+            </summary>
+        </member>
+        <member name="P:Netick.NetworkLinkedListSnapshot`1.Head">
+            <summary>
+            Gets the first node in the linked list snapshot.
+            </summary>
+        </member>
+        <member name="P:Netick.NetworkLinkedListSnapshot`1.Tail">
+            <summary>
+            Gets the last node in the linked list snapshot.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkLinkedListSnapshot`1.GetNode(System.Int32)">
+            <summary>
+            Gets the node at the specified index in the snapshot.
             </summary>
         </member>
         <member name="F:Netick.NetworkLinkedListNode`1.Index">
@@ -285,21 +523,89 @@
             A networked linked list collection. This is an ordered list meaning that the elements insertion order is maintained when iterating through the collection.
             </summary>
         </member>
-        <member name="T:Netick.NetworkPlayer">
+        <member name="P:Netick.NetworkLinkedList`1.Head">
             <summary>
-            Represents a network player, which can be either a local player (representing this player) or a remote connection (representing a connected client)).
+            Gets the first node in the linked list.
             </summary>
         </member>
-        <member name="P:Netick.NetworkPlayer.PlayerId">
+        <member name="P:Netick.NetworkLinkedList`1.Tail">
             <summary>
-            The networked index of this player. 
-            <para>Note: it returns -1 on the client for the local player when not connected to a server.</para>
-            <para>Note: the server player always has Id 0.</para>
+            Gets the last node in the linked list.
             </summary>
         </member>
-        <member name="P:Netick.NetworkPlayer.PlayerObject">
+        <member name="P:Netick.NetworkLinkedList`1.Count">
             <summary>
-            Use this to associate an object with this player. This is a local variable that is not synced.
+            Gets the number of items contained in the linked list.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkLinkedList`1.Add(`0)">
+            <summary>
+            Adds an item to the end of the linked list.
+            </summary>
+            <param name="item">The item to add.</param>
+            <returns>True if the item was added; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkLinkedList`1.AddFirst(`0,Netick.NetworkLinkedListNode{`0}@)">
+            <summary>
+            Adds an item as the first node in the linked list.
+            </summary>
+            <param name="item">The item to add.</param>
+            <param name="addedNode">The node that was added.</param>
+            <returns>True if the item was added; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkLinkedList`1.AddLast(`0,Netick.NetworkLinkedListNode{`0}@)">
+            <summary>
+            Adds an item as the last node in the linked list.
+            </summary>
+            <param name="item">The item to add.</param>
+            <param name="addedNode">The node that was added.</param>
+            <returns>True if the item was added; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkLinkedList`1.AddBefore(Netick.NetworkLinkedListNode{`0},`0,Netick.NetworkLinkedListNode{`0}@)">
+            <summary>
+            Adds an item before the specified node in the linked list.
+            </summary>
+            <param name="beforeThisNode">The node before which to insert the new item.</param>
+            <param name="item">The item to add.</param>
+            <param name="addedNode">The node that was added.</param>
+            <returns>True if the item was added; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkLinkedList`1.AddAfter(Netick.NetworkLinkedListNode{`0},`0,Netick.NetworkLinkedListNode{`0}@)">
+            <summary>
+            Adds an item after the specified node in the linked list.
+            </summary>
+            <param name="afterThisNode">The node after which to insert the new item.</param>
+            <param name="item">The item to add.</param>
+            <param name="addedNode">The node that was added.</param>
+            <returns>True if the item was added; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkLinkedList`1.Remove(`0)">
+            <summary>
+            Removes the first occurrence of the specified item from the linked list.
+            </summary>
+            <param name="item">The item to remove.</param>
+            <returns>True if the item was removed; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkLinkedList`1.Remove(Netick.NetworkLinkedListNode{`0})">
+            <summary>
+            Removes the specified node from the linked list.
+            </summary>
+            <param name="node">The node to remove.</param>
+            <returns>True if the node was removed; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkLinkedList`1.Clear">
+            <summary>
+            Removes all items from the linked list.
+            </summary>
+        </member>
+        <member name="P:Netick.NetworkLinkedList`1.Nodes">
+            <summary>
+            Gets an enumerable collection of all nodes in the linked list.
+            </summary>
+        </member>
+        <member name="T:Netick.NetickEngine">
+            <summary>
+            The NetickEngine class is the core of Netick, managing networking, simulation, interpolation, replication, etc.
             </summary>
         </member>
         <member name="P:Netick.NetickEngine.ConnectedClients">
@@ -370,6 +676,12 @@
             <c><b>[Client Only]</b></c> Disconnects this client from the server.
             </summary>
         </member>
+        <member name="M:Netick.NetickEngine.GetWorldStateTotalSize">
+            <summary>
+            Returns the size of the entirety of the game's networked state snapshot size, in bytes. This includes the sizes of all allocated blocks.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Netick.NetickEngine.AttachBehaviour(Netick.INetickScript,System.Boolean)">
             <summary>
             Attaches a <see cref="T:Netick.INetickScript"/> to the simulation.
@@ -380,12 +692,6 @@
             Detaches a <see cref="T:Netick.INetickScript"/> from the simulation.
             </summary>
         </member>
-        <member name="M:Netick.NetickEngine.GetWorldStateTotalSize">
-            <summary>
-            Returns the size of the entirety of the game's networked state snapshot size, in bytes. This includes the sizes of all allocated blocks.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="M:Netick.NetickEngine.Update(System.Single,System.Single)">
             <summary>
             Updates Netick logic. 
@@ -394,6 +700,28 @@
         <member name="M:Netick.NetickEngine.Render">
             <summary>
             Call this to invoke NetworkRender on simulated entities. This might not be needed if you are running a headless build.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkPlayer">
+            <summary>
+            Represents a network player, which can be either a local player (representing this player) or a remote connection (representing a connected client)).
+            </summary>
+        </member>
+        <member name="P:Netick.NetworkPlayer.PlayerId">
+            <summary>
+            The networked index of this player. 
+            <para>Note: it returns -1 on the client for the local player when not connected to a server.</para>
+            <para>Note: the server player always has Id 0.</para>
+            </summary>
+        </member>
+        <member name="P:Netick.NetworkPlayer.PlayerObject">
+            <summary>
+            Use this to associate an object with this player. This is a local variable that is not synced.
+            </summary>
+        </member>
+        <member name="T:Netick.Tick">
+            <summary>
+            Represents a network tick.
             </summary>
         </member>
         <member name="M:Netick.IGameEngine.GetConnectionMetaSizeWords">
@@ -511,9 +839,33 @@
             A networked list collection. This is an unordered list meaning that the order of the elements during iteration is undefined.
             </summary>
         </member>
-        <member name="T:Netick.NetworkBool">
+        <member name="P:Netick.NetworkUnorderedList`1.Count">
             <summary>
-            Always use NetworkBool instead of bool, for networked properties and RPC parameters.
+            Gets the number of items contained in the list.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkUnorderedList`1.Clear">
+            <summary>
+            Removes all elements from the list.
+            </summary>
+        </member>
+        <member name="M:Netick.NetworkUnorderedList`1.Add(`0)">
+            <summary>
+            Adds an item to the list.
+            </summary>
+            <param name="item">The item to add.</param>
+            <returns>True if the item was added; otherwise, false.</returns>
+        </member>
+        <member name="M:Netick.NetworkUnorderedList`1.Remove(`0)">
+            <summary>
+            Removes an item from the list.
+            </summary>
+            <param name="item">The item to add.</param>
+            <returns>True if the item was removed; otherwise, false.</returns>
+        </member>
+        <member name="T:Netick.InterestManagement">
+            <summary>
+            Manages interest groups and area of interest (AoI) layers.
             </summary>
         </member>
         <member name="M:Netick.NetworkRpc.InternalIsResim(Netick.NetickEngine)">
@@ -521,7 +873,7 @@
             Internal method. Never call this.
             </summary>
         </member>
-        <member name="M:Netick.NetworkRpc.InternalCreateRpc(Netick.NetickEngine,Netick.NetworkConnection,System.Int32,Netick.INetickNetworkScript,System.Boolean,Netick.RpcPeers,System.Int32)">
+        <member name="M:Netick.NetworkRpc.InternalCreateRpc(Netick.NetickEngine,System.Boolean,Netick.NetworkPlayerId,System.Int32,Netick.INetickNetworkScript,System.Boolean,Netick.RpcPeers,System.Int32)">
             <summary>
             Internal method. Never call this.
             </summary>
@@ -531,9 +883,14 @@
             Internal method. Never call this.
             </summary>
         </member>
-        <member name="M:Netick.NetworkRpc.InternalCanInvoke(Netick.NetickEngine,Netick.Entity,Netick.RpcPeers,Netick.RpcPeers,System.Boolean,System.Int32)">
+        <member name="M:Netick.NetworkRpc.InternalCanInvokeWithRID(Netick.NetickEngine,Netick.Entity,Netick.RpcPeers,Netick.RpcPeers,System.Boolean,System.Int32,Netick.RpcContext@)">
             <summary>
             Internal method. Never call this.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkBool">
+            <summary>
+            Always use NetworkBool instead of bool, for networked properties and RPC parameters.
             </summary>
         </member>
         <member name="F:Netick.CustomizableSocketTransport._connectRequestBuffer">
@@ -558,6 +915,36 @@
             <summary>
             Sends data to this connection. 
             <para>Note: the low-level transport must implement <see cref="M:Netick.TransportConnection.SendUserData(System.IntPtr,System.Int32,Netick.TransportDeliveryMethod)"/> for this method to have an effect.</para>
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkString8">
+            <summary>
+            Represents a fixed-size network-serializable string with a maximum length of 8 characters.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkString16">
+            <summary>
+            Represents a fixed-size network-serializable string with a maximum length of 16 characters.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkString32">
+            <summary>
+            Represents a fixed-size network-serializable string with a maximum length of 32 characters.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkString64">
+            <summary>
+            Represents a fixed-size network-serializable string with a maximum length of 64 characters.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkString128">
+            <summary>
+            Represents a fixed-size network-serializable string with a maximum length of 128 characters.
+            </summary>
+        </member>
+        <member name="T:Netick.NetworkString256">
+            <summary>
+            Represents a fixed-size network-serializable string with a maximum length of 256 characters.
             </summary>
         </member>
     </members>
