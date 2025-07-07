@@ -193,7 +193,7 @@
         </member>
         <member name="P:Netick.Unity.NetworkObject.InputSourcePlayerId">
             <summary>
-            Returns the NetworkPlayerId of the input source of this object. This is synced for every client.
+            Returns the NetworkPlayerId of the input source of this object. This is synced to every client.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkObject.InterestGroup">
@@ -398,7 +398,7 @@
         </member>
         <member name="P:Netick.Unity.NetworkBehaviour.InputSourcePlayerId">
             <summary>
-            Returns the NetworkPlayerId of the input source of this object. This is synced for every client.
+            Returns the NetworkPlayerId of the input source of this object. This is synced to every client.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkBehaviour.StateSize">
@@ -832,7 +832,7 @@
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.LocalPlayer">
             <summary>
-            The local player (this) player of this sandbox instance.
+            The local player of this sandbox instance.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.FixedDeltaTime">

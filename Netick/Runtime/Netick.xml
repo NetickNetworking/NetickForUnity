@@ -352,6 +352,15 @@
             typically for the purpose of optimizing network traffic by only sending relevant updates to clients.
             </summary>
         </member>
+        <member name="T:Netick.Networked">
+             <summary>
+             Use this attribute on a property to make it networked. It will be synchronized across the network.
+            <para> * Use the parameter "size" to specify the max capacity of a network array/collection.</para>
+            <para> * Use the parameter "relevancy" to specify who will receive this variable.</para>
+            <para> * Use the parameter "precision" to specify the precision of a float-based variable.</para>
+            <para> * Use the parameter "ensureSafety" to specify if it will always be safe to access this variable (for instance, when Netick is not running).</para>
+             </summary>
+        </member>
         <member name="T:Netick.OnChanged">
             <summary>
             Use this attribute on a method you want to call when a specific property value changes. Example: [OnChanged(nameof(PropertyName)]
@@ -359,7 +368,7 @@
         </member>
         <member name="T:Netick.Rpc">
              <summary>
-             Use this attribute on any method you want to make an RPC. Should have the return type of void.
+             Use this attribute on any method you want to make an RPC. Must have the return type of void.
             <para> * Use the parameter "source" to specify who is allowed to send this RPC.</para>
             <para> * Use the parameter "target" to specify who is allowed to receive and execute this RPC.</para>
             <para> * Use the parameter "isReliable" to specify if this Rpc should be reliable or not, meaning it won't be lost (due to packet loss).</para>
@@ -866,6 +875,16 @@
         <member name="T:Netick.InterestManagement">
             <summary>
             Manages interest groups and area of interest (AoI) layers.
+            </summary>
+        </member>
+        <member name="T:Netick.RpcContext">
+            <summary>
+            Contains information about an RPC call.
+            </summary>
+        </member>
+        <member name="F:Netick.RpcContext.Source">
+            <summary>
+            The source of this RPC call (the player that originally called it).
             </summary>
         </member>
         <member name="M:Netick.NetworkRpc.InternalIsResim(Netick.NetickEngine)">
