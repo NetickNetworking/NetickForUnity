@@ -4,16 +4,6 @@
         <name>Netick.Unity</name>
     </assembly>
     <members>
-        <member name="T:Netick.Unity.NetworkArray`1">
-            <summary>
-            A networked array.
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.SingleInstanceEnforcer">
-            <summary>
-            AddEntity this component to a GameObject to ensure only a single instance of it will exist at the same time, across all sandboxes.
-            </summary>
-        </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnConnectRequest(Netick.Unity.NetworkSandbox,Netick.NetworkConnectionRequest)">
             <summary>
             Called on the server when a client tries to connect. Use <paramref name="request"/> to decide whether or not to allow this client to connect.
@@ -64,18 +54,6 @@
             </summary>
             <param name="sandbox"></param>
         </member>
-        <member name="M:Netick.Unity.NetworkEventsListener.OnSceneLoaded(Netick.Unity.NetworkSandbox)">
-            <summary>
-            Called on both the client and the server when the scene has been loaded.
-            </summary>
-            <param name="sandbox"></param>
-        </member>
-        <member name="M:Netick.Unity.NetworkEventsListener.OnSceneLoadStarted(Netick.Unity.NetworkSandbox)">
-            <summary>
-            Called on both the client and the server before beginning to load the new scene.
-            </summary>
-            <param name="sandbox"></param>
-        </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnConnectedToServer(Netick.Unity.NetworkSandbox,Netick.NetworkConnection)">
             <summary>
             Called on the client when connection to the server has been initiated.
@@ -98,6 +76,16 @@
         <member name="M:Netick.Unity.NetworkEventsListener.OnPlayerLeft(Netick.Unity.NetworkSandbox,Netick.NetworkPlayerId)">
             <summary>
             Called on when a specific player has left the game. This is synced to all clients, including late-joiners..
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkEventsListener.OnObjectCreated(Netick.Unity.NetworkObject)">
+            <summary>
+            Called when a network object has been created/initialized. 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkEventsListener.OnObjectDestroyed(Netick.Unity.NetworkObject)">
+            <summary>
+            Called when a network object has been destroyed/recycled.
             </summary>
         </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnClientConnected(Netick.Unity.NetworkSandbox,Netick.NetworkConnection)">
@@ -128,429 +116,44 @@
             <param name="sandbox"></param>
             <param name="client"></param>
         </member>
-        <member name="M:Netick.Unity.NetworkEventsListener.OnObjectCreated(Netick.Unity.NetworkObject)">
+        <member name="M:Netick.Unity.NetworkEventsListener.OnSceneLoaded(Netick.Unity.NetworkSandbox)">
             <summary>
-            Called when a network object has been created/initialized. 
+            Called on both the client and the server when the scene has been loaded.
             </summary>
-            <param name="entity"></param>
+            <param name="sandbox"></param>
         </member>
-        <member name="M:Netick.Unity.NetworkEventsListener.OnObjectDestroyed(Netick.Unity.NetworkObject)">
+        <member name="M:Netick.Unity.NetworkEventsListener.OnSceneLoadStarted(Netick.Unity.NetworkSandbox)">
             <summary>
-            Called when a network object has been destroyed/recycled.
+            Called on both the client and the server before beginning to load the new scene.
             </summary>
-            <param name="entity"></param>
-        </member>
-        <member name="T:Netick.Unity.NetworkObject">
-            <summary>
-            Any GameObject which needs to be synced/replicated must have a Network Object component. It’s the component that tells Netick a GameObject is networked. Although not every child GameObject needs it, only the root has to have a Network Object.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.HasValidId">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkObject"/> has been added to the simulation by Netick, and thus has a valid id.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.Parent">
-            <summary>
-            The <see cref="T:Netick.Unity.NetworkObject"/> parent of this object.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsClient">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a client.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsServer">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the server.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsOwner">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the owner of this Object. In this version of Netick: Server=Owner.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsInputSource">
-            <summary>
-            Returns true if this <see cref="P:Netick.Unity.NetworkSandbox.LocalPlayer"/> is providing inputs for this <see cref="T:Netick.Unity.NetworkObject"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsProxy">
-            <summary>
-            Returns true if we neither provide inputs nor own this <see cref="T:System.Object"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.IsResimulating">
-            <summary>
-            Returns true if we are currently resimulating a previous input of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.InputSource">
-            <summary>
-            Returns the source <see cref="T:Netick.NetworkPlayer"/> (<see cref="T:Netick.NetworkPeer"/>/<see cref="T:Netick.ServerConnection"/>) of inputs for this <see cref="T:Netick.Unity.NetworkObject"/>. If the source of inputs is remote (from a client) it returns that <see cref="T:Netick.ServerConnection"/>, while on the
-            input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.InputSourcePlayerId">
-            <summary>
-            Returns the NetworkPlayerId of the input source of this object. This is synced to every client.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.InterestGroup">
-            <summary>
-            The interest group of this object. This can only be changed if BroadPhaseFilter is set to Custom.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkObject.StateSize">
-            <summary>
-            Returns the networked state size of this object in bytes.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkObject.ClearState(System.Boolean)">
-            <summary>
-            Zeros out the networked state memory of this object. Ignores InputSource Relevancy.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkObject.CopyStateTo(System.Byte*)">
-            <summary>
-            Copies the state of this object into target.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkObject.CopyStateTo(System.Byte[])">
-            <summary>
-            Copies the state of this object into target.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkObject.SetStateFrom(System.Byte*,System.Boolean)">
-            <summary>
-            Sets the state of this object. Ignores InputSource Relevancy.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkObject.SetStateFrom(System.Byte[],System.Boolean)">
-            <summary>
-            Sets the state of this object. Ignores InputSource Relevancy.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkObject.SetParent(Netick.Unity.NetworkObject)">
-            <summary>
-            <i><b>[Owner/InputSource Only]</b></i> Changes the parent of this object.
-            </summary>
-            <param name="obj">The object which will become the parent of this object.</param>
-        </member>
-        <member name="T:Netick.Unity.FloatErrorCorrector">
-            <summary>
-            Handles prediction error correction smoothing for a float.
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.TransformErrorCorrector">
-            <summary>
-            Handles prediction error correction smoothing for a transform.
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.Vector3ErrorCorrector">
-            <summary>
-            Handles prediction error correction smoothing for a Vector3.
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.Vector2ErrorCorrector">
-            <summary>
-            Handles prediction error correction smoothing for a Vector2.
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.QuaternionErrorCorrector">
-            <summary>
-            Handles prediction error correction smoothing for a Quaternion.
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.NetworkRigidbody2D">
-            <summary>
-            This component is used to replicate the position and rotation of an object. Therefore, it’s the same as the Network Transform, the difference is that Network Rigidbody 2D must be used if you want to have client-side prediction over Box2D objects since it replicates several other properties necessary for correct prediction. 
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.NetworkBehaviourRef`1">
-            <summary>
-            Represents a network-serializable reference to a <see cref="T:Netick.Unity.NetworkBehaviour"/> of type <typeparamref name="T"/> within the networked simulation.
-            This struct stores the object and behaviour ids, allowing retrieval of the referenced behaviour from a <see cref="T:Netick.Unity.NetworkSandbox"/>.
-            </summary>
-            <typeparam name="T">The type of <see cref="T:Netick.Unity.NetworkBehaviour"/> being referenced.</typeparam>
-        </member>
-        <member name="T:Netick.Unity.NetworkObjectRef">
-            <summary>
-            Represents a network-serializable reference to a <see cref="T:Netick.Unity.NetworkObject"/> within the networked simulation.
-            This struct stores the object network id, allowing retrieval of the referenced object from a <see cref="T:Netick.Unity.NetworkSandbox"/>.
-            </summary>
-            <typeparam name="T">The type of <see cref="T:Netick.Unity.NetworkBehaviour"/> being referenced.</typeparam>
-        </member>
-        <member name="T:Netick.Unity.NetworkRigidbody">
-            <summary>
-            This component is used to replicate the position and rotation of an object. Therefore, it’s the same as the Network Transform, the difference is that Network Rigidbody must be used if you want to have client-side prediction over PhysX objects since it replicates several other properties necessary for correct prediction. 
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.PhysicsSimulationStep">
-            <summary>
-            Executes the physics (PhysX or Box2D) simulation step during the <c>NetworkFixedUpdate</c> callback of Netick.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetickBehaviour.Sandbox">
-            <summary>
-            The <see cref="T:Netick.Unity.NetworkSandbox"/> containing this <see cref="P:Netick.Unity.NetickBehaviour.Object"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetickBehaviour.Object">
-            <summary>
-            The <see cref="T:Netick.Unity.NetworkObject"/> this behaviour is attached to.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkStart">
-            <summary>
-            Called when this behaviour has been added to the simulation. 
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkDestroy">
-            <summary>
-            Called when this behaviour has been removed from the simulation.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkUpdate">
-            <summary>
-            Called every frame. Executed before NetworkFixedUpdate.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkFixedUpdate">
-            <summary>
-            Called every fixed-time network step. Any changes to the networked state should happen here.
-            <para>On the client, if you are the Input Source or if this Object.PredictionMode is set to Everyone, it will be called several times in one update/tick during resimulations. To check for resimulations, use [<see cref="!:IsResimulating"/>].</para> 
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetickBehaviour.NetworkRender">
-             <summary>
-             Called every frame. Executed after NetworkUpdate and NetworkFixedUpdate.
-             </summary>
-            <para>IMPORTANT NOTE: properties (which can be interpolated) marked with [<see cref="T:Netick.Smooth"/>] attribute will return interpolated values when accessed in this method.</para>
-        </member>
-        <member name="T:Netick.Unity.NetworkBehaviour">
-            <summary>
-            Base class for all networked behaviors in Netick.
-            Inherit from this class to create custom network-synchronized logic.
-            Provides access to network state, input, and misc utility methods.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.BehaviourId">
-            <summary>
-            The network id of this <see cref="T:Netick.Unity.NetworkBehaviour"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.Id">
-            <summary>
-            The network id of this <see cref="T:System.Object"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsClient">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a client.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsServer">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the server.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsOwner">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the owner of this Object. In this version of Netick: Server=Owner.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsHost">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the host.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsPlayer">
-            <summary>
-            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a client or the host.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsInputSource">
-            <summary>
-            Returns true if this <see cref="P:Netick.Unity.NetworkSandbox.LocalPlayer"/> is providing inputs to this Object.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsProxy">
-            <summary>
-            Returns true if we neither provide inputs nor own this <see cref="T:System.Object"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsResimulating">
-            <summary>
-            Returns true if we are currently resimulating a previous input of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.IsPredicted">
-            <summary>
-            On the client, it returns true only if the client is predicting this object. On the server, it always returns true.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.InputSource">
-            <summary>
-            Returns the source <see cref="T:Netick.NetworkPlayer"/> (<see cref="T:Netick.NetworkPeer"/>/<see cref="T:Netick.ServerConnection"/>) of inputs for this <see cref="T:Netick.Unity.NetworkObject"/>. If the source of inputs is remote (from a client) it returns that <see cref="T:Netick.ServerConnection"/>, while on the
-            input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.InputSourcePlayerId">
-            <summary>
-            Returns the NetworkPlayerId of the input source of this object. This is synced to every client.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkBehaviour.StateSize">
-            <summary>
-            Returns the networked state size of this behavior in bytes.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.CopyStateTo(System.Byte*)">
-            <summary>
-            Copies the state of this behavior into target.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.CopyStateTo(System.Byte[])">
-            <summary>
-            Copies the state of this behavior into target.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.SetStateFrom(System.Byte*,System.Boolean)">
-            <summary>
-            Sets the state of this behavior. Ignores InputSource Relevancy.
-            </summary>
-            <param name="source"></param>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.SetStateFrom(System.Byte[],System.Boolean)">
-            <summary>
-            Sets the state of this behavior. Ignores InputSource Relevancy.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.ClearState(System.Boolean)">
-            <summary>
-            Zeros out the networked state memory of this behavior. Ignores InputSource Relevancy.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.FetchInput``1(``0@,System.Int32)">
-            <summary>
-            Fetches a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.FetchInput``1(``0@,System.Boolean@,System.Int32)">
-            <summary>
-            Fetches a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.OnBecameInterested">
-            <summary>
-            Called in the client when the client becomes interested in this object.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.OnBecameUninterested">
-            <summary>
-            Called in the client when the client becomes uninterested in this object.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.OnInputSourceChanged(Netick.NetworkPlayer)">
-            <summary>
-            Called in the server (or the client if it is the input source) when the input source of this Object has changed.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkBehaviour.OnInputSourceLeft">
-            <summary>
-            Called on the server when the input source of this Object has disconnected.
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.NetworkAnimator">
-            <summary>
-            This component is used to replicate Unity's Animator parameters and states. 
-            </summary>
-        </member>
-        <member name="T:Netick.Unity.NetworkTransform">
-            <summary>
-            This component is used to replicate the position and rotation of an object.  
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Vector3)">
-            <summary>
-            Instantly moves the object. By calling this method, the object won't be interpolated for one tick.
-            </summary>
-            <param name="position"></param>
-        </member>
-        <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Vector3,UnityEngine.Quaternion)">
-            <summary>
-            Instantly moves the object. By calling this method, the object won't be interpolated for one tick.
-            </summary>
-            <param name="position"></param>
-        </member>
-        <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Quaternion)">
-            <summary>
-            Instantly moves the object. By calling this method, the object won't be interpolated for one tick.
-            </summary>
-            <param name="position"></param>
+            <param name="sandbox"></param>
         </member>
         <member name="T:Netick.Unity.NetworkSandbox">
             <summary>
             NetworkSandbox represents a networked game instance in Netick. It encapsulates the entire simulation state for that instance.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.InitializePool(UnityEngine.GameObject,System.Int32,System.Boolean)">
+        <member name="P:Netick.Unity.NetworkSandbox.InputEnabled">
             <summary>
-            Initializes the pool for the specified prefab. After this method has been called for a certain prefab, all instances of that prefab will be recycled and reset when created/destroyed.
-            <para>Note: this method should only be called on <see cref="M:Netick.Unity.NetworkEventsListener.OnStartup(Netick.Unity.NetworkSandbox)"/>, in other words, just after Netick has been started. </para>
-            </summary>
-            <param name="networkedPrefab">Prefab to enable pooling for.</param>
-            <param name="preloadedAmount">How many instances to be preloaded.</param>
-            <param name="hideInactiveMembers">Pass true to hide inactive pool members.</param>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.GetPrefab(System.String)">
-            <summary>
-            Gets a Network Prefab by name.
-            <para>Note: this causes GC.</para>
-            </summary>
-            <param name="name"></param>
-            <returns>The Network Prefab</returns>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
-            <summary>
-            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
-            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
-            <para>Note: make sure the prefab has been registered. </para> 
-            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            Returns true if input is enabled on this sandbox. Use this to enable/disable input at runtime.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayerId)">
+        <member name="P:Netick.Unity.NetworkSandbox.IsVisible">
             <summary>
-            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
-            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
-            <para>Note: make sure the prefab has been registered. </para> 
-            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            Returns true if this sandbox is visible. Use this to enable/disable visibility at runtime.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate``1(``0,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
+        <member name="M:Netick.Unity.NetworkSandbox.AttachBehaviour(Netick.Unity.NetickBehaviour)">
             <summary>
-            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
-            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
-            <para>Note: make sure the prefab has been registered. </para> 
-            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            Attaches a <see cref="T:Netick.Unity.NetickBehaviour"/> to the simulation.
             </summary>
+            <param name="behaviour"></param>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate``1(``0,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayerId)">
+        <member name="M:Netick.Unity.NetworkSandbox.DetachBehaviour(Netick.Unity.NetickBehaviour)">
             <summary>
-            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
-            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
-            <para>Note: make sure the prefab has been registered. </para> 
-            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            Detaches a <see cref="T:Netick.Unity.NetickBehaviour"/> from the simulation.
             </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.Destroy(Netick.Unity.NetworkObject)">
-            <summary>
-            <i><b>[Server Only]</b></i> Destroys a network object.
-            <para>Note: never call this on a child <see cref="T:Netick.Unity.NetworkObject"/> of the original prefab, only the root of the prefab.</para> 
-            </summary>
-            <param name="obj">The object to destroy.</param>
-            <returns></returns>
+            <param name="behaviour"></param>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.Instantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion)">
             <summary>
@@ -670,6 +273,27 @@
             <param name="id"> The id of the network object</param>
             <returns></returns>
         </member>
+        <member name="M:Netick.Unity.NetworkSandbox.GetBehavioursOfType``1(System.Collections.Generic.List{``0})">
+            <summary>
+            Gets all network behaviours (or Netick behaviours) in the simulation that have the type of <see cref="!:T"/>.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.GetBehavioursOfType``1">
+            <summary>
+            Gets all network behaviours (or Netick behaviours) in the simulation that have the type of <see cref="!:T"/>.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.GetInput``1(System.Int32)">
+            <summary>
+            Gets a specific input for the next tick.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.SetInput``1(``0,System.Int32)">
+            <summary>
+            Sets a specific input for the next tick.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
         <member name="M:Netick.Unity.NetworkSandbox.TickToTime(Netick.Tick)">
             <summary>
             Converts ticks to time in seconds.
@@ -690,17 +314,85 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.AttachBehaviour(Netick.Unity.NetickBehaviour)">
+        <member name="P:Netick.Unity.NetworkSandbox.ConnectedClients">
+            ****************************************************** Deprecated ******************************************************
             <summary>
-            Attaches a <see cref="T:Netick.Unity.NetickBehaviour"/> to the simulation.
+            A list containing all connected clients currently.
+            <para>Note: if you want the clients + the server, use <see cref="P:Netick.Unity.NetworkSandbox.ConnectedPlayers"/>.</para>
             </summary>
-            <param name="behaviour"></param>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.DetachBehaviour(Netick.Unity.NetickBehaviour)">
+        <member name="P:Netick.Unity.NetworkSandbox.ConnectedPlayers">
             <summary>
-            Detaches a <see cref="T:Netick.Unity.NetickBehaviour"/> from the simulation.
+            <para>A list containing all connected clients currently, in addition to the server (when started as a host).</para>
+            <para>Note: if you only want the clients, use <see cref="P:Netick.Unity.NetworkSandbox.ConnectedClients"/>.</para>
             </summary>
-            <param name="behaviour"></param>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.CurrentRpcSource">
+            <summary>
+            Always always returns null except when called inside the body of an RPC method, it returns the <see cref="T:Netick.NetworkConnection"/> we are executing RPCs from.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.CurrentRpcCaller">
+            <summary>
+            Always always returns null except when called inside the body of an RPC method, it returns the <see cref="T:Netick.NetworkPlayer"/> we are executing RPCs from. Works the same as <see cref="P:Netick.Unity.NetworkSandbox.CurrentRpcSource"/>, except when the RPC is called by the local player, it returns <see cref="!:Sandbox.LocalPlayer"/>.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.InitializePool(UnityEngine.GameObject,System.Int32,System.Boolean)">
+            <summary>
+            Initializes the pool for the specified prefab. After this method has been called for a certain prefab, all instances of that prefab will be recycled and reset when created/destroyed.
+            <para>Note: this method should only be called on <see cref="M:Netick.Unity.NetworkEventsListener.OnStartup(Netick.Unity.NetworkSandbox)"/>, in other words, just after Netick has been started. </para>
+            </summary>
+            <param name="networkedPrefab">Prefab to enable pooling for.</param>
+            <param name="preloadedAmount">How many instances to be preloaded.</param>
+            <param name="hideInactiveMembers">Pass true to hide inactive pool members.</param>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.GetPrefab(System.String)">
+            <summary>
+            Gets a Network Prefab by name.
+            <para>Note: this causes GC.</para>
+            </summary>
+            <param name="name"></param>
+            <returns>The Network Prefab</returns>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
+            <summary>
+            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
+            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayerId)">
+            <summary>
+            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
+            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate``1(``0,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
+            <summary>
+            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
+            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate``1(``0,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayerId)">
+            <summary>
+            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
+            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.Destroy(Netick.Unity.NetworkObject)">
+            <summary>
+            <i><b>[Server Only]</b></i> Destroys a network object.
+            <para>Note: never call this on a child <see cref="T:Netick.Unity.NetworkObject"/> of the original prefab, only the root of the prefab.</para> 
+            </summary>
+            <param name="obj">The object to destroy.</param>
+            <returns></returns>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.FindSandboxOf(UnityEngine.MonoBehaviour)">
             <summary>
@@ -808,18 +500,6 @@
             A list containing the ids of all connected players currently. This list is networked and synced to all clients.
             </summary>
         </member>
-        <member name="P:Netick.Unity.NetworkSandbox.ConnectedClients">
-            <summary>
-            A list containing all connected clients currently.
-            <para>Note: if you want the clients + the server, use <see cref="P:Netick.Unity.NetworkSandbox.ConnectedPlayers"/>.</para>
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkSandbox.ConnectedPlayers">
-            <summary>
-            <para>A list containing all connected clients currently, in addition to the server (when started as a host).</para>
-            <para>Note: if you only want the clients, use <see cref="P:Netick.Unity.NetworkSandbox.ConnectedClients"/>.</para>
-            </summary>
-        </member>
         <member name="P:Netick.Unity.NetworkSandbox.ConnectedServer">
             <summary>
             The server the client is connected to.
@@ -830,9 +510,30 @@
             A dictionary containing all simulated/registered network objects [<see cref="T:Netick.Unity.NetworkObject"/>] currently.
             </summary>
         </member>
+        <member name="P:Netick.Unity.NetworkSandbox.InterestManagement">
+            <summary>
+            Use this to manages interest groups and area of interest (AoI) layers.
+            </summary>
+        </member>
         <member name="P:Netick.Unity.NetworkSandbox.LocalPlayer">
             <summary>
             The local player of this sandbox instance.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.LocalInterpolation">
+            <summary>
+            The Local (predicted) Interpolation instance used for interpolating local/predicted objects. Includes useful interpolation data, such as the current interpolation alpha, the ticks being interpolated, and the local interpolation time (in seconds).
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.RemoteInterpolation">
+            <summary>
+            The Remote Interpolation instance used for interpolating remote objects on the client. Includes useful interpolation data, such as the current interpolation alpha, the ticks being interpolated, the remote interpolation time (in seconds), and the remote interpolation delay (in seconds).
+            <para>Note: this is only valid in the client.</para>
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.Timer">
+            <summary>
+            The simulation clock used for managing time in the network simulation.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.FixedDeltaTime">
@@ -840,11 +541,26 @@
             Time period between network simulation steps. Same as <see cref="P:UnityEngine.Time.fixedDeltaTime"/>
             </summary>
         </member>
+        <member name="P:Netick.Unity.NetworkSandbox.DeltaTime">
+            <summary>
+            Time period between frames. Same as <see cref="P:UnityEngine.Time.deltaTime"/>
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.ScaledFixedDeltaTime">
+            <summary>
+            Scaled time period between network simulation steps. This is the same as <see cref="P:UnityEngine.Time.fixedDeltaTime"/>, but multiplied by <see cref="P:UnityEngine.Time.timeScale"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.NetworkTime">
+            <summary>
+            Current (local/predicted) network time in seconds. Same as <see cref="P:Netick.LocalInterpolation.Time"/>.
+            </summary>
+        </member>
         <member name="P:Netick.Unity.NetworkSandbox.Tick">
             <summary>
             Current simulation tick. 
             <para>On the server, <b>it's always going forward/increasing.</b></para>
-            <para>On the client, <b>during resimulations it returns the current resimulated tick. </b> To check for resimulations, use <see cref="P:Netick.Unity.NetworkSandbox.IsResimulating"/>.</para>
+            <para>On the client, <b>during resimulations it returns the current re-simulated tick. </b> To check for resimulations, use <see cref="P:Netick.Unity.NetworkSandbox.IsResimulating"/>.</para>
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.AuthoritativeTick">
@@ -861,17 +577,27 @@
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.IsResimulating">
             <summary>
-            Returns true if we are currently resimulating a previous input/tick of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
+            Returns true if we are currently re-simulating a previous input/tick of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.ResimulationCount">
+            <summary>
+            <i><b>[Client Only]</b></i> The number of re-simulations that have been performed in this tick. This is only valid on the client (and during the re-simulation stage), and it returns 0 on the server.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.ResimulationStep">
+            <summary>
+            <i><b>[Client Only]</b></i> Returns the current re-simulation step we are currently performing, if we are in the re-simulation stage. This is only valid on the client, and it returns 0 on the server.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.IsFirstNetworkFixedUpdateCall">
             <summary>
-            Returns true if this NetworkFixedUpdate call is the first one executed in this frame. This excludes resimulations, and it only refers to new/forward ticks.
+            Returns true if this NetworkFixedUpdate call is the first one executed in this frame. This excludes re-simulations, and it only refers to new/forward ticks.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.IsLastNetworkFixedUpdateCall">
             <summary>
-            Returns true if this NetworkFixedUpdate call is the last one executed in this frame. This excludes resimulations, and it only refers to new/forward ticks.
+            Returns true if this NetworkFixedUpdate call is the last one executed in this frame. This excludes re-simulations, and it only refers to new/forward ticks.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.InKBps">
@@ -896,7 +622,7 @@
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.InterpolationDelay">
             <summary>
-            <i><b>[Client Only]</b></i> Interpolation delay in seconds.
+            <i><b>[Client Only]</b></i> Remote Interpolation delay in seconds.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.RTT">
@@ -904,14 +630,9 @@
             <i><b>[Client Only]</b></i> The round-trip time (RTT) of the client in seconds.
             </summary>  
         </member>
-        <member name="P:Netick.Unity.NetworkSandbox.CurrentRpcSource">
+        <member name="P:Netick.Unity.NetworkSandbox.Monitor">
             <summary>
-            Always always returns null except when called inside the body of an RPC method, it returns the <see cref="T:Netick.NetworkConnection"/> we are executing RPCs from.
-            </summary>
-        </member>
-        <member name="P:Netick.Unity.NetworkSandbox.CurrentRpcCaller">
-            <summary>
-            Always always returns null except when called inside the body of an RPC method, it returns the <see cref="T:Netick.NetworkPlayer"/> we are executing RPCs from. Works the same as <see cref="P:Netick.Unity.NetworkSandbox.CurrentRpcSource"/>, except when the RPC is called by the local player, it returns <see cref="!:Sandbox.LocalPlayer"/>.
+            Used to track network metrics and statistics.
             </summary>
         </member>
         <member name="E:Netick.Unity.NetworkSandbox.PostNetworkFixedUpdate">
@@ -951,17 +672,6 @@
             Use this to subscribe/unsubscribe to/from Netick events.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.GetInput``1(System.Int32)">
-            <summary>
-            Gets a specific input for the next tick.
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.SetInput``1(``0,System.Int32)">
-            <summary>
-            Sets a specific input for the next tick.
-            </summary>
-            <typeparam name="T"></typeparam>
-        </member>
         <member name="M:Netick.Unity.NetworkSandbox.Connect(System.Int32,System.String,System.Byte[],System.Int32)">
             <summary>
             <i><b>[Client Only]</b></i> Connects to a remote server. 
@@ -972,16 +682,16 @@
             <param name="port">Port of the server.</param>
             <param name="connectionData">RawValue sent with the connection request. Could be used to decide whether or not to allow the connection.</param>
         </member>
+        <member name="M:Netick.Unity.NetworkSandbox.DisconnectFromServer">
+            <summary>
+            <i><b>[Client Only]</b></i> Disconnects this client from the server.
+            </summary>
+        </member>
         <member name="M:Netick.Unity.NetworkSandbox.Kick(Netick.NetworkPlayerId)">
             <summary>
             <i><b>[Server Only]</b></i> Disconnects a client from the server.
             </summary>
             <param name="client">The client to be disconnected.</param>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.DisconnectFromServer">
-            <summary>
-            <i><b>[Client Only]</b></i> Disconnects this client from the server.
-            </summary>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.CreateMatch(System.String)">
             <summary>
@@ -1010,16 +720,147 @@
             <summary>
             <i><b>[Server Only]</b></i>  Loads a scene asynchronously. This should only be called for scenes included in the build of the game.
             </summary>
-            <param name="buildIndex"></param>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.UnloadSceneAsync(System.String)">
             <summary>
             <i><b>[Server Only]</b></i>  Unloads a scene asynchronously. 
             </summary>
         </member>
+        <member name="T:Netick.Unity.NetworkRigidbody2D">
+            <summary>
+            This component is used to replicate the position and rotation of an object. Therefore, it’s the same as the Network Transform, the difference is that Network Rigidbody 2D must be used if you want to have client-side prediction over Box2D objects since it replicates several other properties necessary for correct prediction. 
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.NetworkArray`1">
+            <summary>
+            A networked array.
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.NetworkRigidbody">
+            <summary>
+            This component is used to replicate the position and rotation of an object. Therefore, it’s the same as the Network Transform, the difference is that Network Rigidbody must be used if you want to have client-side prediction over PhysX objects since it replicates several other properties necessary for correct prediction. 
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.PhysicsSimulationStep">
+            <summary>
+            Executes the physics (PhysX or Box2D) simulation step during the <c>NetworkFixedUpdate</c> callback of Netick.
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.NetworkAnimator">
+            <summary>
+            This component is used to replicate Unity's Animator parameters and states. 
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.FloatErrorCorrector">
+            <summary>
+            Handles prediction error correction smoothing for a float.
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.TransformErrorCorrector">
+            <summary>
+            Handles prediction error correction smoothing for a transform.
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.Vector3ErrorCorrector">
+            <summary>
+            Handles prediction error correction smoothing for a Vector3.
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.Vector2ErrorCorrector">
+            <summary>
+            Handles prediction error correction smoothing for a Vector2.
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.QuaternionErrorCorrector">
+            <summary>
+            Handles prediction error correction smoothing for a Quaternion.
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.NetworkBehaviourRef`1">
+            <summary>
+            Represents a network-serializable reference to a <see cref="T:Netick.Unity.NetworkBehaviour"/> of type <typeparamref name="T"/> within the networked simulation.
+            This struct stores the object and behaviour ids, allowing retrieval of the referenced behaviour from a <see cref="T:Netick.Unity.NetworkSandbox"/>.
+            </summary>
+            <typeparam name="T">The type of <see cref="T:Netick.Unity.NetworkBehaviour"/> being referenced.</typeparam>
+        </member>
+        <member name="T:Netick.Unity.NetworkObjectRef">
+            <summary>
+            Represents a network-serializable reference to a <see cref="T:Netick.Unity.NetworkObject"/> within the networked simulation.
+            This struct stores the object network id, allowing retrieval of the referenced object from a <see cref="T:Netick.Unity.NetworkSandbox"/>.
+            </summary>
+            <typeparam name="T">The type of <see cref="T:Netick.Unity.NetworkBehaviour"/> being referenced.</typeparam>
+        </member>
+        <member name="T:Netick.Unity.NetworkTransform">
+            <summary>
+            This component is used to replicate the position and rotation of an object.  
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Vector3)">
+            <summary>
+            Instantly moves the object. By calling this method, the object won't be interpolated for one tick.
+            </summary>
+            <param name="position"></param>
+        </member>
+        <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Vector3,UnityEngine.Quaternion)">
+            <summary>
+            Instantly moves the object. By calling this method, the object won't be interpolated for one tick.
+            </summary>
+            <param name="position"></param>
+        </member>
+        <member name="M:Netick.Unity.NetworkTransform.Teleport(UnityEngine.Quaternion)">
+            <summary>
+            Instantly moves the object. By calling this method, the object won't be interpolated for one tick.
+            </summary>
+            <param name="position"></param>
+        </member>
+        <member name="T:Netick.Unity.SingleInstanceEnforcer">
+            <summary>
+            Add this component to a GameObject to ensure only a single instance of it will exist at the same time, across all sandboxes.
+            </summary>
+        </member>
+        <member name="T:Netick.Unity.StartMode">
+            <summary>
+            Defines the start modes for Netick, which determine how the network is initialized.
+            </summary>
+        </member>
         <member name="T:Netick.Unity.Network">
             <summary>
             Manages Netick and its sandboxes, and is used to start and shut down Netick.
+            </summary>
+        </member>
+        <member name="F:Netick.Unity.Network.Version">
+            <summary>
+            The version of Netick.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.Network.StartMode">
+            <summary>
+            The start mode of Netick.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.Network.IsRunning">
+            <summary>
+            Returns true if Netick is running, false otherwise.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.Network.Sandboxes">
+            <summary>
+            Returns the list of all sandboxes currently running in Netick.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.Network.Instance">
+            <summary>
+            Returns the singleton instance of the Network class, which manages Netick.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.Network.Config">
+            <summary>
+            Returns the configuration (of the first sandbox) used by Netick.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.Network.IsHeadless">
+            <summary>
+            Returns true if Netick is running in headless mode (batch mode), false otherwise.
             </summary>
         </member>
         <member name="M:Netick.Unity.Network.Init(Netick.Unity.NetickConfig)">
@@ -1099,10 +940,360 @@
             <param name="port">Network port.</param>
             <returns>The sandbox representing the server</returns>
         </member>
+        <member name="P:Netick.Unity.NetickBehaviour.Sandbox">
+            <summary>
+            The <see cref="T:Netick.Unity.NetworkSandbox"/> containing this <see cref="P:Netick.Unity.NetickBehaviour.Object"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetickBehaviour.Object">
+            <summary>
+            The <see cref="T:Netick.Unity.NetworkObject"/> this behaviour is attached to.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkStart">
+            <summary>
+            Called when this behaviour has been added to the simulation. 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkDestroy">
+            <summary>
+            Called when this behaviour has been removed from the simulation.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkUpdate">
+            <summary>
+            Called every frame. Executed before NetworkFixedUpdate.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkFixedUpdate">
+            <summary>
+            Called every fixed-time network step. Any changes to the networked state should happen here.
+            <para>On the client, if you are the Input Source or if this Object.PredictionMode is set to Everyone, it will be called several times in one update/tick during resimulations. To check for resimulations, use [<see cref="!:IsResimulating"/>].</para> 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetickBehaviour.NetworkRender">
+             <summary>
+             Called every frame. Executed after NetworkUpdate and NetworkFixedUpdate.
+             </summary>
+            <para>IMPORTANT NOTE: properties (which can be interpolated) marked with [<see cref="T:Netick.Smooth"/>] attribute will return interpolated values when accessed in this method.</para>
+        </member>
+        <member name="T:Netick.Unity.NetworkBehaviour">
+            <summary>
+            Base class for all networked behaviors in Netick.
+            Inherit from this class to create custom network-synchronized logic.
+            Provides access to network state, input, and misc utility methods.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.BehaviourId">
+            <summary>
+            The network id of this <see cref="T:Netick.Unity.NetworkBehaviour"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.Id">
+            <summary>
+            The network id of this <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsClient">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a client.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsServer">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the server.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsOwner">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the owner of this Object. In this version of Netick: Server=Owner.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsHost">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the host.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsPlayer">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a client or the host.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsInputSource">
+            <summary>
+            Returns true if this <see cref="P:Netick.Unity.NetworkSandbox.LocalPlayer"/> is providing inputs to this Object.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsProxy">
+            <summary>
+            Returns true if we neither provide inputs nor own this <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsResimulating">
+            <summary>
+            Returns true if we are currently resimulating a previous input of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsPredicted">
+            <summary>
+            On the client  returns true only if the client is predicting this object. On the server, always returns true.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsInterested">
+            <summary>
+            On the client, returns true if this client is interested in this object. On the server, always returns true.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.InputSource">
+            <summary>
+            Returns the source <see cref="T:Netick.NetworkPlayer"/> (<see cref="T:Netick.NetworkPeer"/>/<see cref="T:Netick.ServerConnection"/>) of inputs for this <see cref="T:Netick.Unity.NetworkObject"/>. If the source of inputs is remote (from a client) it returns that <see cref="T:Netick.ServerConnection"/>, while on the
+            input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.InputSourcePlayerId">
+            <summary>
+            Returns the NetworkPlayerId of the input source of this object. This is synced to every client.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.StateSize">
+            <summary>
+            Returns the networked state size of this behavior in bytes.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.CopyStateTo(System.Byte*)">
+            <summary>
+            Copies the state of this behavior into target.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.CopyStateTo(System.Byte[])">
+            <summary>
+            Copies the state of this behavior into target.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.SetStateFrom(System.Byte*,System.Boolean)">
+            <summary>
+            Sets the state of this behavior. Ignores InputSource Relevancy.
+            </summary>
+            <param name="source"></param>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.SetStateFrom(System.Byte[],System.Boolean)">
+            <summary>
+            Sets the state of this behavior. Ignores InputSource Relevancy.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.ClearState(System.Boolean)">
+            <summary>
+            Zeros out the networked state memory of this behavior. Ignores InputSource Relevancy.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.FetchInput``1(``0@,System.Int32)">
+            <summary>
+            Fetches a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.FetchInput``1(``0@,System.Boolean@,System.Int32)">
+            <summary>
+            Fetches a network input for this tick. Returns false if no input source is currently providing inputs to this Object, or when input loss occurs (in case of a remote input source).
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.OnBecameInterested">
+            <summary>
+            Called in the client when the client becomes interested in this object.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.OnBecameUninterested">
+            <summary>
+            Called in the client when the client becomes uninterested in this object.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.OnInputSourceChanged(Netick.NetworkPlayer)">
+            <summary>
+            Called in the server (or the client if it is the input source) when the input source of this Object has changed.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkBehaviour.OnInputSourceLeft">
+            <summary>
+            Called on the server when the input source of this Object has disconnected.
+            </summary>
+        </member>
         <member name="T:Netick.Unity.NetickConfig">
             <summary>
             Config class for Netick.
             </summary> 
+        </member>
+        <member name="T:Netick.Unity.NetworkObject">
+            <summary>
+            Any GameObject which needs to be synced/replicated must have a Network Object component. It’s the component that tells Netick a GameObject is networked. Although not every child GameObject needs it, only the root has to have a Network Object.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.Sandbox">
+            <summary>
+            The <see cref="T:Netick.Unity.NetworkSandbox"/> this <see cref="T:Netick.Unity.NetworkObject"/> belongs to.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.Engine">
+            <summary>
+            The <see cref="T:Netick.NetickEngine"/> this <see cref="T:Netick.Unity.NetworkObject"/> belongs to.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.Entity">
+            <summary>
+            The <see cref="T:Netick.Entity"/> this <see cref="T:Netick.Unity.NetworkObject"/> represents in the Netick simulation.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkObject.GetRef">
+            <summary>
+            Returns a network-serializable reference to this <see cref="T:Netick.Unity.NetworkObject"/>. This is used to get a networkable identifier for this object, which can be used for RPCs or network properties.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.Id">
+            <summary>
+            Returns the unique identifier of this <see cref="T:Netick.Unity.NetworkObject"/> in the Netick simulation. This id is assigned by the Netick when the object is added to the simulation and is used to identify the object across the network.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.SpawnTick">
+            <summary>
+            Returns the tick at which this <see cref="T:Netick.Unity.NetworkObject"/> was spawned locally. This is a local value, and is not synced.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.HasValidId">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkObject"/> has been added to the simulation by Netick, and thus has a valid id.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsMarkedForDestruction">
+            <summary>
+            <i><b>[Server Only]</b></i> Returns true if <see cref="M:Netick.Unity.NetworkSandbox.Destroy(Netick.Unity.NetworkObject)"/> has been called on this object in the server, and the object is scheduled to be removed from the simulation (destroyed) at the end of the current tick.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.NetworkedBehaviours">
+            <summary>
+            Returns the <see cref="T:Netick.Unity.NetworkBehaviour"/> components attached to this <see cref="T:Netick.Unity.NetworkObject"/>. 
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.NetickBehaviours">
+            <summary>
+            Returns the <see cref="T:Netick.Unity.NetickBehaviour"/> components attached to this <see cref="T:Netick.Unity.NetworkObject"/>. 
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.Parent">
+            <summary>
+            The <see cref="T:Netick.Unity.NetworkObject"/> parent of this object.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsSceneObject">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkObject"/> is a scene object (not a prefab instance). Scene objects are objects that are part of the scene and not instantiated from a prefab.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsPrefabObject">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkObject"/> is a prefab object (not a scene object). Prefab objects are objects that are instantiated from a prefab and not part of the scene.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.PrefabId">
+            <summary>
+            Returns the prefab id of this <see cref="T:Netick.Unity.NetworkObject"/>. This is used to identify the prefab from which this object was instantiated. If this object is a scene object, it returns -1.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.SceneId">
+            <summary>
+            Returns the scene id of this <see cref="T:Netick.Unity.NetworkObject"/>. This value is only unique per-scene, and not per the entire game.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.RuntimeSceneId">
+            <summary>
+            Returns the runtime scene id of this <see cref="T:Netick.Unity.NetworkObject"/>. This value is only unique per-scene, and not per the entire game.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsClient">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a client.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsServer">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the server.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsOwner">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the owner of this Object. In this version of Netick: Server=Owner.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsInputSource">
+            <summary>
+            Returns true if this <see cref="P:Netick.Unity.NetworkSandbox.LocalPlayer"/> is providing inputs for this <see cref="T:Netick.Unity.NetworkObject"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsProxy">
+            <summary>
+            Returns true if we neither provide inputs nor own this <see cref="T:System.Object"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsResimulating">
+            <summary>
+            Returns true if we are currently resimulating a previous input of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.InputSource">
+            <summary>
+            Returns the source <see cref="T:Netick.NetworkPlayer"/> (<see cref="T:Netick.NetworkPeer"/>/<see cref="T:Netick.ServerConnection"/>) of inputs for this <see cref="T:Netick.Unity.NetworkObject"/>. If the source of inputs is remote (from a client) it returns that <see cref="T:Netick.ServerConnection"/>, while on the
+            input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
+            <para>Use <see cref="P:Netick.Unity.NetworkObject.InputSourcePlayerId"/> for the synced-to-everyone player id of the Input Source - because <see cref="P:Netick.Unity.NetworkObject.InputSource"/> is only valid in the client for objects the client itself is the input source of, and it's null for everything else.</para>
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.InputSourcePlayerId">
+            <summary>
+            Returns the NetworkPlayerId of the input source of this object. This is synced to every client.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.IsInterested">
+            <summary>
+            <i><b>[Client Only]</b></i> On the client, returns true if this client is interested in this object. On the server, always returns true.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.InterestGroup">
+            <summary>
+            The interest group of this object. This can only be changed if BroadPhaseFilter is set to Custom.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkObject.StateSize">
+            <summary>
+            Returns the networked state size of this object in bytes.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkObject.ClearState(System.Boolean)">
+            <summary>
+            Zeros out the networked state memory of this object. Ignores InputSource Relevancy.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkObject.CopyStateTo(System.Byte*)">
+            <summary>
+            Copies the state of this object into target.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkObject.CopyStateTo(System.Byte[])">
+            <summary>
+            Copies the state of this object into target.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkObject.SetStateFrom(System.Byte*,System.Boolean)">
+            <summary>
+            Sets the state of this object. Ignores InputSource Relevancy.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkObject.SetStateFrom(System.Byte[],System.Boolean)">
+            <summary>
+            Sets the state of this object. Ignores InputSource Relevancy.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkObject.SetParent(Netick.Unity.NetworkObject)">
+            <summary>
+            <i><b>[Owner/InputSource Only]</b></i> Changes the parent of this object.
+            </summary>
+            <param name="obj">The object which will become the parent of this object.</param>
         </member>
     </members>
 </doc>

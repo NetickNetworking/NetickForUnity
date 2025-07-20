@@ -128,6 +128,11 @@
             </summary>
             <param name="item">The item to add.</param>
         </member>
+        <member name="T:Netick.NetickConfigData">
+            <summary>
+            Configuration data for Netick.
+            </summary>
+        </member>
         <member name="P:Netick.AdaptiveRemoteInterpolation.CurrentBufferTime">
             <summary>
             Interpolation time in seconds.
@@ -428,6 +433,11 @@
             Removes all item from the set.
             </summary>
         </member>
+        <member name="T:Netick.Entity">
+            <summary>
+            Represents an networked entity (object) in the simulation.
+            </summary>
+        </member>
         <member name="T:Netick.NetworkStackSnapshot`1">
             <summary>
             A snapshot of the state of a <see cref="T:Netick.NetworkStack`1"/> collection. Note this must not be used outside the scope of an OnChanged call or a NetworkRender call.
@@ -701,7 +711,7 @@
             Detaches a <see cref="T:Netick.INetickScript"/> from the simulation.
             </summary>
         </member>
-        <member name="M:Netick.NetickEngine.Update(System.Single,System.Single)">
+        <member name="M:Netick.NetickEngine.Update(System.Single,System.Single,System.Boolean)">
             <summary>
             Updates Netick logic. 
             </summary>
@@ -731,6 +741,16 @@
         <member name="T:Netick.Tick">
             <summary>
             Represents a network tick.
+            </summary>
+        </member>
+        <member name="T:Netick.INetickComponent">
+            <summary>
+            This interface is used to internal Netick systems. 
+            </summary>
+        </member>
+        <member name="T:Netick.IGameEngine">
+            <summary>
+            This interface is used to integrate Netick with a game engine. 
             </summary>
         </member>
         <member name="M:Netick.IGameEngine.GetConnectionMetaSizeWords">
@@ -831,6 +851,11 @@
             A script which can have networked properties and rpcs.
             </summary>
         </member>
+        <member name="T:Netick.INetickEntity">
+            <summary>
+            This interface is used to integrate Netick with a game engine entity.
+            </summary>
+        </member>
         <member name="M:Netick.INetickEntity.Initialize(Netick.NetickEngine,Netick.Entity)">
             <summary>
             Used to initialize the user entity and assign Engine and Entity.
@@ -887,6 +912,11 @@
             The source of this RPC call (the player that originally called it).
             </summary>
         </member>
+        <member name="T:Netick.NetworkRpc">
+            <summary>
+            Represents an RPC. Used internally only.
+            </summary>
+        </member>
         <member name="M:Netick.NetworkRpc.InternalIsResim(Netick.NetickEngine)">
             <summary>
             Internal method. Never call this.
@@ -902,7 +932,7 @@
             Internal method. Never call this.
             </summary>
         </member>
-        <member name="M:Netick.NetworkRpc.InternalCanInvokeWithRID(Netick.NetickEngine,Netick.Entity,Netick.RpcPeers,Netick.RpcPeers,System.Boolean,System.Int32,Netick.RpcContext@)">
+        <member name="M:Netick.NetworkRpc.InternalCanInvokeWithRID(Netick.NetickEngine,Netick.Entity,Netick.RpcPeers,Netick.RpcPeers,System.Boolean,System.Int32,System.Boolean,Netick.NetworkPlayerId,Netick.RpcContext@)">
             <summary>
             Internal method. Never call this.
             </summary>
