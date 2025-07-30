@@ -29,7 +29,7 @@ namespace Netick.Transport
     private NetManager                         _netManager;
     private NetDataWriter                      _writer          = new NetDataWriter();
     private BitBuffer                          _buffer;
-    private byte[]                             _connectionBytes = new byte[200];
+    private byte[]                             _connectionBytes = new byte[1000];
     private int                                _port;
     private Dictionary<NetPeer, LNLConnection> _clients;
     private Queue<LNLConnection>               _freeClients;
