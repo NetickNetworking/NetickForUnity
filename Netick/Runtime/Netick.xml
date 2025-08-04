@@ -435,7 +435,7 @@
         </member>
         <member name="T:Netick.Entity">
             <summary>
-            Represents an networked entity (object) in the simulation.
+            Represents an networked entity (object) in Netick.
             </summary>
         </member>
         <member name="T:Netick.NetworkStackSnapshot`1">
@@ -627,18 +627,6 @@
             The NetickEngine class is the core of Netick, managing networking, simulation, interpolation, replication, etc.
             </summary>
         </member>
-        <member name="P:Netick.NetickEngine.ConnectedClients">
-            <summary>
-            A list containing all connected clients currently.
-            <para>Note: if you want the clients + the server, use <see cref="P:Netick.NetickEngine.ConnectedPlayers"/>.</para>
-            </summary>
-        </member>
-        <member name="P:Netick.NetickEngine.ConnectedPlayers">
-            <summary>
-            <para>A list containing all connected clients currently, in addition to the server.</para>
-            <para>Note: if you only want the clients, use <see cref="P:Netick.NetickEngine.ConnectedClients"/>.</para>
-            </summary>
-        </member>
         <member name="P:Netick.NetickEngine.ServerEndPoint">
             <summary>
             <c><b>[Client Only]</b></c> The <see cref="T:System.Net.IPEndPoint"/> of the server you are connected to. Returns null if you are not connected to any server, or if you are the server.
@@ -688,6 +676,18 @@
         <member name="P:Netick.NetickEngine.RTT">
             <summary>
             <c><b>[Client Only]</b></c> The round-trip time (RTT) of the client in seconds.
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.ConnectedClients">
+            <summary>
+            A list containing all connected clients currently.
+            <para>Note: if you want the clients + the server, use <see cref="P:Netick.NetickEngine.ConnectedPlayers"/>.</para>
+            </summary>
+        </member>
+        <member name="P:Netick.NetickEngine.ConnectedPlayers">
+            <summary>
+            <para>A list containing all connected clients currently, in addition to the server.</para>
+            <para>Note: if you only want the clients, use <see cref="P:Netick.NetickEngine.ConnectedClients"/>.</para>
             </summary>
         </member>
         <member name="M:Netick.NetickEngine.DisconnectFromServer">
@@ -789,7 +789,7 @@
             </summary>
             <param name="entity"></param>
         </member>
-        <member name="M:Netick.IGameEngine.OnEntityMetaChanged(Netick.NetickEntityMeta,System.Byte*,System.Int32)">
+        <member name="M:Netick.IGameEngine.OnEntityMetaChanged1(Netick.NetickEntityMeta,System.Byte*,System.Int32)">
             <summary>
             This method is called on the client when it receives new entity meta data. This must be used to create/setup network entities on the client. It can be called many times not only when the data has changed.
             <para>Note: user entity meta data can be used for custom user data that might be used in creating entities.</para>

@@ -155,10 +155,42 @@
             </summary>
             <param name="behaviour"></param>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.Instantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion)">
+        <member name="M:Netick.Unity.NetworkSandbox.LocalInstantiate(UnityEngine.GameObject,UnityEngine.Vector3)">
             <summary>
-            Instantiates a prefab. This must be called instead of <see cref="M:UnityEngine.Object.Instantiate(UnityEngine.Object)"/> or its variations. 
+            Instantiates a prefab. This must be called instead of <see cref="M:UnityEngine.Object.Instantiate(UnityEngine.Object)"/>. 
             <para>Note: this must be called only for non-networked prefabs. If you want to instantiate a network prefab, use <see cref="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)"/> instead.</para>
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
+            <summary>
+            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
+            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayerId)">
+            <summary>
+            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
+            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate``1(``0,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
+            <summary>
+            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
+            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate``1(``0,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayerId)">
+            <summary>
+            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
+            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
+            <para>Note: make sure the prefab has been registered. </para> 
+            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
             </summary>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.GetPlayerObject(Netick.NetworkPlayer)">
@@ -349,36 +381,10 @@
         <member name="M:Netick.Unity.NetworkSandbox.GetPrefab(System.String)">
             <summary>
             Gets a Network Prefab by name.
-            <para>Note: this causes GC.</para>
             </summary>
-            <param name="name"></param>
             <returns>The Network Prefab</returns>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
-            <summary>
-            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
-            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
-            <para>Note: make sure the prefab has been registered. </para> 
-            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayerId)">
-            <summary>
-            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
-            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
-            <para>Note: make sure the prefab has been registered. </para> 
-            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate``1(``0,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
-            <summary>
-            <i><b>[Server Only]</b></i> Instantiates a network prefab. 
-            <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
-            <para>Note: make sure the prefab has been registered. </para> 
-            <para>Note: the specified input source will be given to every <see cref="T:Netick.Unity.NetworkObject"/> child of this prefab.</para> 
-            </summary>
-        </member>
-        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiate``1(``0,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayerId)">
+        <member name="M:Netick.Unity.NetworkSandbox.NetworkInstantiateInternal(UnityEngine.GameObject,UnityEngine.Vector3,UnityEngine.Quaternion,Netick.NetworkPlayer)">
             <summary>
             <i><b>[Server Only]</b></i> Instantiates a network prefab. 
             <para>This must only be called on the server, since only the server can instantiate network prefabs.</para>
@@ -512,7 +518,7 @@
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.InterestManagement">
             <summary>
-            Use this to manages interest groups and area of interest (AoI) layers.
+            Use this to manage interest groups and area of interest (AoI) layers.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.LocalPlayer">
@@ -813,6 +819,16 @@
             </summary>
             <param name="position"></param>
         </member>
+        <member name="T:Netick.Unity.Angle">
+            <summary>
+            A helper struct that represents an angle in degrees, which automatically wraps to [0, 360) range.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.Angle.#ctor(System.Single)">
+            <summary>
+            Construct from raw degrees (auto-wrapped to [0, 360) internally).
+            </summary>
+        </member>
         <member name="T:Netick.Unity.SingleInstanceEnforcer">
             <summary>
             Add this component to a GameObject to ensure only a single instance of it will exist at the same time, across all sandboxes.
@@ -980,7 +996,7 @@
         <member name="T:Netick.Unity.NetworkBehaviour">
             <summary>
             Base class for all networked behaviors in Netick.
-            Inherit from this class to create custom network-synchronized logic.
+            Inherit from this class to create network-synchronized logic.
             Provides access to network state, input, and misc utility methods.
             </summary>
         </member>
@@ -1048,6 +1064,7 @@
             <summary>
             Returns the source <see cref="T:Netick.NetworkPlayer"/> (<see cref="T:Netick.NetworkPeer"/>/<see cref="T:Netick.ServerConnection"/>) of inputs for this <see cref="T:Netick.Unity.NetworkObject"/>. If the source of inputs is remote (from a client) it returns that <see cref="T:Netick.ServerConnection"/>, while on the
             input source itself it returns the local <see cref="T:Netick.NetworkPlayer"/>.
+            <para>Use <see cref="P:Netick.Unity.NetworkBehaviour.InputSourcePlayerId"/> for the synced-to-everyone player id of the Input Source - because <see cref="P:Netick.Unity.NetworkBehaviour.InputSource"/> is only valid in the client for objects the client itself is the input source of, and it's null for everything else.</para>
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkBehaviour.InputSourcePlayerId">
