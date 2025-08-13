@@ -100,7 +100,7 @@ namespace Netick.Transport
 
     void INetEventListener.OnConnectionRequest(ConnectionRequest request)
     {
-      if (_clients.Count >= Engine.Config.MaxPlayers)
+      if (_freeClients.Count == 0)
       {
         request.Reject();
         return;
@@ -118,6 +118,11 @@ namespace Netick.Transport
 
     void INetEventListener.OnPeerConnected(NetPeer peer)
     {
+      if (_freeClients.Count == 0)
+      {
+        peer.Disconnect();
+        return;
+      }
       var connection     = _freeClients.Dequeue();
       connection.LNLPeer = peer;
       _clients.          Add(peer, connection);
