@@ -14,7 +14,7 @@ namespace Netick.Samples.Bomberman
 
     public override void NetworkAwake()
     {
-      Sandbox.Events.OnInputRead      += OnInput;
+      Sandbox.Events.OnInput          += OnInput;
       Sandbox.Events.OnConnectRequest += OnConnectRequest;
       Sandbox.Events.OnPlayerJoined   += OnPlayerJoined;
       Sandbox.Events.OnPlayerLeft     += OnPlayerLeft;
