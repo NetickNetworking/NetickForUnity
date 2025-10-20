@@ -70,12 +70,12 @@
         </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnPlayerJoined(Netick.Unity.NetworkSandbox,Netick.NetworkPlayerId)">
             <summary>
-            Called on when a specific player has joined the game. This is synced to all clients, including late-joiners..
+            Called when a specific player has joined the game. This is synced to all clients, including late-joiners..
             </summary>
         </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnPlayerLeft(Netick.Unity.NetworkSandbox,Netick.NetworkPlayerId)">
             <summary>
-            Called on when a specific player has left the game. This is synced to all clients, including late-joiners..
+            Called when a specific player has left the game. This is synced to all clients, including late-joiners..
             </summary>
         </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnObjectCreated(Netick.Unity.NetworkObject)">
@@ -128,9 +128,14 @@
             </summary>
             <param name="sandbox"></param>
         </member>
+        <member name="T:Netick.Unity.GridRenderer">
+            <summary>
+            Helper script to draw the AOI grid.
+            </summary>
+        </member>
         <member name="T:Netick.Unity.NetworkSandbox">
             <summary>
-            NetworkSandbox represents a networked game instance in Netick. It encapsulates the entire simulation state for that instance.
+            NetworkSandbox represents a networked game instance in Netick.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.InputEnabled">
@@ -369,10 +374,10 @@
             Always always returns null except when called inside the body of an RPC method, it returns the <see cref="T:Netick.NetworkPlayer"/> we are executing RPCs from. Works the same as <see cref="P:Netick.Unity.NetworkSandbox.CurrentRpcSource"/>, except when the RPC is called by the local player, it returns <see cref="!:Sandbox.LocalPlayer"/>.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.InitializePool(UnityEngine.GameObject,System.Int32,System.Boolean)">
+        <member name="M:Netick.Unity.NetworkSandbox.InitializePool(Netick.Unity.NetworkObject,System.Int32,System.Boolean)">
             <summary>
             Initializes the pool for the specified prefab. After this method has been called for a certain prefab, all instances of that prefab will be recycled and reset when created/destroyed.
-            <para>Note: this method should only be called on <see cref="M:Netick.Unity.NetworkEventsListener.OnStartup(Netick.Unity.NetworkSandbox)"/>, in other words, just after Netick has been started. </para>
+            <para>Note: this method should be called on <see cref="M:Netick.Unity.NetworkEventsListener.OnStartup(Netick.Unity.NetworkSandbox)"/>, in other words, just after Netick has been started. </para>
             </summary>
             <param name="networkedPrefab">Prefab to enable pooling for.</param>
             <param name="preloadedAmount">How many instances to be preloaded.</param>
@@ -488,7 +493,7 @@
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.ServerEndPoint">
             <summary>
-            <i><b>[Client Only]</b></i> The <see cref="!:IPEndPoint"/> of the server you are connected to. Returns null if you are not connected to any server, or if you are the server.
+            <i><b>[Client Only]</b></i> The <see cref="T:Netick.IEndPoint"/> of the server you are connected to. Returns null if you are not connected to any server, or if you are the server.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.IsConnected">
@@ -499,6 +504,11 @@
         <member name="P:Netick.Unity.NetworkSandbox.Transport">
             <summary>
             The underlying transport used for low-level networking.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.ReplayTransport">
+            <summary>
+            The underlying transport used for replay.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.Players">
@@ -521,6 +531,11 @@
             Use this to manage interest groups and area of interest (AoI) layers.
             </summary>
         </member>
+        <member name="P:Netick.Unity.NetworkSandbox.Replay">
+            <summary>
+            Use this to manage the replay system. Returns null when replay is not enabled.
+            </summary>
+        </member>
         <member name="P:Netick.Unity.NetworkSandbox.LocalPlayer">
             <summary>
             The local player of this sandbox instance.
@@ -540,6 +555,12 @@
         <member name="P:Netick.Unity.NetworkSandbox.Timer">
             <summary>
             The simulation clock used for managing time in the network simulation.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.LocalAlpha">
+            <summary>
+            Returns the progress of this sandbox between the current and next tick.
+            A value of 0 represents the start of the current tick, and 1 represents the end of the tick (start of the next tick). Same as <see cref="P:Netick.LocalInterpolation.Alpha"/>.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.FixedDeltaTime">
@@ -586,6 +607,16 @@
             Returns true if we are currently re-simulating a previous input/tick of the past. On the server, it always returns false since <b>only the clients resimulate</b>.
             </summary>
         </member>
+        <member name="P:Netick.Unity.NetworkSandbox.IsRecording">
+            <summary>
+            Returns true if Netick is recording for replay.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.IsReplay">
+            <summary>
+            Returns true if Netick is running in ReplayClient mode.
+            </summary>
+        </member>
         <member name="P:Netick.Unity.NetworkSandbox.ResimulationCount">
             <summary>
             <i><b>[Client Only]</b></i> The number of re-simulations that have been performed in this tick. This is only valid on the client (and during the re-simulation stage), and it returns 0 on the server.
@@ -608,12 +639,12 @@
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.InKBps">
             <summary>
-            Incoming data in kilobytes per second (KBps).
+            Average incoming data in kilobytes per second (KBps).
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.OutKBps">
             <summary>
-            Outgoing data in kilobytes per second (KBps).
+            Average outgoing data in kilobytes per second (KBps).
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.InPacketLoss">
@@ -724,12 +755,28 @@
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.LoadSceneAsync(System.String,UnityEngine.SceneManagement.LoadSceneMode)">
             <summary>
-            <i><b>[Server Only]</b></i>  Loads a scene asynchronously. This should only be called for scenes included in the build of the game.
+            <i><b>[Server Only]</b></i> Loads a scene asynchronously. This should only be called for scenes included in the build of the game.
             </summary>
         </member>
         <member name="M:Netick.Unity.NetworkSandbox.UnloadSceneAsync(System.String)">
             <summary>
-            <i><b>[Server Only]</b></i>  Unloads a scene asynchronously. 
+            <i><b>[Server Only]</b></i> Unloads a scene asynchronously. 
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.StartReplayRecording(System.String)">
+            <summary>
+            <i><b>[Server Only]</b></i> Starts recording replay data. When not passed any address, Netick will use the current date and time for the replay file name, and the file will be stored in `Application.persistentDataPath/replays/gameVersion/`.
+            <para>Note: to stop recording, use <see cref="M:Netick.Unity.NetworkSandbox.StopReplayRecording"/>.</para>
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.StopReplayRecording">
+            <summary>
+            Stops the current recording session. Awaiting this method ensures that recording has fully finished.
+            </summary>
+        </member>
+        <member name="M:Netick.Unity.NetworkSandbox.StartReplayPlayback(System.String)">
+            <summary>
+            <i><b>[Client Only]</b></i> Starts replaying. When not passed any address, Netick will automatically use the latest created file in `Application.persistentDataPath/replays/gameVersion/`.
             </summary>
         </member>
         <member name="T:Netick.Unity.NetworkRigidbody2D">
@@ -849,6 +896,7 @@
             The version of Netick.
             </summary>
         </member>
+        <!-- Badly formed XML comment ignored for member "P:Netick.Unity.Network.GameVersion" -->
         <member name="P:Netick.Unity.Network.StartMode">
             <summary>
             The start mode of Netick.
@@ -933,6 +981,12 @@
         <member name="M:Netick.Unity.Network.StartAsClient(Netick.Unity.NetworkTransportProvider,System.Int32,UnityEngine.GameObject,Netick.Unity.NetickConfig)">
             <summary>
             Starts Netick as a client.
+            </summary>
+            <returns>The sandbox representing the client</returns>
+        </member>
+        <member name="M:Netick.Unity.Network.StartAsReplayClient(UnityEngine.GameObject,Netick.Unity.NetickConfig)">
+            <summary>
+            Starts Netick as a replay client.
             </summary>
             <returns>The sandbox representing the client</returns>
         </member>
@@ -1035,6 +1089,11 @@
             Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is a client or the host.
             </summary>
         </member>
+        <member name="P:Netick.Unity.NetworkBehaviour.IsReplay">
+            <summary>
+            Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is running in ReplayClient mode.
+            </summary>
+        </member>
         <member name="P:Netick.Unity.NetworkBehaviour.IsInputSource">
             <summary>
             Returns true if this <see cref="P:Netick.Unity.NetworkSandbox.LocalPlayer"/> is providing inputs to this Object.
@@ -1135,7 +1194,7 @@
         </member>
         <member name="T:Netick.Unity.NetickConfig">
             <summary>
-            Config class for Netick.
+            Config of Netick.
             </summary> 
         </member>
         <member name="T:Netick.Unity.NetworkObject">

@@ -33,7 +33,18 @@ namespace Netick.Samples
     [Header("UI")]
     public bool                     ShowDisconnectButton           = true;
     public bool                     ShowConnectButton              = true;
-    public Vector2                  Offset                         = new Vector2(36, 0);
+  
+    public Vector2                  ButtonSize                     = new Vector2(200, 20);
+    public Vector2                  LabelSize                      = new Vector2(200, 200);
+    public Vector2                  StartOffset                    = new Vector2(27, 20);
+    public Vector2                  Spacing                        = new Vector2(0, 25);
+    private Vector2                 _curOffset                     = default;
+    private Color                   _buttonForegroundColor         = Color.white;
+    private Color                   _buttonBackgroundColor         = new(0.2f, 0.2f, 0.2f, 1f);
+    private Color                   _buttonHoverColor              = new(0.1f, 0.1f, 0.1f, 1f);
+    private Texture2D               _buttonNormalTexture;
+    private Texture2D               _buttonHoverTexture;
+    private GUIStyle                _buttonStyle;
 
     private void Reset()
     {
@@ -43,14 +54,17 @@ namespace Netick.Samples
 
     private void Awake()
     {
+      _buttonStyle = null;
+
       if (Application.isBatchMode)
       {
         if (Cap)
           Application.targetFrameRate = FPS;
         Network.StartAsServer(Transport, Port, SandboxPrefab);
+        return;
       }
 
-      else if (AutoStart)
+      if (AutoStart)
       {
         if (Network.Instance == null)
         {
@@ -70,8 +84,6 @@ namespace Netick.Samples
                 for (int i = 0; i < sandboxes.Clients.Length; i++)
                   sandboxes.Clients[i].Connect(Port, ServerIPAddress);
               }
-
-
               break;
           }
         }
@@ -80,6 +92,10 @@ namespace Netick.Samples
 
     private void OnGUI()
     {
+      if (_buttonStyle == null)
+        InitButtonStyle();
+
+      _curOffset = StartOffset;
       if (Network.IsRunning)
       {
         if (Sandbox != null && Sandbox.IsClient)
@@ -87,48 +103,70 @@ namespace Netick.Samples
           if (!Sandbox.IsVisible)
             return;
 
-          if (Sandbox.IsConnected)
+          _curOffset.x = (Screen.width - ButtonSize.x) - StartOffset.x;
+
+          if (!Sandbox.IsReplay)
           {
-            if (ShowDisconnectButton)
+            if (Sandbox.IsConnected)
             {
-              GUI.Label(new Rect(Offset.x, Offset.y + 170, 200, 50), $"Connected to {Sandbox.ServerEndPoint}");
+              if (ShowDisconnectButton)
+              {
+                Label($"Connected to {Sandbox.ServerEndPoint}");
 
-              if (GUI.Button(new Rect(Offset.x, Offset.y + 220, 200, 50), "Disconnect"))
-                Sandbox.DisconnectFromServer();
+                if (Button("Disconnect"))
+                  Sandbox.DisconnectFromServer();
+              }
+
             }
+            else if (ShowConnectButton)
+            {
+              if (Button("Connect"))
+                Sandbox.Connect(Port, ServerIPAddress);
 
+              ServerIPAddress = TextField(ServerIPAddress);
+              Port = int.Parse(TextField(Port.ToString()));
+            }
           }
-          else if (ShowConnectButton)
+          else
           {
-            if (GUI.Button(new Rect(Offset.x, Offset.y + 40, 200, 50), "Connect"))
-              Sandbox.Connect(Port, ServerIPAddress);
-
-            ServerIPAddress = GUI.TextField(new Rect(Offset.x, Offset.y + 100, 200, 50), ServerIPAddress);
-            Port = int.Parse(GUI.TextField(new Rect(Offset.x, Offset.y + 160, 200, 50), Port.ToString()));
+            if (Sandbox.Replay.Playback.IsInitialized)
+              Label($"Connected using replay: {Sandbox.Replay.Playback.ReplayAddress}");
           }
-        }
 
+
+        }
 
         return;
       }
 
-      if (GUI.Button(new Rect(Offset.x, Offset.y + 40, 200, 50), "Run Host"))
+      if (Button("Run Host"))
       {
         Network.StartAsHost(Transport, Port, SandboxPrefab);
       }
 
-      if (GUI.Button(new Rect(Offset.x, Offset.y + 100, 200, 50), "Run Client"))
+      if (Button("Run Client"))
       {
-        var sandbox = Network.StartAsClient(Transport, Port, SandboxPrefab);
+        var sandbox = Network.StartAsClient(Transport, SandboxPrefab);
         sandbox.Connect(Port, ServerIPAddress);
       }
 
-      if (GUI.Button(new Rect(Offset.x, Offset.y + 160, 200, 50), "Run Server"))
+      if (Button("Run Server"))
       {
         Network.StartAsServer(Transport, Port, SandboxPrefab);
       }
 
-      if (GUI.Button(new Rect(Offset.x, Offset.y + 220, 200, 50), "Run Host + Client"))
+      if (Button("Run Replay Client"))
+      {
+        var sandbox = Network.StartAsReplayClient(SandboxPrefab);
+        sandbox.StartReplayPlayback();
+      }
+
+      if (Button("Run Single Player"))
+      {
+        Network.StartAsSinglePlayer(SandboxPrefab);
+      }
+
+      if (Button("Run Host + Client"))
       {
         var sandboxes = Network.StartAsMultiplePeers(Transport, Port, SandboxPrefab, StartServerInMultiplePeersMode, true, Clients);
 
@@ -139,8 +177,54 @@ namespace Netick.Samples
         }
       }
 
-      ServerIPAddress = GUI.TextField(new Rect(Offset.x, Offset.y + 280, 200, 50), ServerIPAddress);
+      ServerIPAddress = TextField(ServerIPAddress);
+    }
 
+    private bool Button(string title)
+    {
+      bool result = GUI.Button(new Rect(_curOffset.x, _curOffset.y, ButtonSize.x, ButtonSize.y), title, _buttonStyle);
+      _curOffset += Spacing;
+      return result;
+    }
+
+    private string TextField(string title)
+    {
+      var result = GUI.TextField(new Rect(_curOffset.x,  _curOffset.y, ButtonSize.x, ButtonSize.y), title);
+      _curOffset += Spacing;
+      return result;
+    }
+
+    private void Label(string title)
+    {
+       GUI.Label(new Rect(_curOffset.x, _curOffset.y, LabelSize.x, LabelSize.y), title);
+      _curOffset += Spacing;
+    }
+
+    void InitButtonStyle()
+    {
+      _buttonNormalTexture = new Texture2D(1, 1);
+      _buttonNormalTexture.SetPixel(0, 0, _buttonBackgroundColor);
+      _buttonNormalTexture.Apply();
+
+      _buttonHoverTexture = new Texture2D(1, 1);
+      _buttonHoverTexture.SetPixel(0, 0, _buttonHoverColor);
+      _buttonHoverTexture.Apply();
+
+      _buttonStyle = new GUIStyle(GUI.skin.button)
+      {
+        normal = { background = _buttonNormalTexture, textColor = _buttonForegroundColor },
+        hover  = { background = _buttonHoverTexture, textColor = _buttonForegroundColor },
+        active = { background = _buttonHoverTexture, textColor = Color.gray },
+        border = new RectOffset(0, 0, 0, 0)
+      };
+    }
+
+    private void OnDestroy()
+    {
+      if (_buttonNormalTexture != null)
+        Destroy(_buttonNormalTexture);
+      if (_buttonHoverTexture != null)
+        Destroy(_buttonHoverTexture);
     }
   }
 }

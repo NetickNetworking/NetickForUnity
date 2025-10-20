@@ -12,7 +12,8 @@ namespace Netick.Samples
   public class NetworkInfo : NetworkEventsListener
   {
     [Header("Network Stats")]
-    public Vector2 Offset                     = new Vector2(27, 20);
+    public Vector2  StartOffset               = new Vector2(27, 20);
+    public Vector2  Spacing                   = new Vector2(0, 15);
 
     [Header("Network Conditions Icons")]
     public float    MediumLatencyThreshold    = 150;
@@ -28,6 +29,7 @@ namespace Netick.Samples
     private Texture _packetLossIcon;
     private Texture _latencyIcon;
     private Texture _serverLagIcon;
+    private Vector2 _curOffset;
 
     private void Awake()
     {
@@ -40,27 +42,30 @@ namespace Netick.Samples
     {
       if (Network.IsRunning)
       {
+        _curOffset = StartOffset;
+
         if (Sandbox != null && Sandbox.IsConnected && Sandbox.IsVisible)
         {
-          DrawText(0, "RTT",          (Sandbox.RTT * 1000f).ToString(),                         "ms");
-          DrawText(1, "In",            Sandbox.InKBps.ToString(),                               "KB/s");
-          DrawText(2, "Out",           Sandbox.OutKBps.ToString(),                              "KB/s");
-          DrawText(3, "In Loss",      (Sandbox.InPacketLoss * 100f).ToString(),                 "%");
-          DrawText(4, "Out Loss",     (Sandbox.OutPacketLoss * 100f).ToString(),                "%");
-          DrawText(5, "Interp Delay", (Sandbox.InterpolationDelay * 1000f).ToString(),          "ms");
-          DrawText(6, "Resims",        Sandbox.Monitor.Resimulations.Average.ToString(),        "ticks");
-          DrawText(7, "Srv Tick Time", (Sandbox.Monitor.ServerTickTime.Max * 1000f).ToString(), "ms");
-          DrawText(8, "Delta time",    (Time.deltaTime * 1000f).ToString(),                     "ms");
+          DrawText("RTT",          (Sandbox.RTT * 1000f).ToString(),                         "ms");
+          DrawText("In",            Sandbox.InKBps.ToString(),                               "KB/s");
+          DrawText("Out",           Sandbox.OutKBps.ToString(),                              "KB/s");
+          DrawText("In Loss",      (Sandbox.InPacketLoss * 100f).ToString(),                 "%");
+          DrawText("Out Loss",     (Sandbox.OutPacketLoss * 100f).ToString(),                "%");
+          DrawText("Interp Delay", (Sandbox.InterpolationDelay * 1000f).ToString(),          "ms");
+          DrawText("Resims",        Sandbox.Monitor.Resimulations.Average.ToString(),        "ticks");
+          DrawText("Srv Tick Time", (Sandbox.Monitor.ServerTickTime.Max * 1000f).ToString(), "ms");
+          DrawText("Delta time",    (Time.deltaTime * 1000f).ToString(),                     "ms");
 
           DrawIcons();
         }
       }
     }
 
-    private void DrawText(int offset, string title, string content, string unit)
+    private void DrawText(string title, string content, string unit)
     {
-      GUI.Label(new Rect(Offset.x + 10,  Offset.y + 10 + (15 * offset), 200, 50), $"{title}: ");
-      GUI.Label(new Rect(Offset.x + 130, Offset.y + 10 + (15 * offset), 200, 50), $"{content} {unit}");
+      GUI.Label(new Rect(_curOffset.x,       _curOffset.y, 200, 50), $"{title}: ");
+      GUI.Label(new Rect(_curOffset.x + 130, _curOffset.y, 200, 50), $"{content} {unit}");
+      _curOffset += Spacing;
     }
 
     public void DrawIcons()
