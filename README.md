@@ -14,7 +14,7 @@
   <a href="https://discord.com/invite/uV6bfG66Fx">Discord</a>
 </p>
 
-Netick is a free server-authoritative state-sync networking solution for Unity. Netick is the state-of-the-art networking solution, it's the highest-performing networking solution for Unity, **achieving the lowest bandwidth and CPU usage, shown by** [**open-source benchmarks.**](#technology-and-performance) Built with an architecture that’s different from other solutions, Netick makes writing cheat-free networked games as close to writing single-player games as possible. Whether you're building a competitive shooter like CS, a 200-player battle royale, or a large-scale survival game, Netick is built to handle it all.
+Netick is a free, server-authoritative, state-sync networking solution for Unity, built for performance, reliability, and ease of use. It’s a state-of-the-art networking solution, delivering industry-leading bandwidth efficiency and CPU performance, achieving the lowest bandwidth usage, as shown by [open-source benchmarks](https://github.com/StinkySteak/unity-netcode-benchmark). Designed with a fundamentally different architecture from other solutions, Netick makes developing cheat-resistant multiplayer games feel almost as simple as writing single-player games. Whether you’re building a competitive shooter, a casual party game, a 200-player battle royale, or a large-scale survival game, Netick is built to handle it all. It’s also the **only (state-sync) networking solution for Unity with a built-in replay system** and the only free one **proven to handle poor network conditions** - demonstrated [here](https://github.com/StinkySteak/unity-network-library-benchmark-on-bad-network-condition).
 
 ![Showcase](https://i.ibb.co/9kNSY07z/Netick-Github-Showcase.png)
 
@@ -56,6 +56,7 @@ Unity Editor 2021 or later.
 
 - Stable, clean, and powerful API
 - Client-Side Prediction
+- Game Replay
 - Full and Partial Delta Snapshots
 - Snapshot Interpolation
 - Remote Procedure Calls (RPCs)
