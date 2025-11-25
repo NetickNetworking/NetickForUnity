@@ -164,12 +164,12 @@ namespace Netick.Unity
       GUILayout.Space(20f);
       GUILayout.Label("Speed:", _centeredLabelStyle, GUILayout.Width(60f), GUILayout.Height(ButtonHeight));
 
-      DrawSpeedButton("¼×", 0.25f);
-      DrawSpeedButton("½×", 0.5f);
-      DrawSpeedButton("1×", 1f);
-      DrawSpeedButton("2×", 2f);
-      DrawSpeedButton("4×", 4f);
-      DrawSpeedButton("8×", 8f);
+      DrawSpeedButton("1/4x", 0.25f);
+      DrawSpeedButton("1/2x", 0.5f);
+      DrawSpeedButton("1x", 1f);
+      DrawSpeedButton("2x", 2f);
+      DrawSpeedButton("4x", 4f);
+      DrawSpeedButton("8x", 8f);
 
       GUILayout.EndHorizontal();
     }
