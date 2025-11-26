@@ -153,7 +153,7 @@ namespace Netick.Unity
       if (GUILayout.Button(IsPlaying ? "||" : ">", _buttonStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(ButtonHeight)))
         TogglePaused();
 
-      GUILayout.Label($"{playback.Position:F1}s / {playback.Duration:F1}s", _centeredLabelStyle, GUILayout.Width(100f), GUILayout.Height(ButtonHeight));
+      GUILayout.Label($"{FormatTime(playback.Position)} / {FormatTime(playback.Duration)}", _centeredLabelStyle, GUILayout.Width(150f), GUILayout.Height(ButtonHeight));
 
       if (GUILayout.Button("<<", _buttonStyle, GUILayout.Width(ButtonWidth), GUILayout.Height(ButtonHeight)) && IsPlaying)
         playback.SeekToTimeRelative(-jumpTime);
@@ -184,6 +184,19 @@ namespace Netick.Unity
         if (IsPlaying)
           Time.timeScale = Mathf.Max(0f, _timeScale);
       }
+    }
+
+    string FormatTime(float seconds)
+    {
+      int totalSeconds = Mathf.FloorToInt(seconds);
+      int hours        = totalSeconds / 3600;
+      int minutes      = (totalSeconds % 3600) / 60;
+      int secs         = totalSeconds % 60;
+
+      if (hours > 0)
+        return $"{hours}:{minutes:00}:{secs:00}";
+      else
+        return $"{minutes}:{secs:00}";
     }
   }
 }
