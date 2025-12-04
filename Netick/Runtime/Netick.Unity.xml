@@ -92,15 +92,11 @@
             <summary>
             Called on the server when a specific client has connected.
             </summary>
-            <param name="sandbox"></param>
-            <param name="client"></param>
         </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnClientDisconnected(Netick.Unity.NetworkSandbox,Netick.NetworkConnection,Netick.TransportDisconnectReason)">
             <summary>
             Called on the server when a specific client has disconnected.
             </summary>
-            <param name="sandbox"></param>
-            <param name="client"></param>
         </member>
         <member name="M:Netick.Unity.NetworkEventsListener.OnPlayerConnected(Netick.Unity.NetworkSandbox,Netick.NetworkPlayer)">
             <summary>
@@ -709,7 +705,7 @@
             Use this to subscribe/unsubscribe to/from Netick events.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.Connect(System.Int32,System.String,System.Byte[],System.Int32)">
+        <member name="M:Netick.Unity.NetworkSandbox.Connect(System.Int32,System.String)">
             <summary>
             <i><b>[Client Only]</b></i> Connects to a remote server. 
             <para>Note: if you are already connected to a server, and you want to connect to a different one, you have to disconnect before calling this. Otherwise this method does nothing.</para>
@@ -724,7 +720,7 @@
             <i><b>[Client Only]</b></i> Disconnects this client from the server.
             </summary>
         </member>
-        <member name="M:Netick.Unity.NetworkSandbox.Kick(Netick.NetworkPlayerId)">
+        <member name="M:Netick.Unity.NetworkSandbox.Kick(Netick.NetworkPlayerId,System.ReadOnlySpan{System.Byte})">
             <summary>
             <i><b>[Server Only]</b></i> Disconnects a client from the server.
             </summary>

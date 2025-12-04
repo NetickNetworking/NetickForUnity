@@ -13,9 +13,23 @@
         <member name="M:Netick.NetickTransport.OnConnectRequest(Netick.NetworkConnectionRequest)">
             -------------------------------
         </member>
+        <member name="P:Netick.OnChangedData.IsCatchingUp">
+             <summary>
+             <para>Returns true during the server-authoritative tick in which this client is catching up on an
+             already-existing object — either because the client has just late-joined,
+             or because it has just gained/regained interest in this object.</para>
+            
+             <para>This flag is only set for existing objects; it is not set for objects (ones that the client has interest in at spawn time) spawned after the client has joined. 
+             It is true only during the "catching up" tick in which the object becomes relevant, 
+             and false afterward.</para>
+            
+             <para>This flag always returns false on the server.</para>
+             </summary>
+        </member>
         <member name="P:Netick.OnChangedData.InvokedForMisprediction">
             <summary>
             Returns true if this OnChanged callback is due to a mismatch between the state of this variable before rollback, and the state after rollback and resimulation.
+            <para>This flag always returns false on the server.</para>
             </summary>
         </member>
         <member name="M:Netick.OnChangedData.GetPreviousNetworkDictionary``2(Netick.NetworkDictionary{``0,``1})">
@@ -529,7 +543,7 @@
         </member>
         <member name="T:Netick.Entity">
             <summary>
-            Represents an networked entity (object) in Netick.
+            Represents a networked entity (object) in Netick.
             </summary>
         </member>
         <member name="T:Netick.NetworkUnorderedListSnapshot`1">
