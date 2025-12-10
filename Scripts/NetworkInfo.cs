@@ -12,6 +12,7 @@ namespace Netick.Samples
   public class NetworkInfo : NetworkEventsListener
   {
     [Header("Network Stats")]
+    public bool     ShowProfilerStats         = false;
     public Vector2  StartOffset               = new Vector2(27, 20);
     public Vector2  Spacing                   = new Vector2(0, 15);
 
@@ -54,9 +55,32 @@ namespace Netick.Samples
           DrawText("Interp Delay", (Sandbox.InterpolationDelay * 1000f).ToString(),          "ms");
           DrawText("Resims",        Sandbox.Monitor.Resimulations.Average.ToString(),        "ticks");
           DrawText("Srv Tick Time", (Sandbox.Monitor.ServerTickTime.Max * 1000f).ToString(), "ms");
-          DrawText("Delta time",    (Time.deltaTime * 1000f).ToString(),                     "ms");
+          DrawText("Delta Time",    (Time.deltaTime * 1000f).ToString(),                     "ms");
 
           DrawIcons();
+        }
+
+        if (Sandbox != null && Sandbox.IsVisible && ShowProfilerStats && Sandbox.Config.EnableProfiling)
+        {
+          DrawText("Tick Time",                  (Sandbox.Monitor.TickProfiler.Time).ToString(),                  "ms");
+          DrawText("NetworkFixedUpdate Time",    (Sandbox.Monitor.FixedUpdateProfiler.Time).ToString(),           "ms");
+
+          if (Sandbox.IsClient)
+            DrawText("Resimulate Time",          (Sandbox.Monitor.ResimulateProfiler.Time).ToString(),            "ms");
+
+          DrawText("NetworkRender Time",         (Sandbox.Monitor.RenderProfiler.Time).ToString(),                "ms");
+
+          if (Sandbox.IsServer && Sandbox.IsRecording)
+            DrawText("Replay Write Time",        (Sandbox.Monitor.WriteReplayProfiler.Time).ToString(),           "ms");
+
+          if (Sandbox.IsServer)
+            DrawText("Process Changes Time",     (Sandbox.Monitor.ProcessStateChangesProfiler.Time).ToString(),   "ms");
+
+          DrawText("Send Time",                  (Sandbox.Monitor.SendProfiler.Time).ToString(),                  "ms");
+          DrawText("Receive Time",               (Sandbox.Monitor.ReceiveProfiler.Time).ToString(),               "ms");
+
+          DrawText("NetcodeIntoGameEngine Time", (Sandbox.Monitor.NetcodeIntoGameEngineProfiler.Time).ToString(), "ms");
+          DrawText("GameEngineIntoNetcode Time", (Sandbox.Monitor.GameEngineIntoNetcodeProfiler.Time).ToString(), "ms");
         }
       }
     }
@@ -64,7 +88,7 @@ namespace Netick.Samples
     private void DrawText(string title, string content, string unit)
     {
       GUI.Label(new Rect(_curOffset.x,       _curOffset.y, 200, 50), $"{title}: ");
-      GUI.Label(new Rect(_curOffset.x + 130, _curOffset.y, 200, 50), $"{content} {unit}");
+      GUI.Label(new Rect(_curOffset.x + 200, _curOffset.y, 200, 50), $"{content} {unit}");
       _curOffset += Spacing;
     }
 
