@@ -60,7 +60,8 @@ namespace Netick.Samples
       {
         if (Cap)
           Application.targetFrameRate = FPS;
-        Network.StartAsServer(Transport, Port, SandboxPrefab);
+        if (!Network.IsRunning)
+          Network.StartAsServer(Transport, Port, SandboxPrefab);
         return;
       }
 
