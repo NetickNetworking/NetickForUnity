@@ -192,14 +192,17 @@ namespace Netick.Transport
       if (dataLength > 0)
         disconnectInfo.AdditionalData.GetRemainingBytesSegment().AsSpan().CopyTo(kickData);
 
+      if (peer != null && _connections.ContainsKey(peer))
+      {
+        TransportDisconnectReason reason = disconnectInfo.Reason == DisconnectReason.Timeout ? TransportDisconnectReason.Timeout : TransportDisconnectReason.Shutdown;
+        NetworkPeer.OnDisconnected(_connections[peer], reason, kickData);
+        _freeClients.Enqueue(_connections[peer]);
+        _connections.Remove(peer);
+        return;
+      }
+
       if (Engine.IsClient)
       {
-        if (disconnectInfo.Reason == DisconnectReason.ConnectionRejected)
-        {
-          NetworkPeer.OnConnectFailed(ConnectionFailedReason.Refused, kickData);
-          return;
-        }
-
         if (disconnectInfo.Reason == DisconnectReason.ConnectionRejected)
         {
           NetworkPeer.OnConnectFailed(ConnectionFailedReason.Refused, kickData);
@@ -218,17 +221,6 @@ namespace Netick.Transport
           NetworkPeer.OnConnectFailed(ConnectionFailedReason.Refused, kickData);
           return;
         }
-      }
-
-      if (peer == null)
-        return;
-
-      if (_connections.ContainsKey(peer))
-      {
-        TransportDisconnectReason reason = disconnectInfo.Reason == DisconnectReason.Timeout ? TransportDisconnectReason.Timeout : TransportDisconnectReason.Shutdown;
-        NetworkPeer. OnDisconnected(_connections[peer], reason, kickData);
-        _freeClients.Enqueue(_connections[peer]);
-        _connections.Remove(peer);
       }
     }
 
