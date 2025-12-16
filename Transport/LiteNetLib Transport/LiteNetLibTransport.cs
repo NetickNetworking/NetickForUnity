@@ -1,9 +1,11 @@
+using LiteNetLib;
+using LiteNetLib.Utils;
+using Netick.Unity;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using LiteNetLib;
-using LiteNetLib.Utils;
+using System.Text;
 
 namespace Netick.Transport
 {
@@ -69,8 +71,10 @@ namespace Netick.Transport
     private byte[]                             _bytesBuffer = new byte[1024];
     private int                                _port;
     private Dictionary<NetPeer, LNLConnection> _connections;
-    private Queue<LNLConnection>               _freeClients;
+    private Queue<LNLConnection>               _freeConnections;
     private Queue<LNLRequest>                  _freeRequests;
+    private byte[]                             _serverIsFullMsg;
+    private NetworkSandbox                     _sandbox;
 
     public LiteNetLibTransport(LiteNetLibTransportProvider provider)
     {
@@ -79,8 +83,9 @@ namespace Netick.Transport
 
     public override void Init()
     {
+      _sandbox                       = (NetworkSandbox)Engine.UserObject;
       _connections                   = new(Engine.Config.MaxPlayers);
-      _freeClients                   = new(Engine.Config.MaxPlayers);
+      _freeConnections               = new(Engine.Config.MaxPlayers);
       _freeRequests                  = new(Engine.Config.MaxPlayers);
       _bitBuffer                     = new BitBuffer(createChunks: false);
       _netManager                    = new NetManager(this) { AutoRecycle = true };
@@ -88,11 +93,12 @@ namespace Netick.Transport
       _netManager.ReconnectDelay     = (int)(_provider.ReconnectInterval * 1000);
       _netManager.MaxConnectAttempts = _provider.MaxConnectAttempts;
       _netManager.UpdateTime         = (int)(_provider.UpdateInterval * 1000);
+      _serverIsFullMsg               = Encoding.UTF8.GetBytes("ServerFull");
+      int connCount                  = Engine.IsClient ? 1 : Engine.MaxClients;
 
-      for (int i = 0; i < Engine.Config.MaxPlayers; i++)
-        _freeClients.Enqueue(new LNLConnection(this));
-
-      for (int i = 0; i < Engine.Config.MaxPlayers; i++)
+      for (int i = 0; i < connCount; i++)
+        _freeConnections.Enqueue(new LNLConnection(this));
+      for (int i = 0; i < connCount; i++)
         _freeRequests.Enqueue(new LNLRequest(this));
     }
 
@@ -151,14 +157,14 @@ namespace Netick.Transport
 
     void INetEventListener.OnConnectionRequest(ConnectionRequest request)
     {
-      if (_freeClients.Count == 0)
+      if (_freeConnections.Count == 0)
       {
-        request.Reject();
+        request.Reject(_serverIsFullMsg);
         return;
       }
 
-      var r               = _freeRequests.Count > 0 ? _freeRequests.Dequeue() : new LNLRequest(this); 
-      r.Request           = request;
+      var r       = _freeRequests.Count > 0 ? _freeRequests.Dequeue() : new LNLRequest(this); 
+      r.Request   = request;
 
       if (request.Data.AvailableBytes > 0)
       {
@@ -174,12 +180,12 @@ namespace Netick.Transport
 
     void INetEventListener.OnPeerConnected(NetPeer peer)
     {
-      if (_freeClients.Count == 0)
+      if (_freeConnections.Count == 0)
       {
-        peer.Disconnect();
+        peer.Disconnect(_serverIsFullMsg);
         return;
       }
-      var connection     = _freeClients.Dequeue();
+      var connection     = _freeConnections.Dequeue();
       connection.LNLPeer = peer;
       _connections.      Add(peer, connection);
       NetworkPeer.       OnConnected(connection);
@@ -196,13 +202,21 @@ namespace Netick.Transport
       {
         TransportDisconnectReason reason = disconnectInfo.Reason == DisconnectReason.Timeout ? TransportDisconnectReason.Timeout : TransportDisconnectReason.Shutdown;
         NetworkPeer.OnDisconnected(_connections[peer], reason, kickData);
-        _freeClients.Enqueue(_connections[peer]);
+        _freeConnections.Enqueue(_connections[peer]);
         _connections.Remove(peer);
         return;
       }
 
       if (Engine.IsClient)
       {
+        var serverFull   = dataLength > 0 && Encoding.UTF8.GetString(kickData) == "ServerFull";
+
+        if (serverFull)
+        {
+          NetworkPeer.OnConnectFailed(ConnectionFailedReason.ServerFull);
+          return;
+        }
+
         if (disconnectInfo.Reason == DisconnectReason.ConnectionRejected)
         {
           NetworkPeer.OnConnectFailed(ConnectionFailedReason.Refused, kickData);

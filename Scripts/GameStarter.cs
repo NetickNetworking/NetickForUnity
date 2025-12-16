@@ -75,7 +75,7 @@ namespace Netick.Samples
               Network.StartAsServer(Transport, Port, SandboxPrefab);
               break;
             case StartMode.Client:
-              Network.StartAsClient(Transport, Port, SandboxPrefab).Connect(Port, ServerIPAddress);
+              Network.StartAsClient(Transport, SandboxPrefab).Connect(Port, ServerIPAddress);
               break;
             case StartMode.MultiplePeers:
               var sandboxes = Network.StartAsMultiplePeers(Transport, Port, SandboxPrefab, StartServerInMultiplePeersMode, true, Clients);
