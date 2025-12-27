@@ -1,11 +1,12 @@
-using LiteNetLib;
-using LiteNetLib.Utils;
-using Netick.Unity;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using Collections = Unity.Collections;
+using LiteNetLib;
+using LiteNetLib.Utils;
+using Netick.Unity;
 
 namespace Netick.Transport
 {
@@ -60,8 +61,30 @@ namespace Netick.Transport
         Transport = transport;
       }
 
-      public unsafe override void Send(IntPtr ptr, int length)                                         => LNLPeer.Send(new ReadOnlySpan<byte>(ptr.ToPointer(), length), DeliveryMethod.Unreliable);
-      public unsafe override void SendUserData(IntPtr ptr, int length, TransportDeliveryMethod method) => LNLPeer.Send(new ReadOnlySpan<byte>(ptr.ToPointer(), length), method == TransportDeliveryMethod.Unreliable ? DeliveryMethod.Unreliable : DeliveryMethod.ReliableOrdered);
+      public unsafe override void Send(IntPtr ptr, int length)
+      {
+        SendLNL((byte*)ptr.ToPointer(), length, DeliveryMethod.Unreliable);
+      }
+      public unsafe override void SendUserData(IntPtr ptr, int length, TransportDeliveryMethod method)
+      {
+        SendLNL((byte*)ptr.ToPointer(), length, method == TransportDeliveryMethod.Unreliable ? DeliveryMethod.Unreliable : DeliveryMethod.ReliableOrdered);
+      }
+
+      private unsafe void SendLNL(byte* ptr, int length, DeliveryMethod deliveryMethod)
+      {
+#if NET_STANDARD_2_1
+        LNLPeer.Send(new ReadOnlySpan<byte>(ptr, length), deliveryMethod);
+#else
+
+        if (Transport._bytesBuffer.Length < length)
+          Transport._bytesBuffer = new byte[length];
+        fixed (byte* bytesBuffer = Transport._bytesBuffer)
+          Collections.LowLevel.Unsafe.UnsafeUtility.MemCpy(bytesBuffer, ptr, length);
+
+        LNLPeer.Send(Transport._bytesBuffer, 0, length, deliveryMethod);
+#endif
+      }
+
     }
 
     private LiteNetLibTransportProvider        _provider;
