@@ -5,120 +5,249 @@ using Network = Netick.Unity.Network;
 
 namespace Netick.Samples
 {
-  /// <summary>
-  /// This is a helper script for quick prototyping, used to show useful network information of Netick.
-  /// </summary>
   [AddComponentMenu("Netick/Network Info")]
   public class NetworkInfo : NetworkEventsListener
   {
-    [Header("Network Stats")]
-    public bool     ShowProfilerStats         = false;
-    public Vector2  StartOffset               = new Vector2(27, 20);
-    public Vector2  Spacing                   = new Vector2(0, 15);
+    public enum AnchorPoint     
+    { 
+      TopLeft, 
+      TopRight, 
+      BottomLeft,
+      BottomRight 
+    }
 
-    [Header("Network Conditions Icons")]
-    public float    MediumLatencyThreshold    = 150;
-    public float    HighLatencyThreshold      = 250;
-    public float    MediumPacketLossThreshold = 1;
-    public float    HighPacketLossThreshold   = 10;
+    public enum LayoutDirection
+    { 
+      Vertical,
+      Horizontal 
+    }
 
-    public Vector2  PacketLossIconOffset      = new Vector2(-80, 30);
-    public Vector2  LatencyIconOffset         = new Vector2(-80, 70);
-    public Vector2  ServerLagIconOffset       = new Vector2(-80, 110);
-    public float    IconSize                  = 30;
+    [Header("Text Layout Settings")]
+    public AnchorPoint          TextAnchor                = AnchorPoint.TopLeft;
+    public LayoutDirection      TextLayout                = LayoutDirection.Vertical;
+    public Vector2              TextStartOffset           = new Vector2(27, 20);
+    public float                HorizontalPadding         = 20f;
+    public float                LineHeight                = 15f;
 
-    private Texture _packetLossIcon;
-    private Texture _latencyIcon;
-    private Texture _serverLagIcon;
-    private Vector2 _curOffset;
+    [Header("Icon Layout Settings")]
+    public AnchorPoint          IconAnchor                = AnchorPoint.TopRight;
+    public LayoutDirection      IconLayout                = LayoutDirection.Vertical;
+    public Vector2              IconStartOffset           = new Vector2(-40, 40);
+    public Vector2              IconSpacing               = new Vector2(10, 10);
+    public float                IconSize                  = 30;
+
+    [Header("Sizing")]
+    public float                ContentFixedWidth         = 120f;
+    public float                VerticalTitleOffset       = 150f;
+
+    [Header("Network Stats Settings")]
+    public bool                 ShowProfilerStats         = false;
+    public float                MediumLatencyThreshold    = 150;
+    public float                HighLatencyThreshold      = 250;
+    public float                MediumPacketLossThreshold = 1;
+    public float                HighPacketLossThreshold   = 10;
+
+    private Texture             _packetLossIcon;
+    private Texture             _latencyIcon;
+    private Texture             _serverLagIcon;
+    private Vector2             _curOffset;
+    private GUIStyle            _labelStyle;
+    private const string        FloatFormat               = "F3";
 
     private void Awake()
     {
       _packetLossIcon = Resources.Load<Texture>("Network Icons/PacketLoss");
       _latencyIcon    = Resources.Load<Texture>("Network Icons/Latency");
       _serverLagIcon  = Resources.Load<Texture>("Network Icons/ServerLag");
+      _labelStyle     = null;
     }
 
     private void OnGUI()
     {
-      if (Network.IsRunning)
+      if (Sandbox == null || !Sandbox.IsRunning || (Sandbox.IsClient && !Sandbox.IsConnected)) 
+        return;
+
+      if (_labelStyle == null)
       {
-        _curOffset = StartOffset;
+        _labelStyle          = new GUIStyle(GUI.skin.label);
+        _labelStyle.wordWrap = false;
+        _labelStyle.padding  = new RectOffset(0, 0, 0, 0); 
+        _labelStyle.margin   = new RectOffset(0, 0, 0, 0); 
+      }
 
-        if (Sandbox != null && Sandbox.IsConnected && Sandbox.IsVisible)
-        {
-          DrawText("RTT",          (Sandbox.RTT * 1000f).ToString(),                         "ms");
-          DrawText("In",            Sandbox.InKBps.ToString(),                               "KB/s");
-          DrawText("Out",           Sandbox.OutKBps.ToString(),                              "KB/s");
-          DrawText("In Loss",      (Sandbox.InPacketLoss * 100f).ToString(),                 "%");
-          DrawText("Out Loss",     (Sandbox.OutPacketLoss * 100f).ToString(),                "%");
-          DrawText("Interp Delay", (Sandbox.InterpolationDelay * 1000f).ToString(),          "ms");
-          DrawText("Resims",        Sandbox.Monitor.Resimulations.Average.ToString(),        "ticks");
-          DrawText("Srv Tick Time", (Sandbox.Monitor.ServerTickTime.Max * 1000f).ToString(), "ms");
-          DrawText("Delta Time",    (Time.deltaTime * 1000f).ToString(),                     "ms");
+      _curOffset             = GetAnchorPosition(TextAnchor) + TextStartOffset;
 
-          DrawIcons();
-        }
+      if (TextLayout == LayoutDirection.Vertical && (TextAnchor == AnchorPoint.BottomLeft || TextAnchor == AnchorPoint.BottomRight))
+      {
+        float totalHeight    = GetTotalLineCount() * LineHeight;
+        _curOffset.y        -= totalHeight;
+      }
 
-        if (Sandbox != null && Sandbox.IsVisible && ShowProfilerStats && Sandbox.Config.EnableProfiling)
-        {
-          DrawText("Tick Time",                  (Sandbox.Monitor.TickProfiler.Time).ToString(),                  "ms");
-          DrawText("NetworkFixedUpdate Time",    (Sandbox.Monitor.FixedUpdateProfiler.Time).ToString(),           "ms");
+      if (Sandbox != null && Sandbox.IsVisible)
+      {
+        DrawAllMetrics();
+        DrawIcons();
+      }
+    }
 
-          if (Sandbox.IsClient)
-            DrawText("Resimulate Time",          (Sandbox.Monitor.ResimulateProfiler.Time).ToString(),            "ms");
+    private void DrawAllMetrics()
+    {
+      if (Sandbox.IsClient)
+      {
+        DrawText("RTT", (Sandbox.RTT * 1000f).ToString(FloatFormat), "ms");
+      }
 
-          DrawText("NetworkRender Time",         (Sandbox.Monitor.RenderProfiler.Time).ToString(),                "ms");
+      DrawText("In", Sandbox.InKBps.ToString(FloatFormat), "KB/s");
+      DrawText("Out", Sandbox.OutKBps.ToString(FloatFormat), "KB/s");
 
-          if (Sandbox.IsServer && Sandbox.IsRecording)
-            DrawText("Replay Write Time",        (Sandbox.Monitor.WriteReplayProfiler.Time).ToString(),           "ms");
+      if (Sandbox.IsClient)
+      {
+        DrawText("In Loss", (Sandbox.InPacketLoss * 100f).ToString(FloatFormat), "%");
+        DrawText("Out Loss", (Sandbox.OutPacketLoss * 100f).ToString(FloatFormat), "%");
+        DrawText("Interp Delay", (Sandbox.InterpolationDelay * 1000f).ToString(FloatFormat), "ms");
+        DrawText("Resims", Sandbox.Monitor.Resimulations.Average.ToString(FloatFormat), "ticks");
+        DrawText("Srv Tick Time", (Sandbox.Monitor.ServerTickTime.Max * 1000f).ToString(FloatFormat), "ms");
+      }
 
-          if (Sandbox.IsServer)
-            DrawText("Process Changes Time",     (Sandbox.Monitor.ProcessStateChangesProfiler.Time).ToString(),   "ms");
+      DrawText("Delta Time", (Time.deltaTime * 1000f).ToString(FloatFormat), "ms");
 
-          DrawText("Send Time",                  (Sandbox.Monitor.SendProfiler.Time).ToString(),                  "ms");
-          DrawText("Receive Time",               (Sandbox.Monitor.ReceiveProfiler.Time).ToString(),               "ms");
+      if (ShowProfilerStats && Sandbox.Config.EnableProfiling)
+      {
+        DrawText("Tick Time", (Sandbox.Monitor.TickProfiler.Time).ToString(FloatFormat), "ms");
+        DrawText("NetworkFixedUpdate Time", (Sandbox.Monitor.FixedUpdateProfiler.Time).ToString(FloatFormat), "ms");
+        
+        if (Sandbox.IsClient) 
+          DrawText("Resimulate Time", (Sandbox.Monitor.ResimulateProfiler.Time).ToString(FloatFormat), "ms");
 
-          DrawText("NetcodeIntoGameEngine Time", (Sandbox.Monitor.NetcodeIntoGameEngineProfiler.Time).ToString(), "ms");
-          DrawText("GameEngineIntoNetcode Time", (Sandbox.Monitor.GameEngineIntoNetcodeProfiler.Time).ToString(), "ms");
-        }
+        DrawText("NetworkRender Time", (Sandbox.Monitor.RenderProfiler.Time).ToString(FloatFormat), "ms");
+        
+        if (Sandbox.IsServer && Sandbox.IsRecording) 
+          DrawText("Replay Write Time", (Sandbox.Monitor.WriteReplayProfiler.Time).ToString(FloatFormat), "ms");
+        
+        if (Sandbox.IsServer) 
+          DrawText("Process Changes Time", (Sandbox.Monitor.ProcessStateChangesProfiler.Time).ToString(FloatFormat), "ms");
+
+        DrawText("Send Time", (Sandbox.Monitor.SendProfiler.Time).ToString(FloatFormat), "ms");
+        DrawText("Receive Time", (Sandbox.Monitor.ReceiveProfiler.Time).ToString(FloatFormat), "ms");
+        DrawText("NetcodeIntoGameEngine Time", (Sandbox.Monitor.NetcodeIntoGameEngineProfiler.Time).ToString(FloatFormat), "ms");
+        DrawText("GameEngineIntoNetcode Time", (Sandbox.Monitor.GameEngineIntoNetcodeProfiler.Time).ToString(FloatFormat), "ms");
       }
     }
 
     private void DrawText(string title, string content, string unit)
     {
-      GUI.Label(new Rect(_curOffset.x,       _curOffset.y, 200, 50), $"{title}: ");
-      GUI.Label(new Rect(_curOffset.x + 200, _curOffset.y, 200, 50), $"{content} {unit}");
-      _curOffset += Spacing;
+      string titleStr   = $"{title}: ";
+      string valueStr   = $"{content} {unit}";
+
+      float titleWidth  = _labelStyle.CalcSize(new GUIContent(titleStr)).x;
+      float valueOffset = (TextLayout == LayoutDirection.Vertical) ? VerticalTitleOffset : titleWidth;
+      float totalWidth  = valueOffset + ContentFixedWidth;
+
+      float x           = _curOffset.x;
+      float y           = _curOffset.y;
+
+      if (TextAnchor == AnchorPoint.TopRight || TextAnchor == AnchorPoint.BottomRight)
+        x -= totalWidth;
+
+      GUI.Label(new Rect(x, y, titleWidth, LineHeight), titleStr, _labelStyle);
+      GUI.Label(new Rect(x + valueOffset, y, ContentFixedWidth, LineHeight), valueStr, _labelStyle);
+
+      if (TextLayout == LayoutDirection.Vertical)
+        _curOffset.y += LineHeight;
+      else
+      {
+        bool isRight  = (TextAnchor == AnchorPoint.TopRight || TextAnchor == AnchorPoint.BottomRight);
+        _curOffset.x += isRight ? -(totalWidth + HorizontalPadding) : (totalWidth + HorizontalPadding);
+      }
     }
 
     public void DrawIcons()
     {
-      var pktLossIconPos   = PacketLossIconOffset + (Screen.width * Vector2.right);
-      var latencyIconPos   = LatencyIconOffset    + (Screen.width * Vector2.right);
-      var serverLagIconPos = ServerLagIconOffset  + (Screen.width * Vector2.right);
+      Vector2 iconPos = GetAnchorPosition(IconAnchor) + IconStartOffset;
+      bool isRight    = (IconAnchor == AnchorPoint.TopRight || IconAnchor == AnchorPoint.BottomRight);
+      bool isBottom   = (IconAnchor == AnchorPoint.BottomLeft || IconAnchor == AnchorPoint.BottomRight);
 
-      var pktLoss          = Mathf.Max(Sandbox.InPacketLoss, Sandbox.OutPacketLoss) * 100; // multiplying by 100 to convert from a decimal to a percentage.
-      var rtt              = Sandbox.RTT * 1000f; // multiplying by 1000 to convert from seconds to milliseconds.
+      if (isRight) 
+        iconPos.x    -= IconSize;
+      if (isBottom)
+        iconPos.y    -= IconSize;
+
+      Vector2 step    = Vector2.zero;
+      if (IconLayout == LayoutDirection.Horizontal)
+        step.x        = isRight ? -(IconSize + IconSpacing.x) : (IconSize + IconSpacing.x);
+      else
+        step.y        = isBottom ? -(IconSize + IconSpacing.y) : (IconSize + IconSpacing.y);
+
+      var pktLoss     = Mathf.Max(Sandbox.InPacketLoss, Sandbox.OutPacketLoss) * 100;
+      var rtt         = Sandbox.RTT * 1000f;
 
       if (pktLoss >= MediumPacketLossThreshold)
       {
-        Color color        = pktLoss < HighPacketLossThreshold ? Color.yellow : Color.red;
-        GUI.DrawTexture(new Rect(pktLossIconPos, Vector2.one * IconSize), _packetLossIcon, ScaleMode.ScaleToFit, true, 1f, color, 0f, 0f);
+        Color color   = pktLoss < HighPacketLossThreshold ? Color.yellow : Color.red;
+        DrawIcon(ref iconPos, _packetLossIcon, color, step);
       }
 
       if (rtt >= MediumLatencyThreshold)
       {
-        Color color        = rtt >= HighLatencyThreshold ? Color.red : Color.yellow;
-        GUI.DrawTexture(new Rect(latencyIconPos, Vector2.one * IconSize), _latencyIcon, ScaleMode.ScaleToFit, true, 1f, color, 0f, 0f);
+        Color color   = rtt >= HighLatencyThreshold ? Color.red : Color.yellow;
+        DrawIcon(ref iconPos, _latencyIcon, color, step);
       }
 
       if (Sandbox.Monitor.ServerTickTime.Max >= Sandbox.FixedDeltaTime)
       {
-        Color color        = Sandbox.Monitor.ServerTickTime.Average >= Sandbox.FixedDeltaTime ? Color.red : Color.yellow;
-        GUI.DrawTexture(new Rect(serverLagIconPos, Vector2.one * IconSize), _serverLagIcon, ScaleMode.ScaleToFit, true, 1f, color, 0f, 0f);
+        Color color   = Sandbox.Monitor.ServerTickTime.Average >= Sandbox.FixedDeltaTime ? Color.red : Color.yellow;
+        DrawIcon(ref iconPos, _serverLagIcon, color, step);
+      }
+    }
+
+    private void DrawIcon(ref Vector2 pos, Texture tex, Color col, Vector2 step)
+    {
+      GUI.DrawTexture(new Rect(pos, Vector2.one * IconSize), tex, ScaleMode.ScaleToFit, true, 1f, col, 0f, 0f);
+      pos += step;
+    }
+
+    private Vector2 GetAnchorPosition(AnchorPoint anchor)
+    {
+      switch (anchor)
+      {
+        case AnchorPoint.TopRight: return new Vector2(Screen.width, 0);
+        case AnchorPoint.BottomLeft: return new Vector2(0, Screen.height);
+        case AnchorPoint.BottomRight: return new Vector2(Screen.width, Screen.height);
+        default: return Vector2.zero;
+      }
+    }
+
+    private int GetTotalLineCount()
+    {
+      int lines = 0;
+
+      if (Sandbox.IsClient)
+        lines++; // RTT
+
+      lines++; // In
+      lines++; // Out
+
+      if (Sandbox.IsClient)
+      {
+        lines++; // In Loss
+        lines++; // Out Loss
+        lines++; // Interp Delay
+        lines++; // Resims
+        lines++; // Srv Tick Time
       }
 
+      lines++; // Delta Time
+
+      // Profiler Lines 
+      if (ShowProfilerStats && Sandbox.Config.EnableProfiling)
+      {
+        lines += 8; // The 8 static profiler lines
+        if (Sandbox.IsClient) lines++; // Resimulate Time
+        if (Sandbox.IsServer && Sandbox.IsRecording) lines++; // Replay Write Time
+        if (Sandbox.IsServer) lines++; // Process Changes Time
+      }
+
+      return lines;
     }
   }
 }
