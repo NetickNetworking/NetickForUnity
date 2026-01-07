@@ -1,3 +1,5 @@
+#if HAS_ADDRESSABLES
+
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
@@ -14,16 +16,16 @@ namespace Netick.Samples
     private class AddressableSceneOperation : ISceneOperation
     {
       AsyncOperationHandle<SceneInstance>    Handle;
-      bool                   ISceneOperation.IsDone            => Handle.IsDone;
-      float                  ISceneOperation.Progress          => Handle.PercentComplete;
-      public AddressableSceneOperation(AsyncOperationHandle<SceneInstance> handle)
+      bool                   ISceneOperation.IsDone                      => Handle.IsDone;
+      float                  ISceneOperation.Progress                    => Handle.PercentComplete;
+      public AddressableSceneOperation (AsyncOperationHandle<SceneInstance> handle)
       {
         Handle = handle;
       }
     }
 
-    public string[]                          AddressableScenes = new string[0];
-    public override int                      CustomScenesCount => AddressableScenes != null ? AddressableScenes.Length : 0;
+    public string[]                          AddressableScenes           = new string[0];
+    public override int                      CustomScenesCount           => AddressableScenes != null ? AddressableScenes.Length : 0;
 
     private Dictionary<string, int>          _keyToIndex;
     private Dictionary<int, string>          _indexToKey;
@@ -42,12 +44,12 @@ namespace Netick.Samples
       }
     }
 
-    protected override ISceneOperation LoadCustomSceneAsync(int index, LoadSceneParameters loadSceneParameters, out string sceneName)
+    protected override ISceneOperation LoadCustomSceneAsync (int index, LoadSceneParameters loadSceneParameters, out string sceneName)
     {
-      var key   = _indexToKey[index];
-      sceneName = key;
+      var key           = _indexToKey[index];
+      sceneName         = key;
 
-      var handle = Addressables.LoadSceneAsync(key, loadSceneParameters);
+      var handle        = Addressables.LoadSceneAsync(key, loadSceneParameters);
       handle.Completed += handle =>
       {
         if (handle.Status == AsyncOperationStatus.Succeeded)
@@ -59,7 +61,7 @@ namespace Netick.Samples
       return new AddressableSceneOperation(handle);
     }
 
-    protected override ISceneOperation UnloadCustomSceneAsync(Scene scene)
+    protected override ISceneOperation UnloadCustomSceneAsync (Scene scene)
     {
       var didGetSceneInstance = _loadedScenes.TryGetValue(scene, out var sceneInstance);
 
@@ -78,7 +80,7 @@ namespace Netick.Samples
           Sandbox.LogError($"Addressables.UnloadSceneAsync: failed to unload scene {scene.name}");
       };
 
-      return new AddressableSceneOperation(handle);
+      return new AddressableSceneOperation (handle);
     }
 
     // -- Addressable Scenes
@@ -164,3 +166,5 @@ namespace Netick.Samples
     }
   }
 }
+
+#endif
