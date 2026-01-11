@@ -1,3 +1,4 @@
+// This script will only compile if the HAS_ADDRESSABLES symbol is defined.
 #if HAS_ADDRESSABLES
 
 using System.Collections.Generic;

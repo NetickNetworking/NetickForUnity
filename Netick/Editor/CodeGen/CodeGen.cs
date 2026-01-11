@@ -6,10 +6,10 @@ using Mono.Cecil.Cil;
 using Unity.CompilationPipeline.Common.Diagnostics;
 using Unity.CompilationPipeline.Common.ILPostProcessing;
 using Netick.CodeGen;
-using Unity.Netick.CodeGen;
+using Netick.CodeGen.Unity;
 using ILPPInterface = Unity.CompilationPipeline.Common.ILPostProcessing.ILPostProcessor;
 
-namespace Unity.Netick.Helper.CodeGen
+namespace Netick.CodeGen.Unity
 {
   public sealed class CodeGen : ILPPInterface
   {
