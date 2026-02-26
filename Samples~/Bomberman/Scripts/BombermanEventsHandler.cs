@@ -43,7 +43,7 @@ namespace Netick.Samples.Bomberman
     {
       if (IsClient)
         return;
-      var playerObj = sandbox.NetworkInstantiate(_playerPrefab, _spawnPositions[Sandbox.Players.Count], Quaternion.identity, player).GetComponent<BombermanController>();
+      var playerObj = sandbox.NetworkInstantiate(_playerPrefab, _freePositions.Dequeue(), Quaternion.identity, player).GetComponent<BombermanController>();
       sandbox.SetPlayerObject(player, playerObj.Object);
       AlivePlayers.Add(playerObj);
     }
