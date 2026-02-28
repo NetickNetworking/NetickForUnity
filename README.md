@@ -5,6 +5,8 @@
 </p>
 
 <p align="center">
+  <a href="https://assetstore.unity.com/packages/tools/network/netick-networking-engine-292096">Asset Store Link</a>
+  ·
   <a href="https://netick.net/docs/2/articles/getting-started-guide/0-overview.html">Getting Started</a>
   ·
   <a href="https://netick.net/docs/2/articles/understanding-client-server-model.html">Manual</a>
