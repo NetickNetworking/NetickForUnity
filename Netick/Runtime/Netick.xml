@@ -22,6 +22,7 @@
              <para>This flag is only set for existing objects; it is not set for objects (ones that the client has interest in at spawn time) spawned after the client has joined. 
              It is true only during the "catching up" tick in which the object becomes relevant, 
              and false afterward.</para>
+             <para>This flag always returns true during replay when seeking.</para>
             
              <para>This flag always returns false on the server.</para>
              </summary>
@@ -111,14 +112,14 @@
             Configuration data for Netick.
             </summary>
         </member>
-        <member name="P:Netick.AdaptiveRemoteInterpolation.CurrentBufferTime">
-            <summary>
-            Interpolation time in seconds.
-            </summary>
-        </member>
         <member name="P:Netick.AdaptiveRemoteInterpolation.Time">
             <summary>
             Time in seconds.
+            </summary>
+        </member>
+        <member name="P:Netick.AdaptiveRemoteInterpolation.CurrentBufferTime">
+            <summary>
+            Interpolation time in seconds.
             </summary>
         </member>
         <member name="T:Netick.Interpolator">
@@ -156,11 +157,6 @@
         <member name="T:Netick.RemoteInterpolation">
             <summary>
             A class representing the remote interpolation of this instance <see cref="T:Netick.NetickEngine"/>. This should be used whenever you want to use Remote Timeline on the client.
-            </summary>
-        </member>
-        <member name="P:Netick.RemoteInterpolation.CurrentBufferTime">
-            <summary>
-            Interpolation time in seconds.
             </summary>
         </member>
         <member name="P:Netick.RemoteInterpolation.Time">

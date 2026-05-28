@@ -442,6 +442,11 @@
             Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> has been started.
             </summary>
         </member>
+        <member name="P:Netick.Unity.NetworkSandbox.IsTerminated">
+            <summary>
+             Returns true when this <see cref="T:Netick.Unity.NetworkSandbox"/> begins shutdown and remains true afterward.
+             </summary>
+        </member>
         <member name="P:Netick.Unity.NetworkSandbox.IsServer">
             <summary>
             Returns true if this <see cref="T:Netick.Unity.NetworkSandbox"/> is the server.
@@ -561,7 +566,7 @@
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.FixedDeltaTime">
             <summary>
-            Time period between network simulation steps. Same as <see cref="P:UnityEngine.Time.fixedDeltaTime"/>
+            Time period between network simulation steps. Same as <see cref="P:UnityEngine.Time.fixedUnscaledDeltaTime"/>
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.DeltaTime">
@@ -577,6 +582,11 @@
         <member name="P:Netick.Unity.NetworkSandbox.NetworkTime">
             <summary>
             Current (local/predicted) network time in seconds. Same as <see cref="P:Netick.LocalInterpolation.Time"/>.
+            </summary>
+        </member>
+        <member name="P:Netick.Unity.NetworkSandbox.NetworkTimeAsDouble">
+            <summary>
+            Current (local/predicted) network time (as a double) in seconds. Same as <see cref="P:Netick.LocalInterpolation.TimeAsDouble"/>.
             </summary>
         </member>
         <member name="P:Netick.Unity.NetworkSandbox.Tick">
