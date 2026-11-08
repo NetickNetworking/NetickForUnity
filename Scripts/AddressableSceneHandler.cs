@@ -104,7 +104,7 @@ namespace Netick.Samples
     public void UnloadAddressableSceneAsync(string key)
     {
       if (_keyToIndex.TryGetValue(key, out int customIndex))
-        Sandbox.UnloadSceneAsync(customIndex);
+        Sandbox.UnloadCustomSceneAsync(customIndex);
       else
         Sandbox.LogError("Unloading scene: failed to find the addressable scene key in the AddressableScenes array. Make sure to add all scenes keys to the array.");
     }
